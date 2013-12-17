@@ -31,20 +31,20 @@
         android:textSize="60sp" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/playButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button2"
-        android:layout_alignRight="@+id/button2"
+        android:layout_alignLeft="@+id/settingsButton"
+        android:layout_alignRight="@+id/settingsButton"
         android:layout_below="@+id/textView1"
         android:layout_marginTop="60dp"
         android:text="@string/play" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/settingsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button1"
+        android:layout_below="@+id/playButton"
         android:layout_centerHorizontal="true"
         android:text="@string/settings" />
 
