@@ -3,7 +3,7 @@
     package="com.example.jbomb"
     android:versionCode="1"
     android:versionName="1.0" >
-
+<!-- este es un comentario de andres para ver si puede commitear -->
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="18" />
