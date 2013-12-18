@@ -19,7 +19,7 @@ public class QuizActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_quiz);
 		TextView tv = (TextView)findViewById(R.id.quizNotice);  
-		tv.setText("El jugador x te ha pasado la bomba! responde la pregunta");
+		tv.setText("Para poder pasarle la bomba al jugador x responde la pregunta!");
 		
 		
 		// Show the Up button in the action bar.
