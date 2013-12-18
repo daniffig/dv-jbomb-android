@@ -28,7 +28,7 @@ public class QuizActivity extends Activity {
 	
 	public void openGameOver(View view)
 	{
-    	Intent myIntent = new Intent(QuizActivity.this, QuizActivity.class);
+    	Intent myIntent = new Intent(QuizActivity.this, GameOverActivity.class);
 
     	QuizActivity.this.startActivity(myIntent);
 	}
