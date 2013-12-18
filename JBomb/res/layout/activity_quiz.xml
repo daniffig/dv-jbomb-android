@@ -21,9 +21,9 @@
         android:id="@+id/question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="57dp"
+        android:layout_below="@+id/quizNotice"
+        android:layout_marginTop="20dp"
         android:text="¿En que museo se encuentra el David de Miguel Angel?"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
