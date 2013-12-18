@@ -15,16 +15,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
-        Button settingsButton = (Button) this.findViewById(R.id.settingsButton);
-        
-        settingsButton.setOnClickListener(new OnClickListener()
-        {
-        	public void onClick(View v)
-        	{
-                Toast.makeText(MainActivity.this, "Clicked on Button", Toast.LENGTH_LONG).show();
-        	}
-        });        
     }
 
 
@@ -35,5 +25,11 @@ public class MainActivity extends Activity {
         return true;
     }
  
+    public void openClientSettings(View view)
+    {
+    	Intent myIntent = new Intent(MainActivity.this, ClientSettings.class);
+
+    	MainActivity.this.startActivity(myIntent);
+    }
     
 }
