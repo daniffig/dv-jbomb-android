@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="100dp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
@@ -34,6 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/GameResults"
         android:layout_alignTop="@+id/GameResults"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="110dp" />
 
 </RelativeLayout>
