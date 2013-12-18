@@ -18,41 +18,41 @@
 
     <ImageView
         android:id="@+id/ingamePlayerLeftImage"
-        android:contentDescription="ingamePlayerLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/ingameBombImage"
         android:layout_marginRight="106dp"
         android:layout_toLeftOf="@+id/ingameBombImage"
+        android:contentDescription="@string/player_left_name"
         android:src="@drawable/jugador_1" />
 
     <ImageView
         android:id="@+id/ingamePlayerTopImage"
-        android:contentDescription="ingamePlayerTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/ingameBombImage"
         android:layout_alignLeft="@+id/ingameBombImage"
         android:layout_marginBottom="35dp"
+        android:contentDescription="@string/player_top_name"
         android:src="@drawable/jugador_2" />
 
     <ImageView
         android:id="@+id/ingamePlayerRightImage"
-        android:contentDescription="ingamePlayerRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/ingameBombImage"
         android:layout_marginLeft="108dp"
         android:layout_toRightOf="@+id/ingameBombImage"
+        android:contentDescription="@string/player_right_name"
         android:src="@drawable/jugador_4" />
 
     <ImageView
         android:id="@+id/ingamePlayerBottomImage"
-        android:contentDescription="ingamePlayerBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ingameBombImage"
         android:layout_toLeftOf="@+id/ingamePlayerRightImage"
+        android:contentDescription="@string/player_bottom_name"
         android:src="@drawable/jugador_3" />
 
     <TextView

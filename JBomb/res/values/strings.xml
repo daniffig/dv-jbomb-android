@@ -17,5 +17,9 @@
     <string name="save">Guardar</string>
     <string name="title_activity_quiz">¡Tenes la bomba!</string>
     <string name="title_activity_game_over">Juego terminado!</string>
+    <string name="player_top_name">Martín</string>
+    <string name="player_right_name">Florencia</string>
+    <string name="player_bottom_name">Alejandro</string>
+    <string name="player_left_name">Lucrecia</string>
 
 </resources>
