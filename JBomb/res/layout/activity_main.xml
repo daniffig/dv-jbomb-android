@@ -12,23 +12,23 @@
         android:id="@+id/ingameBombImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="200dp"
-        android:layout_marginTop="100dp"
+        android:layout_below="@+id/Titulo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
         android:contentDescription="@string/todo"
         android:scaleType="center"
         android:src="@drawable/bomb" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/Titulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/ingameBombImage"
-        android:layout_marginBottom="29dp"
-        android:layout_marginLeft="21dp"
-        android:layout_toRightOf="@+id/ingameBombImage"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp"
+        android:scaleType="center"
         android:text="@string/app_name"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="60sp" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
         android:id="@+id/playButton"
@@ -36,8 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/settingsButton"
         android:layout_alignRight="@+id/settingsButton"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="60dp"
+        android:layout_below="@+id/ingameBombImage"
+        android:layout_marginTop="10dp"
         android:onClick="openGameplay"
         android:text="@string/play" />
 
@@ -45,8 +45,9 @@
         android:id="@+id/settingsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/playButton"
         android:layout_centerHorizontal="true"
+        android:layout_below="@+id/playButton"
+        android:layout_marginTop="3dp"
         android:onClick="openClientSettings"
         android:text="@string/settings" />
 
