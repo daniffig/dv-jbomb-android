@@ -31,5 +31,11 @@ public class MainActivity extends Activity {
 
     	MainActivity.this.startActivity(myIntent);
     }
-    
+ 
+    public void openGameplay(View view)
+    {
+    	Intent myIntent = new Intent(MainActivity.this, IngameActivity.class);
+    	
+    	MainActivity.this.startActivity(myIntent);
+    }
 }
