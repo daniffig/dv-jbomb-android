@@ -12,5 +12,6 @@
     <string name="title_activity_ingame">IngameActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="todo">TODO</string>
+    <string name="title_activity_client_settings">Configuración</string>
 
 </resources>
