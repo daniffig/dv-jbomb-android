@@ -18,52 +18,33 @@
 
     <ImageView
         android:id="@+id/ingamePlayerLeftImage"
-        android:contentDescription="ingamePlayerLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/ingameBombImage"
         android:layout_marginRight="106dp"
         android:layout_toLeftOf="@+id/ingameBombImage"
+        android:contentDescription="@string/player_left_name"
         android:src="@drawable/jugador_1" />
 
     <ImageView
         android:id="@+id/ingamePlayerTopImage"
-        android:contentDescription="ingamePlayerTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/ingameBombImage"
         android:layout_alignLeft="@+id/ingameBombImage"
         android:layout_marginBottom="35dp"
+        android:contentDescription="@string/player_top_name"
         android:src="@drawable/jugador_2" />
 
     <ImageView
         android:id="@+id/ingamePlayerRightImage"
-        android:contentDescription="ingamePlayerRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/ingameBombImage"
         android:layout_marginLeft="108dp"
         android:layout_toRightOf="@+id/ingameBombImage"
+        android:contentDescription="@string/player_right_name"
         android:src="@drawable/jugador_4" />
-
-    <ImageView
-        android:id="@+id/ingamePlayerBottomImage"
-        android:contentDescription="ingamePlayerBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ingameBombImage"
-        android:layout_toLeftOf="@+id/ingamePlayerRightImage"
-        android:src="@drawable/jugador_3" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/ingamePlayerBottomImage"
-        android:layout_below="@+id/ingamePlayerBottomImage"
-        android:layout_toLeftOf="@+id/ingamePlayerRightImage"
-        android:text="Alejandro"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/textView2"
@@ -72,7 +53,7 @@
         android:layout_alignLeft="@+id/ingamePlayerLeftImage"
         android:layout_alignRight="@+id/ingamePlayerLeftImage"
         android:layout_below="@+id/ingamePlayerRightImage"
-        android:text="Lucrecia"
+        android:text="@string/player_left_name"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -82,16 +63,7 @@
         android:layout_above="@+id/ingamePlayerTopImage"
         android:layout_alignRight="@+id/ingamePlayerTopImage"
         android:layout_toRightOf="@+id/ingamePlayerLeftImage"
-        android:text="Martin"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/ingamePlayerRightImage"
-        android:layout_alignTop="@+id/ingamePlayerBottomImage"
-        android:text="Florencia"
+        android:text="@string/player_top_name"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -100,7 +72,44 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textView3"
         android:layout_alignParentLeft="true"
-        android:text="¡Elige a quien pasarle la bomba!"
+        android:text="@string/you_have_the_bomb"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView5"
+        android:layout_alignTop="@+id/ingamePlayerTopImage"
+        android:text="@string/choose_a_target_player"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ImageView
+        android:id="@+id/ingamePlayerBottomImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_toLeftOf="@+id/ingamePlayerRightImage"
+        android:contentDescription="@string/player_bottom_name"
+        android:src="@drawable/jugador_3" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ingamePlayerBottomImage"
+        android:layout_alignRight="@+id/ingamePlayerRightImage"
+        android:text="@string/player_right_name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ingamePlayerBottomImage"
+        android:layout_below="@+id/ingamePlayerBottomImage"
+        android:layout_toLeftOf="@+id/ingamePlayerRightImage"
+        android:text="@string/player_bottom_name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

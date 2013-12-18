@@ -35,13 +35,16 @@ public class IngameActivity extends Activity {
 		return true;
 	}
 
-	
+	/*
 	public void openQuiz(View view)
 	{
     	Intent myIntent = new Intent(IngameActivity.this, QuizActivity.class);
+    	
+    	myIntent.putExtra("TARGET_PLAYER_NAME", )
 
     	IngameActivity.this.startActivity(myIntent);
 	}
+	*/
 	
 	@SuppressLint("NewApi")
 	class TouchListener implements OnTouchListener
@@ -78,7 +81,12 @@ public class IngameActivity extends Activity {
 				break;
 
 			case DragEvent.ACTION_DROP:
-				IngameActivity.this.openQuiz(ingameImage);				
+		    	Intent myIntent = new Intent(IngameActivity.this, QuizActivity.class);
+		    	
+		    	myIntent.putExtra("TARGET_PLAYER_NAME", ingameImage.getContentDescription());
+
+		    	IngameActivity.this.startActivity(myIntent);
+				//IngameActivity.this.openQuiz(ingameImage);				
 				break;
 			}
 		    

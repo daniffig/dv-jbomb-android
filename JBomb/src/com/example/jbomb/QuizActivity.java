@@ -3,14 +3,10 @@ package com.example.jbomb;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.support.v4.app.NavUtils;
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
 
 public class QuizActivity extends Activity {
 
@@ -19,7 +15,7 @@ public class QuizActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_quiz);
 		TextView tv = (TextView)findViewById(R.id.quizNotice);  
-		tv.setText("El jugador x te ha pasado la bomba! responde la pregunta");
+		tv.setText("Para pasarle la bomba a " + this.getIntent().getExtras().getString("TARGET_PLAYER_NAME") + " debés responder la siguiente pregunta correctamente.");
 		
 		
 		// Show the Up button in the action bar.
