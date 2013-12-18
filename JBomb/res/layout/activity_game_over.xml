@@ -9,13 +9,12 @@
     tools:context=".GameOverActivity" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/GameResults"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="97dp"
-        android:text="¡Ganaste/Perdiste!"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ImageView

@@ -19,12 +19,13 @@ public class GameOverActivity extends Activity {
 		setContentView(R.layout.activity_game_over);
 		
 		Intent intent = getIntent();	
-		int answerID = intent.getIntExtra("answerID", 0);
 		
+		String resultado = (R.id.galeriaDeLaAcademiaRadioButton == intent.getIntExtra("answerID", 0))
+							? "¡GANASTE!"
+							: "¡PERDISTE!";
 		
-		
-		//TextView tv = (TextView)findViewById(R.id.GameResults);  
-		//tv.setText(resultado);
+		TextView tv = (TextView)findViewById(R.id.GameResults);  
+		tv.setText(resultado);
 	}
 
 	
