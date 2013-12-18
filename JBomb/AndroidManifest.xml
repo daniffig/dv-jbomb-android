@@ -40,7 +40,7 @@
                 android:value="com.example.jbomb.MainActivity" />
         </activity>
         <activity
-            android:name="com.example.jbomb.ClientSettings"
+            android:name="com.example.jbomb.ClientSettingsActivity"
             android:label="@string/title_activity_client_settings"
             android:parentActivityName="com.example.jbomb.MainActivity" >
             <meta-data

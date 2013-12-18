@@ -4,16 +4,33 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Build;
 
-public class ClientSettings extends Activity {
+public class ClientSettingsActivity extends Activity {
+
+    public static final String PREFS_NAME = "ClientSettingsFile3";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_client_settings);
+		
+		// Restore preferences
+	    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+	    
+	    EditText InetIPAddressEditText = (EditText) this.findViewById(R.id.InetIPAddressEditText);
+	    EditText InetPortEditText = (EditText) this.findViewById(R.id.InetPortEditText);
+	    
+	    InetIPAddressEditText.setText(settings.getString("InetIPAddress", "127.0.0.1"));
+	    InetPortEditText.setText(String.valueOf(settings.getInt("InetPort", 4321)));
+		
 		// Show the Up button in the action bar.
 		setupActionBar();
 	}
@@ -51,5 +68,27 @@ public class ClientSettings extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+ 
+    public void saveClientSettings(View view)
+    {
+	    Editor settings = getSharedPreferences(PREFS_NAME, 0).edit();
+	    
+	    EditText InetIPAddressEditText = (EditText) this.findViewById(R.id.InetIPAddressEditText);
+	    EditText InetPortEditText = (EditText) this.findViewById(R.id.InetPortEditText);
+	    
+	    settings.putString("InetIPAddress", InetIPAddressEditText.getText().toString());    
+	    settings.putInt("InetPort", Integer.parseInt(InetPortEditText.getText().toString()));
+	    
+	    settings.commit();
+	    
+	    Toast.makeText(this.getApplicationContext(), "Se han guardado los cambios", Toast.LENGTH_SHORT).show();
+	    
+	    this.closeClientSettings(view);
+    }
+    
+    public void closeClientSettings(View view)
+    {
+    	this.finish();
+    }
 
 }

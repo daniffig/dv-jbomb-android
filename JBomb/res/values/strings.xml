@@ -13,5 +13,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="todo">TODO</string>
     <string name="title_activity_client_settings">Configuración</string>
+    <string name="cancel">Cancelar</string>
+    <string name="save">Guardar</string>
 
 </resources>

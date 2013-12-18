@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
  
     public void openClientSettings(View view)
     {
-    	Intent myIntent = new Intent(MainActivity.this, ClientSettings.class);
+    	Intent myIntent = new Intent(MainActivity.this, ClientSettingsActivity.class);
 
     	MainActivity.this.startActivity(myIntent);
     }
