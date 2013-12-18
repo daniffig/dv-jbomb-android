@@ -47,6 +47,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.jbomb.MainActivity" />
         </activity>
+        <activity
+            android:name="com.example.jbomb.QuizActivity"
+            android:label="@string/title_activity_quiz"
+            android:parentActivityName="com.example.jbomb.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.jbomb.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.example.jbomb.GameOverActivity"
+            android:label="@string/title_activity_game_over"
+            android:parentActivityName="com.example.jbomb.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.jbomb.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

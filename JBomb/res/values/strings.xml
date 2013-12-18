@@ -15,5 +15,7 @@
     <string name="title_activity_client_settings">Configuración</string>
     <string name="cancel">Cancelar</string>
     <string name="save">Guardar</string>
+    <string name="title_activity_quiz">¡Tenes la bomba!</string>
+    <string name="title_activity_game_over">Juego terminado!</string>
 
 </resources>
