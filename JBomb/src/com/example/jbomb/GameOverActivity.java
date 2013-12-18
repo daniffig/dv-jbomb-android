@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 
 public class GameOverActivity extends Activity {
@@ -16,16 +17,19 @@ public class GameOverActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_game_over);
-		
-		Intent intent = getIntent();	
-		
-		String resultado = (R.id.galeriaDeLaAcademiaRadioButton == intent.getIntExtra("answerID", 0))
+
+			
+		String resultado = (R.id.galeriaDeLaAcademiaRadioButton == this.getIntent().getIntExtra("answerID", 0))
 							? "¡GANASTE!"
 							: "¡PERDISTE!";
 		
 		TextView tv = (TextView)findViewById(R.id.GameResults);  
 		tv.setText(resultado);
+		
+		//Drawable d = getResources().getDrawable(R.drawable.jbomb_loser);
+		this.findViewById(R.id.gameOverRelativeLayout).setBackgroundResource(R.drawable.jbomb_loser); 
 	}
 
 	
