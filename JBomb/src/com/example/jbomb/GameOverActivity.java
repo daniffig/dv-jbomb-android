@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -16,6 +17,14 @@ public class GameOverActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_over);
+		
+		Intent intent = getIntent();	
+		int answerID = intent.getIntExtra("answerID", 0);
+		
+		
+		
+		//TextView tv = (TextView)findViewById(R.id.GameResults);  
+		//tv.setText(resultado);
 	}
 
 	

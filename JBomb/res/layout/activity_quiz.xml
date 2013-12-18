@@ -9,58 +9,68 @@
     tools:context=".QuizActivity" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/quizNotice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/question"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="14dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <TextView
+        android:id="@+id/question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="57dp"
         android:text="¿En que museo se encuentra el David de Miguel Angel?"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <RadioGroup
-        android:id="@+id/radioGroup1"
+        android:id="@+id/answersRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
-        android:layout_marginLeft="17dp"
+        android:layout_alignLeft="@+id/question"
+        android:layout_below="@+id/question"
         android:layout_marginTop="18dp" >
 
         <RadioButton
-            android:id="@+id/radio0"
+            android:id="@+id/galeriaUfizziRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
             android:text="Galería Ufizzi" />
 
         <RadioButton
-            android:id="@+id/radio1"
+            android:id="@+id/museoDelPradoRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Museo del Prado" />
 
         <RadioButton
-            android:id="@+id/radio2"
+            android:id="@+id/galeriaDeLaAcademiaRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Galería de la academia " />
 
         <RadioButton
-            android:id="@+id/radio3"
+            android:id="@+id/museoBritanico"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Museo britanico" />
     </RadioGroup>
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/enviarRespuestaButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/radioGroup1"
-        android:layout_below="@+id/radioGroup1"
-        android:layout_marginTop="22dp"
+        android:layout_below="@+id/answersRadioGroup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
         android:onClick="openGameOver"
         android:text="Enviar respuesta" />
+
+
 
 </RelativeLayout>

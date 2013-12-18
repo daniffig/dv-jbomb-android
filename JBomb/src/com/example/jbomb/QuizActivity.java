@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -16,6 +18,10 @@ public class QuizActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_quiz);
+		TextView tv = (TextView)findViewById(R.id.quizNotice);  
+		tv.setText("El jugador x te ha pasado la bomba! responde la pregunta");
+		
+		
 		// Show the Up button in the action bar.
 	}
 
@@ -28,8 +34,10 @@ public class QuizActivity extends Activity {
 	
 	public void openGameOver(View view)
 	{
+		RadioGroup answersRadioGroup = (RadioGroup) findViewById(R.id.answersRadioGroup);
+		
     	Intent myIntent = new Intent(QuizActivity.this, GameOverActivity.class);
-
+    	myIntent.putExtra("answerID", answersRadioGroup.getCheckedRadioButtonId());
     	QuizActivity.this.startActivity(myIntent);
 	}
 
