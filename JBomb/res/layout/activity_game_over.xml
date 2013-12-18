@@ -15,26 +15,25 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="97dp"
+        android:layout_marginTop="22dp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <ImageView
-        android:id="@+id/ingameBombImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
-        android:src="@drawable/gameplay_bomb" />
 
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ingameBombImage"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="38dp"
+        android:layout_marginBottom="19dp"
         android:onClick="openMainWindow"
         android:text="Volver al inicio" />
+
+    <ImageView
+        android:id="@+id/winnerImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/GameResults"
+        android:layout_alignTop="@+id/GameResults"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

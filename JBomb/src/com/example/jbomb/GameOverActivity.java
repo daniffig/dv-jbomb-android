@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 
@@ -20,16 +21,22 @@ public class GameOverActivity extends Activity {
 		
 		setContentView(R.layout.activity_game_over);
 
+		if(R.id.galeriaDeLaAcademiaRadioButton == this.getIntent().getIntExtra("answerID", 0))
+		{
+			TextView tv = (TextView)findViewById(R.id.GameResults);  
+			tv.setTextSize(50);
+			tv.setText("¡GANASTE!");
+			this.findViewById(R.id.winnerImage).setBackgroundResource(R.drawable.jbomb_winner);
+		}
+		else
+		{
+			this.findViewById(R.id.gameOverRelativeLayout).setBackgroundResource(R.drawable.jbomb_loser);
 			
-		String resultado = (R.id.galeriaDeLaAcademiaRadioButton == this.getIntent().getIntExtra("answerID", 0))
-							? "¡GANASTE!"
-							: "¡PERDISTE!";
-		
-		TextView tv = (TextView)findViewById(R.id.GameResults);  
-		tv.setText(resultado);
-		
-		//Drawable d = getResources().getDrawable(R.drawable.jbomb_loser);
-		this.findViewById(R.id.gameOverRelativeLayout).setBackgroundResource(R.drawable.jbomb_loser); 
+			TextView tv = (TextView)findViewById(R.id.GameResults);  
+			tv.setText("¡PERDISTE!");
+			tv.setTextSize(50);
+			tv.setTextColor(Color.WHITE);
+		} 
 	}
 
 	
