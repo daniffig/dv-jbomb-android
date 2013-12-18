@@ -3,7 +3,8 @@
     package="com.example.jbomb"
     android:versionCode="1"
     android:versionName="1.0" >
-<!-- este es un comentario de andres para ver si puede commitear -->
+
+    <!-- este es un comentario de andres para ver si puede commitear -->
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="18" />
@@ -33,6 +34,14 @@
         <activity
             android:name="com.example.jbomb.IngameActivity"
             android:label="@string/title_activity_ingame"
+            android:parentActivityName="com.example.jbomb.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.jbomb.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.example.jbomb.ClientSettings"
+            android:label="@string/title_activity_client_settings"
             android:parentActivityName="com.example.jbomb.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
