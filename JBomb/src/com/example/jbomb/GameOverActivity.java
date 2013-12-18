@@ -3,15 +3,10 @@ package com.example.jbomb;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.support.v4.app.NavUtils;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 
 public class GameOverActivity extends Activity {
 
@@ -25,7 +20,7 @@ public class GameOverActivity extends Activity {
 		{
 			TextView tv = (TextView)findViewById(R.id.GameResults);  
 			tv.setTextSize(50);
-			tv.setText("¡GANASTE!");
+			tv.setText("ï¿½GANASTE!");
 			this.findViewById(R.id.winnerImage).setBackgroundResource(R.drawable.jbomb_winner);
 		}
 		else
@@ -33,7 +28,7 @@ public class GameOverActivity extends Activity {
 			this.findViewById(R.id.gameOverRelativeLayout).setBackgroundResource(R.drawable.jbomb_loser);
 			
 			TextView tv = (TextView)findViewById(R.id.GameResults);  
-			tv.setText("¡PERDISTE!");
+			tv.setText("ï¿½PERDISTE!");
 			tv.setTextSize(50);
 			tv.setTextColor(Color.WHITE);
 		} 

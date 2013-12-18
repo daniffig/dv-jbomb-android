@@ -21,5 +21,9 @@
     <string name="player_right_name">Florencia</string>
     <string name="player_bottom_name">Alejandro</string>
     <string name="player_left_name">Lucrecia</string>
+    <string name="Servidor">server</string>
+    <string name="server">Servidor</string>
+    <string name="you_have_the_bomb">¡Tienes la bomba!</string>
+    <string name="the_bomb">TheBomb</string>
 
 </resources>
