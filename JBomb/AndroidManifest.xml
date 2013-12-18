@@ -6,7 +6,7 @@
 
     <!-- este es un comentario de andres para ver si puede commitear -->
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="18" />
 
     <application

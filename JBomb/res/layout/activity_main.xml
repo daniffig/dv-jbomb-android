@@ -9,7 +9,7 @@
     tools:context=".MainActivity" >
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/ingameBombImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="200dp"
@@ -22,10 +22,10 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView1"
+        android:layout_alignBottom="@+id/ingameBombImage"
         android:layout_marginBottom="29dp"
         android:layout_marginLeft="21dp"
-        android:layout_toRightOf="@+id/imageView1"
+        android:layout_toRightOf="@+id/ingameBombImage"
         android:text="@string/app_name"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="60sp" />

@@ -9,7 +9,7 @@
     tools:context=".IngameActivity" >
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/ingameBombImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -17,41 +17,41 @@
         android:src="@drawable/gameplay_bomb" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/ingamePlayerLeftImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageView1"
+        android:layout_alignTop="@+id/ingameBombImage"
         android:layout_marginRight="106dp"
-        android:layout_toLeftOf="@+id/imageView1"
+        android:layout_toLeftOf="@+id/ingameBombImage"
         android:onClick="openQuiz"
         android:src="@drawable/jugador_1" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/ingamePlayerTopImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/imageView1"
-        android:layout_alignLeft="@+id/imageView1"
+        android:layout_above="@+id/ingameBombImage"
+        android:layout_alignLeft="@+id/ingameBombImage"
         android:layout_marginBottom="35dp"
         android:onClick="openQuiz"
         android:src="@drawable/jugador_2" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/ingamePlayerRightImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageView1"
+        android:layout_alignTop="@+id/ingameBombImage"
         android:layout_marginLeft="108dp"
-        android:layout_toRightOf="@+id/imageView1"
+        android:layout_toRightOf="@+id/ingameBombImage"
         android:onClick="openQuiz"
         android:src="@drawable/jugador_4" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/ingamePlayerBottomImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView1"
-        android:layout_toLeftOf="@+id/imageView5"
+        android:layout_below="@+id/ingameBombImage"
+        android:layout_toLeftOf="@+id/ingamePlayerRightImage"
         android:onClick="openQuiz"
         android:src="@drawable/jugador_3" />
 
@@ -59,9 +59,9 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/imageView4"
-        android:layout_below="@+id/imageView4"
-        android:layout_toLeftOf="@+id/imageView5"
+        android:layout_alignLeft="@+id/ingamePlayerBottomImage"
+        android:layout_below="@+id/ingamePlayerBottomImage"
+        android:layout_toLeftOf="@+id/ingamePlayerRightImage"
         android:text="Alejandro"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -69,9 +69,9 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/imageView2"
-        android:layout_alignRight="@+id/imageView2"
-        android:layout_below="@+id/imageView5"
+        android:layout_alignLeft="@+id/ingamePlayerLeftImage"
+        android:layout_alignRight="@+id/ingamePlayerLeftImage"
+        android:layout_below="@+id/ingamePlayerRightImage"
         android:text="Lucrecia"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -79,9 +79,9 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/imageView3"
-        android:layout_alignRight="@+id/imageView3"
-        android:layout_toRightOf="@+id/imageView2"
+        android:layout_above="@+id/ingamePlayerTopImage"
+        android:layout_alignRight="@+id/ingamePlayerTopImage"
+        android:layout_toRightOf="@+id/ingamePlayerLeftImage"
         android:text="Martin"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -89,8 +89,8 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/imageView5"
-        android:layout_alignTop="@+id/imageView4"
+        android:layout_alignLeft="@+id/ingamePlayerRightImage"
+        android:layout_alignTop="@+id/ingamePlayerBottomImage"
         android:text="Florencia"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
