@@ -90,5 +90,10 @@ public class ClientSettingsActivity extends Activity {
     {
     	this.finish();
     }
+    
+    public void testServiceBind(View view)
+    {
+    	this.finish();
+    }
 
 }
