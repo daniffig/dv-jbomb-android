@@ -1,11 +1,18 @@
 package com.example.jbomb;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
@@ -92,8 +99,30 @@ public class ClientSettingsActivity extends Activity {
     }
     
     public void testServiceBind(View view)
-    {
-    	this.finish();
+    {	
+    	Socket socket = new Socket();
+    	try
+    	{
+  		   socket = new Socket("localhost", 4321);
+  	    }
+    	catch(IOException e){
+  		  System.out.println("Connection to server failed!");
+  	    }
+    	
+
+  		try
+   		{
+   			BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+   			
+   			TextView tv = (TextView)findViewById(R.id.serverNotice);  
+   			tv.setText(inFromServer.readLine());
+   		}
+   		catch(IOException e)
+   		{
+   			System.out.println("Fallo la recepci�n desde el Servidor.");
+   			
+  		}
+
     }
 
 }

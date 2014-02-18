@@ -17,6 +17,11 @@
         android:text="@string/inet_ip_address"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+     <TextView
+        android:id="@+id/serverNotice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+     
     <EditText
         android:id="@+id/InetIPAddressEditText"
         android:layout_width="match_parent"
