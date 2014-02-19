@@ -21,14 +21,6 @@ public class GameServerService extends IntentService {
 	public GameServerService() {
 		super("GameServerService");
 	}
-
-	
-
-	public void onCreate()
-	{
-		Log.i("GAME_SERVER_SERVICE", "Estoy en el onCreate");
-		super.onCreate();
-	}
 	
 	@Override
 	protected void onHandleIntent(Intent intent) {
