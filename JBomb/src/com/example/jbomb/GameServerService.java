@@ -15,8 +15,8 @@ import android.os.NetworkOnMainThreadException;
 import android.util.Log;
 
 public class GameServerService extends Service {
-	
-	private NetworkThread networkThread = new NetworkThread();
+	private Socket socket;
+	private String s;
 
 	private final IBinder mBinder = new GameServerServiceBinder();
 	
@@ -36,26 +36,29 @@ public class GameServerService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-
 		Log.i("GAME_SERVER_SERVICE", "I'm being binded to a client");
+		
 		return mBinder;
 	}
 	
-	private void stablishConnection()
-	{
-		this.networkThread.start();
+	private void stablishConnection(){
+		new Thread(new ConnectionThread()).start();
 	}
 	
 	public void sendString(String s){
-		try{
-			this.networkThread.sendString(s);
-		} catch(Exception e){
-			Log.i("GAME_SERVER_SERVICE", "Fallo el envio");
-		}
+		this.s =s;
+		new Thread(new sendStringThread()).start();
 	}
 	
 	public String receiveString(){
-		return this.networkThread.receiveString();
+		Thread t = new Thread(new receiveStringThread());
+		t.start();
+		try{
+			t.join();
+		}catch(InterruptedException e){
+			Log.e("GAME_SERVER_SERVICE", e.toString());
+		}
+		return s;
 	}
 		
     public class GameServerServiceBinder extends Binder {
@@ -65,10 +68,8 @@ public class GameServerService extends Service {
     }
     
     
-    public class NetworkThread extends Thread{
+    public class ConnectionThread implements Runnable{
 
-    	private Socket socket;
-    	
 		@Override
 		public void run() {
 			try{
@@ -90,8 +91,10 @@ public class GameServerService extends Service {
 			}
 			
 		}
-		
-		public void sendString(String s){
+    }
+    
+    public class sendStringThread implements Runnable{
+		public void run(){
 		    try
 			{
 				DataOutputStream outToClient = new DataOutputStream(socket.getOutputStream());
@@ -104,21 +107,24 @@ public class GameServerService extends Service {
 				Log.e("GAME_SERVER_SERVICE", "fallo el envio del string");
 			}
 		}
+    }
+
+	public class receiveStringThread implements Runnable{
 		
-		public String receiveString(){
+		@Override
+		public void run(){
 			try
 	   		{
 	   			BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	   			  
-	   			return inFromServer.readLine();
+	   			s = inFromServer.readLine();
 	   		}
 	   		catch(IOException e)
 	   		{
 	   			Log.e("GAME_SERVER_SERVICE", "fallo la recepción del string");
-	   			
-	   			return null;
 	  		}
 		}
-    	
-    }
+
+	}
+		    	
 }

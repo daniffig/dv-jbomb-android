@@ -29,6 +29,9 @@ public class MainActivity extends Activity {
         
         //TextView tv = (TextView)this.findViewById(R.id.Titulo);
         //tv.setTextSize(60 * getResources().getDisplayMetrics().density);
+        this.startService(new Intent(this, GameServerService.class));
+    	
+    	getApplicationContext().bindService(new Intent(this, GameServerService.class), mConnection, Context.BIND_AUTO_CREATE);
     }
 
 
@@ -55,17 +58,20 @@ public class MainActivity extends Activity {
     
     public void testServiceBind(View view)
     {	
-    	//startService(new Intent(this, GameServerService.class));
-    	Intent i =new Intent(this, GameServerService.class);
-        getApplicationContext().bindService(i, mConnection, Context.BIND_AUTO_CREATE);
-
-        GameServerService.sendString("Hola Server!");
-        
-        TextView tv = (TextView)findViewById(R.id.serverNotice);  
-        tv.setText(GameServerService.receiveString());
+    	
+    	if(this.isBound)
+    	{
+    		GameServerService.sendString("Hola Server!");
+    
+    		Log.i("GAME_SERVER_SERVICE",GameServerService.receiveString());
+    	}
+    	else
+    	{
+    		Log.e("GAME_SERVER_SERVICE", "I'm not bounded yet!");
+    	}
     }
     
-    /** Defines callbacks for service binding, passed to bindService() */
+    
     private ServiceConnection mConnection = new ServiceConnection() {
 
         @Override

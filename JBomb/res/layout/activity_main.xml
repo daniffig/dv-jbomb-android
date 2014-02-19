@@ -57,10 +57,6 @@
             android:layout_height="wrap_content"
             android:onClick="testServiceBind"
             android:text="@string/server" />
-            
-                 <TextView
-        android:id="@+id/serverNotice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+
 
 </LinearLayout>
