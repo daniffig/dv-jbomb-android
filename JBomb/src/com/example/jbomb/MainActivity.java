@@ -1,10 +1,7 @@
 package com.example.jbomb;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
 import com.example.jbomb.GameServerService.GameServerServiceBinder;
+import com.example.jbomb.GameServerService;
 
 import android.os.Bundle;
 import android.os.IBinder;
@@ -58,12 +55,14 @@ public class MainActivity extends Activity {
     
     public void testServiceBind(View view)
     {	
-        bindService(new Intent(MainActivity.this, GameServerService.class), mConnection, Context.BIND_AUTO_CREATE);
+    	//startService(new Intent(this, GameServerService.class));
+    	Intent i =new Intent(this, GameServerService.class);
+        getApplicationContext().bindService(i, mConnection, Context.BIND_AUTO_CREATE);
+
+        GameServerService.sendString("Hola Server!");
         
-        //GameServerService.sendString("Hola Server!");
-        
-        //TextView tv = (TextView)findViewById(R.id.serverNotice);  
-        //tv.setText(GameServerService.receiveString());
+        TextView tv = (TextView)findViewById(R.id.serverNotice);  
+        tv.setText(GameServerService.receiveString());
     }
     
     /** Defines callbacks for service binding, passed to bindService() */
