@@ -17,6 +17,8 @@ public class GameOverActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_game_over);
+		
+		/*
 
 		if(R.id.galeriaDeLaAcademiaRadioButton == this.getIntent().getIntExtra("answerID", 0))
 		{
@@ -34,6 +36,8 @@ public class GameOverActivity extends Activity {
 			tv.setTextSize(50);
 			tv.setTextColor(Color.WHITE);
 		}
+		
+		*/
 	}
 
 	

@@ -26,5 +26,10 @@
     <string name="you_have_the_bomb">¡Tienes la bomba!</string>
     <string name="the_bomb">TheBomb</string>
     <string name="app_name">JBomb</string>
+    <string name="quiz_question_default">quiz_question_default</string>
+    <string name="send_answer">Enviar respuesta</string>
+    <string name="correct_answer">¡Correcto!</string>
+    <string name="incorrect_answer">¡Respuesta incorrecta!</string>
+    <string name="notification_text_default">notificationTextDefault</string>
 
 </resources>

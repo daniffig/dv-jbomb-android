@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import core.GameClient;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
@@ -14,6 +16,9 @@ import android.view.View;
 import android.view.View.DragShadowBuilder;
 import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
@@ -64,10 +69,17 @@ public class IngameActivity extends Activity {
 		setContentView(R.layout.activity_ingame);
 		
 		this.findViewById(R.id.ingameBombImage).setOnTouchListener(new TouchListener());
+		
+		this.hidePlayers();		
+		this.loadPlayers();		
+		
+		/*
 		this.findViewById(R.id.PlayerTopImage).setOnDragListener(new DragListener());
 		this.findViewById(R.id.PlayerRightImage).setOnDragListener(new DragListener());
 		this.findViewById(R.id.PlayerBottomImage).setOnDragListener(new DragListener());
 		this.findViewById(R.id.PlayerLeftImage).setOnDragListener(new DragListener());
+		
+		*/
 		
 		TextView tv = ((TextView) this.findViewById(R.id.ingameServerInfo));
 		
@@ -76,6 +88,34 @@ public class IngameActivity extends Activity {
 		tv.setText(settings.getString("InetIPAddress", "IP"));
 		
 		this.afterInit();
+	}
+	
+	private void hidePlayers() {
+		this.findViewById(R.id.PlayerTop).setVisibility(View.GONE);
+		this.findViewById(R.id.PlayerRight).setVisibility(View.GONE);
+		this.findViewById(R.id.PlayerBottom).setVisibility(View.GONE);
+		this.findViewById(R.id.PlayerLeft).setVisibility(View.GONE);	
+		this.findViewById(R.id.PlayerTopImage).setVisibility(View.GONE);
+		this.findViewById(R.id.PlayerRightImage).setVisibility(View.GONE);
+		this.findViewById(R.id.PlayerBottomImage).setVisibility(View.GONE);
+		this.findViewById(R.id.PlayerLeftImage).setVisibility(View.GONE);		
+	}
+	
+	private void loadPlayers()
+	{
+		for (int player : GameClient.getInstance().getPlayers())
+		{
+			this.loadPlayer((TextView) this.findViewById(GameClient.getInstance().getIdForPlayer(player)), (ImageView) this.findViewById(GameClient.getInstance().getImageForPlayer(player)), String.valueOf(player));
+		}
+	}
+	
+	private void loadPlayer(TextView tv, ImageView iv, String playerName)
+	{		
+		tv.setText(playerName);
+		iv.setOnDragListener(new DragListener());
+		iv.setContentDescription(playerName);
+		tv.setVisibility(View.VISIBLE);
+		iv.setVisibility(View.VISIBLE);
 	}
 
 
@@ -144,9 +184,21 @@ public class IngameActivity extends Activity {
 		
 		System.out.println("IngameActivity request: " + requestCode);
 		
+		TextView na = (TextView) this.findViewById(R.id.notificationText);
+		
 		if (requestCode == QuizActivity.REQUEST_CODE) {
 			
 			System.out.println("IngameActivity result: " + resultCode);
+			
+			if (resultCode == GameClient.CORRECT_ANSWER) {
+				
+				na.setText(R.string.correct_answer);
+			}
+			
+			if (resultCode == GameClient.INCORRECT_ANSWER) {
+				
+				na.setText(R.string.incorrect_answer);
+			}			
 			
 	        if (resultCode == RESULT_OK) {
 	        	

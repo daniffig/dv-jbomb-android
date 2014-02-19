@@ -30,11 +30,11 @@
             android:textSize="@dimen/text_size_small" />
 
         <TextView
-            android:id="@+id/question"
+            android:id="@+id/quizQuestion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="¿En que museo se encuentra el David de Miguel Angel?"
+            android:text="@string/quiz_question_default"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="@dimen/text_size_small" />
 
@@ -44,40 +44,11 @@
                 android:layout_height="wrap_content" >
 
                 <RadioGroup
-                    android:id="@+id/answersRadioGroup"
+                    android:id="@+id/quizQuestionAnswers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
                     android:orientation="vertical" >
-
-                    <RadioButton
-                        android:id="@+id/galeriaUfizziRadioButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="Galería Ufizzi"
-                        android:textSize="@dimen/text_size_small" />
-
-                    <RadioButton
-                        android:id="@+id/museoDelPradoRadioButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Museo del Prado"
-                        android:textSize="@dimen/text_size_small" />
-
-                    <RadioButton
-                        android:id="@+id/galeriaDeLaAcademiaRadioButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Galería de la academia "
-                        android:textSize="@dimen/text_size_small" />
-
-                    <RadioButton
-                        android:id="@+id/museoBritanico"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Museo britanico"
-                        android:textSize="@dimen/text_size_small" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -87,8 +58,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:onClick="openGameOver"
-            android:text="Enviar respuesta" />
+            android:onClick="sendAnswer"
+            android:text="@string/send_answer" />
 
     </LinearLayout>
 

@@ -1,5 +1,6 @@
 package com.example.jbomb;
 
+import core.GameClient;
 import services.GameServerService;
 import services.GameServerService.GameServerServiceBinder;
 
@@ -18,7 +19,7 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 
     //Prueba
-    private GameServerService GameServerService;
+    //private GameServerService GameServerService;
     private boolean isBound = false;
 	
     @Override
@@ -60,10 +61,11 @@ public class MainActivity extends Activity {
     {	
     	
     	if(this.isBound)
-    	{
+    	{/*
     		GameServerService.sendString("Hola Server!");
     
     		Log.i("GAME_SERVER_SERVICE",GameServerService.receiveString());
+    		*/
     	}
     	else
     	{
@@ -79,7 +81,7 @@ public class MainActivity extends Activity {
                 IBinder service) {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
         	GameServerServiceBinder binder = (GameServerServiceBinder) service;
-            GameServerService = binder.getService();
+            //GameServerService = binder.getService();
             isBound = true;
         }
 
@@ -88,5 +90,15 @@ public class MainActivity extends Activity {
             isBound = false;
         }
     };
+    
+
+    
+    protected void onDestroy()
+    {
+    	System.out.println(1234123);
+    	GameClient.destroyInstance();
+    	
+    	super.onDestroy();
+    }
     
 }
