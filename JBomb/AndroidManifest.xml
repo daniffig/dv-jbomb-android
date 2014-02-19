@@ -64,7 +64,7 @@
         </activity>
 
         <service
-            android:name="com.example.jbomb.GameServerService"
+            android:name="services.GameServerService"
             android:enabled="true"
             android:exported="false" >
         </service>

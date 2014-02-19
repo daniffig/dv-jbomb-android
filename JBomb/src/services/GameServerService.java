@@ -1,11 +1,13 @@
-package com.example.jbomb;
+package services;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
+import network.JBombComunicationObject;
 
 import android.app.Service;
 import android.content.Intent;
@@ -16,7 +18,7 @@ import android.util.Log;
 
 public class GameServerService extends Service {
 	private Socket socket;
-	private String s;
+	private JBombComunicationObject communication_object;
 
 	private final IBinder mBinder = new GameServerServiceBinder();
 	
@@ -45,20 +47,20 @@ public class GameServerService extends Service {
 		new Thread(new ConnectionThread()).start();
 	}
 	
-	public void sendString(String s){
-		this.s =s;
-		new Thread(new sendStringThread()).start();
+	public void sendObject(JBombComunicationObject communicationObject){
+		this.communication_object = communicationObject;
+		new Thread(new sendObjectThread()).start();
 	}
 	
-	public String receiveString(){
-		Thread t = new Thread(new receiveStringThread());
+	public Object receiveString(){
+		Thread t = new Thread(new receiveObjectThread());
 		t.start();
 		try{
 			t.join();
 		}catch(InterruptedException e){
 			Log.e("GAME_SERVER_SERVICE", e.toString());
 		}
-		return s;
+		return this.communication_object;
 	}
 		
     public class GameServerServiceBinder extends Binder {
@@ -93,36 +95,35 @@ public class GameServerService extends Service {
 		}
     }
     
-    public class sendStringThread implements Runnable{
+    public class sendObjectThread implements Runnable{
 		public void run(){
-		    try
+			try
 			{
-				DataOutputStream outToClient = new DataOutputStream(socket.getOutputStream());
-			
-				outToClient.writeBytes(s + '\n');
-				Log.i("GAME_SERVER_SERVICE", "Mande el string");
+				ObjectOutputStream outToClient = new ObjectOutputStream(socket.getOutputStream());
+				
+				outToClient.writeObject(communication_object);
 			}
-			catch(IOException e)
+			catch(Exception e)
 			{
-				Log.e("GAME_SERVER_SERVICE", "fallo el envio del string");
+				Log.e("GAME_SERVER_SERVICE", "Falló el envio del objeto - " + e.toString());
 			}
 		}
     }
 
-	public class receiveStringThread implements Runnable{
+	public class receiveObjectThread implements Runnable{
 		
 		@Override
 		public void run(){
 			try
-	   		{
-	   			BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-	   			  
-	   			s = inFromServer.readLine();
-	   		}
-	   		catch(IOException e)
-	   		{
-	   			Log.e("GAME_SERVER_SERVICE", "fallo la recepción del string");
-	  		}
+			{
+				ObjectInputStream inFromClient = new ObjectInputStream(socket.getInputStream());
+			
+				communication_object =  (JBombComunicationObject) inFromClient.readObject();
+			}
+			catch(Exception e)
+			{
+				Log.e("GAME_SERVER_SERVICE", "Falló la recepción del objeto - " + e.toString());
+			}
 		}
 
 	}

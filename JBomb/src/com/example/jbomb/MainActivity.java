@@ -1,7 +1,7 @@
 package com.example.jbomb;
 
-import com.example.jbomb.GameServerService.GameServerServiceBinder;
-import com.example.jbomb.GameServerService;
+import services.GameServerService;
+import services.GameServerService.GameServerServiceBinder;
 
 import android.os.Bundle;
 import android.os.IBinder;
