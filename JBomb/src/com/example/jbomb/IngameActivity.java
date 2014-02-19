@@ -22,6 +22,8 @@ import android.content.SharedPreferences;
 
 public class IngameActivity extends Activity {
 	
+	public static int REQUEST_CODE = 17;
+	
 	public TextView timeLabel;
 	private Long detonationTime;
 	private Long startTimePoint;
@@ -129,11 +131,27 @@ public class IngameActivity extends Activity {
 		    	
 		    	myIntent.putExtra("TARGET_PLAYER_NAME", ingameImage.getContentDescription());
 
-		    	IngameActivity.this.startActivity(myIntent);
+		    	IngameActivity.this.startActivityForResult(myIntent, QuizActivity.REQUEST_CODE);
 				break;
 			}
 		    
 			return true;
 		}		
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		System.out.println("IngameActivity request: " + requestCode);
+		
+		if (requestCode == QuizActivity.REQUEST_CODE) {
+			
+			System.out.println("IngameActivity result: " + resultCode);
+			
+	        if (resultCode == RESULT_OK) {
+	        	
+	        	IngameActivity.this.finish();
+	        }			
+		}
 	}
 }

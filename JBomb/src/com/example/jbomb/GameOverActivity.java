@@ -5,10 +5,11 @@ import android.app.Activity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
-import android.content.Intent;
 import android.graphics.Color;
 
 public class GameOverActivity extends Activity {
+	
+	public static int REQUEST_CODE = 23;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class GameOverActivity extends Activity {
 			tv.setText("�PERDISTE!");
 			tv.setTextSize(50);
 			tv.setTextColor(Color.WHITE);
-		} 
+		}
 	}
 
 	
@@ -44,12 +45,7 @@ public class GameOverActivity extends Activity {
 	}
 	
 	public void openMainWindow(View view)
-	{
-		Intent myIntent = new Intent(GameOverActivity.this, MainActivity.class);
-
-		GameOverActivity.this.startActivity(myIntent);
-		
-		GameOverActivity.this.finish();
+	{				
+    	GameOverActivity.this.finish();
 	}
-
 }

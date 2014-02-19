@@ -10,7 +10,8 @@ import android.content.Intent;
 
 public class QuizActivity extends Activity {
 	
-
+	public static int REQUEST_CODE = 19;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,6 +39,7 @@ public class QuizActivity extends Activity {
     	
     	QuizActivity.this.startActivity(myIntent);
     	
+    	QuizActivity.this.setResult(RESULT_OK);    	
     	QuizActivity.this.finish();
 	}
 
