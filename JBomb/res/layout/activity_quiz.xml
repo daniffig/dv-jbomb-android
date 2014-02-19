@@ -1,76 +1,96 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".QuizActivity" >
 
-    <TextView
-        android:id="@+id/quizNotice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/question"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="14dp"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-    
-    <TextView
-        android:id="@+id/question"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/quizNotice"
-        android:layout_marginTop="20dp"
-        android:text="¿En que museo se encuentra el David de Miguel Angel?"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+<ScrollView
+	android:id="@+id/ScrlView"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-    <RadioGroup
-        android:id="@+id/answersRadioGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/question"
-        android:layout_below="@+id/question"
-        android:layout_marginTop="18dp" >
+    <LinearLayout
+        android:id="@+id/QuizLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
 
-        <RadioButton
-            android:id="@+id/galeriaUfizziRadioButton"
+        <TextView
+            android:id="@+id/quizNotice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Galería Ufizzi" />
+            android:layout_marginTop="14dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="@dimen/text_size_small" />
 
-        <RadioButton
-            android:id="@+id/museoDelPradoRadioButton"
+        <TextView
+            android:id="@+id/question"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Museo del Prado" />
+            android:layout_marginTop="20dp"
+            android:text="¿En que museo se encuentra el David de Miguel Angel?"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="@dimen/text_size_small" />
 
-        <RadioButton
-            android:id="@+id/galeriaDeLaAcademiaRadioButton"
+            <LinearLayout
+                android:id="@+id/AnswersLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <RadioGroup
+                    android:id="@+id/answersRadioGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:orientation="vertical" >
+
+                    <RadioButton
+                        android:id="@+id/galeriaUfizziRadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Galería Ufizzi"
+                        android:textSize="@dimen/text_size_small" />
+
+                    <RadioButton
+                        android:id="@+id/museoDelPradoRadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Museo del Prado"
+                        android:textSize="@dimen/text_size_small" />
+
+                    <RadioButton
+                        android:id="@+id/galeriaDeLaAcademiaRadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Galería de la academia "
+                        android:textSize="@dimen/text_size_small" />
+
+                    <RadioButton
+                        android:id="@+id/museoBritanico"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Museo britanico"
+                        android:textSize="@dimen/text_size_small" />
+                </RadioGroup>
+            </LinearLayout>
+
+        <Button
+            android:id="@+id/enviarRespuestaButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Galería de la academia " />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:onClick="openGameOver"
+            android:text="Enviar respuesta" />
 
-        <RadioButton
-            android:id="@+id/museoBritanico"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Museo britanico" />
-    </RadioGroup>
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/enviarRespuestaButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/answersRadioGroup"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:onClick="openGameOver"
-        android:text="Enviar respuesta" />
-
-
-
-</RelativeLayout>
+</ScrollView>
+</LinearLayout>
