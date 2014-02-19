@@ -12,57 +12,14 @@
     tools:context=".IngameActivity" >
 
     <TextView
-        android:id="@+id/PlayerRight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/ingameBombImage"
-        android:drawableTop="@drawable/jugador_1"
-        android:gravity="center_horizontal"
-        android:text="@string/player_right_name" />
-
-    <TextView
-        android:id="@+id/PlayerBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ingameBombImage"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:drawableTop="@drawable/jugador_3"
-        android:gravity="center_horizontal"
-        android:text="@string/player_bottom_name" />
-
-    <TextView
-        android:id="@+id/PlayerLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="20dp"
-        android:layout_toLeftOf="@+id/ingameBombImage"
-        android:drawableTop="@drawable/jugador_4"
-        android:gravity="center_horizontal"
-        android:text="@string/player_left_name" />
-
-    <ImageView
-        android:id="@+id/ingameBombImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/the_bomb"
-        android:scaleType="fitCenter"
-        android:src="@drawable/gameplay_bomb" />
-
-    <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:text="@string/server"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="@dimen/text_size_small" />
 
     <TextView
         android:id="@+id/textView5"
@@ -71,18 +28,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:text="@string/you_have_the_bomb"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/PlayerTop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/ingameBombImage"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:drawableTop="@drawable/jugador_2"
-        android:gravity="center_horizontal"
-        android:text="@string/player_top_name" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="@dimen/text_size_small" />
 
     <TextView
         android:id="@+id/ingameServerInfo"
@@ -91,6 +38,113 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView7"
         android:text="@string/the_bomb"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="@dimen/text_size_small" />
+
+    <ImageView
+        android:id="@+id/ingameBombImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/the_bomb"
+        android:maxHeight="@dimen/ingame_bomb"
+        android:maxWidth="@dimen/ingame_bomb"
+        android:scaleType="fitCenter"
+        android:src="@drawable/gameplay_bomb" />
+
+    <TextView
+        android:id="@+id/PlayerLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/PlayerLeftImage"
+        android:layout_alignLeft="@+id/PlayerLeftImage"
+        android:adjustViewBounds="true"
+        android:gravity="center_horizontal"
+        android:text="@string/player_left_name"
+        android:textSize="@dimen/text_size_small" />
+
+    <ImageView
+        android:id="@+id/PlayerLeftImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/ingameBombImage"
+        android:layout_marginRight="30dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/player_left_name"
+        android:maxHeight="@dimen/player_avatar"
+        android:maxWidth="@dimen/player_avatar"
+        android:scaleType="centerInside"
+        android:src="@drawable/avatar" />
+
+    <ImageView
+        android:id="@+id/PlayerRightImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/ingameBombImage"
+        android:layout_marginLeft="30dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/player_right_name"
+        android:maxHeight="@dimen/player_avatar"
+        android:maxWidth="@dimen/player_avatar"
+        android:src="@drawable/avatar" />
+
+    <TextView
+        android:id="@+id/PlayerRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/PlayerRightImage"
+        android:layout_below="@+id/PlayerRightImage"
+        android:gravity="center_horizontal"
+        android:text="@string/player_right_name"
+        android:textSize="@dimen/text_size_small" />
+
+    <ImageView
+        android:id="@+id/PlayerBottomImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ingameBombImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/player_bottom_name"
+        android:maxHeight="@dimen/player_avatar"
+        android:maxWidth="@dimen/player_avatar"
+        android:src="@drawable/avatar" />
+
+    <TextView
+        android:id="@+id/PlayerBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/PlayerBottomImage"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:text="@string/player_bottom_name"
+        android:textSize="@dimen/text_size_small" />
+
+    <ImageView
+        android:id="@+id/PlayerTopImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/PlayerTop"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/player_top_name"
+        android:maxHeight="@dimen/player_avatar"
+        android:maxWidth="@dimen/player_avatar"
+        android:src="@drawable/avatar" />
+
+    <TextView
+        android:id="@+id/PlayerTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ingameBombImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:gravity="center_horizontal"
+        android:text="@string/player_top_name"
+        android:textSize="@dimen/text_size_small" />
 
 </RelativeLayout>
