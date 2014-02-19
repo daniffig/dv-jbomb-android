@@ -16,11 +16,6 @@
         android:layout_height="wrap_content"
         android:text="@string/inet_ip_address"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
-     <TextView
-        android:id="@+id/serverNotice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
      
     <EditText
         android:id="@+id/InetIPAddressEditText"
@@ -64,13 +59,6 @@
             android:onClick="closeClientSettings"
             android:text="@string/cancel" />
 
-        
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="testServiceBind"
-            android:text="@string/server" />
     </LinearLayout>
 
 </LinearLayout>

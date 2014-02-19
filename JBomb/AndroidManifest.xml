@@ -4,10 +4,12 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <!-- este es un comentario de andres para ver si puede commitear -->
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="18" />
+    
+    <uses-permission android:name="android.permission.INTERNET" ></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" ></uses-permission>
 
     <application
         android:allowBackup="true"
@@ -60,9 +62,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.jbomb.MainActivity" />
         </activity>
+
+        <service
+            android:name="com.example.jbomb.GameServerService"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET" ></uses-permission>
-
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" ></uses-permission>
 </manifest>
