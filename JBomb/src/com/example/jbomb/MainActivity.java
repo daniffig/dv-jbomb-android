@@ -14,8 +14,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        TextView tv = (TextView)this.findViewById(R.id.Titulo);
-        tv.setTextSize(60 * getResources().getDisplayMetrics().density);
+        //TextView tv = (TextView)this.findViewById(R.id.Titulo);
+        //tv.setTextSize(60 * getResources().getDisplayMetrics().density);
     }
 
 

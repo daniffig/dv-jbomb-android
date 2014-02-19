@@ -16,7 +16,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.example.jbomb.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,7 +27,8 @@
         <activity
             android:name="com.example.jbomb.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.example.jbomb.MainActivity" >
+            android:parentActivityName="com.example.jbomb.MainActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.jbomb.MainActivity" />
@@ -34,7 +36,8 @@
         <activity
             android:name="com.example.jbomb.IngameActivity"
             android:label="@string/title_activity_ingame"
-            android:parentActivityName="com.example.jbomb.MainActivity" >
+            android:parentActivityName="com.example.jbomb.MainActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.jbomb.MainActivity" />
@@ -42,7 +45,8 @@
         <activity
             android:name="com.example.jbomb.ClientSettingsActivity"
             android:label="@string/title_activity_client_settings"
-            android:parentActivityName="com.example.jbomb.MainActivity" >
+            android:parentActivityName="com.example.jbomb.MainActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.jbomb.MainActivity" />
@@ -50,7 +54,8 @@
         <activity
             android:name="com.example.jbomb.QuizActivity"
             android:label="@string/title_activity_quiz"
-            android:parentActivityName="com.example.jbomb.MainActivity" >
+            android:parentActivityName="com.example.jbomb.MainActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.jbomb.MainActivity" />
@@ -58,7 +63,8 @@
         <activity
             android:name="com.example.jbomb.GameOverActivity"
             android:label="@string/title_activity_game_over"
-            android:parentActivityName="com.example.jbomb.MainActivity" >
+            android:parentActivityName="com.example.jbomb.MainActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.jbomb.MainActivity" />

@@ -12,6 +12,7 @@ public class GameOverActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_game_over);
@@ -47,6 +48,8 @@ public class GameOverActivity extends Activity {
 		Intent myIntent = new Intent(GameOverActivity.this, MainActivity.class);
 
 		GameOverActivity.this.startActivity(myIntent);
+		
+		GameOverActivity.this.finish();
 	}
 
 }

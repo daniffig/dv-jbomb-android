@@ -23,10 +23,10 @@ public class IngameActivity extends Activity {
 		setContentView(R.layout.activity_ingame);
 		
 		this.findViewById(R.id.ingameBombImage).setOnTouchListener(new TouchListener());
-		this.findViewById(R.id.ingamePlayerTopImage).setOnDragListener(new DragListener());
-		this.findViewById(R.id.ingamePlayerRightImage).setOnDragListener(new DragListener());
-		this.findViewById(R.id.ingamePlayerBottomImage).setOnDragListener(new DragListener());
-		this.findViewById(R.id.ingamePlayerLeftImage).setOnDragListener(new DragListener());
+		this.findViewById(R.id.PlayerTop).setOnDragListener(new DragListener());
+		this.findViewById(R.id.PlayerRight).setOnDragListener(new DragListener());
+		this.findViewById(R.id.PlayerBottom).setOnDragListener(new DragListener());
+		this.findViewById(R.id.PlayerLeft).setOnDragListener(new DragListener());
 		
 		TextView tv = ((TextView) this.findViewById(R.id.ingameServerInfo));
 		

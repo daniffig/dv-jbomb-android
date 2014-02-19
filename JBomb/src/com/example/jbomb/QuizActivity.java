@@ -34,7 +34,10 @@ public class QuizActivity extends Activity {
 		
     	Intent myIntent = new Intent(QuizActivity.this, GameOverActivity.class);
     	myIntent.putExtra("answerID", answersRadioGroup.getCheckedRadioButtonId());
+    	
     	QuizActivity.this.startActivity(myIntent);
+    	
+    	QuizActivity.this.finish();
 	}
 
 }
