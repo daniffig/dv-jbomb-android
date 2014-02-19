@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -22,6 +23,7 @@ import android.os.Build;
 
 public class ClientSettingsActivity extends Activity {
 
+	private Socket socket;
     public static final String PREFS_NAME = "ClientSettingsFile3";
 
 	@Override
@@ -40,6 +42,8 @@ public class ClientSettingsActivity extends Activity {
 		
 		// Show the Up button in the action bar.
 		setupActionBar();
+		
+		new Thread(new ClientThread()).start();
 	}
 
 	/**
@@ -97,32 +101,53 @@ public class ClientSettingsActivity extends Activity {
     {
     	this.finish();
     }
-    
+
     public void testServiceBind(View view)
     {	
-    	Socket socket = new Socket();
-    	try
-    	{
-  		   socket = new Socket("localhost", 4321);
-  	    }
-    	catch(IOException e){
-  		  System.out.println("Connection to server failed!");
-  	    }
+    	System.out.println("yeeeeeyyyy");
     	
-
-  		try
-   		{
-   			BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-   			
-   			TextView tv = (TextView)findViewById(R.id.serverNotice);  
-   			tv.setText(inFromServer.readLine());
-   		}
-   		catch(IOException e)
-   		{
-   			System.out.println("Fallo la recepci�n desde el Servidor.");
-   			
-  		}
 
     }
 
+    class ClientThread implements Runnable{
+    
+    	@Override
+    	public void run(){
+    		try{
+    			socket = new Socket("192.168.1.101", 4321);
+    		
+    		} catch(UnknownHostException e1){
+    			e1.printStackTrace();
+    		} catch(IOException e1){
+    			e1.printStackTrace();
+    		}
+    		
+    		try
+       		{
+       			BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+       			
+       			TextView tv = (TextView)findViewById(R.id.serverNotice);  
+       			tv.setText(inFromServer.readLine());
+       		}
+       		catch(IOException e)
+       		{
+       			System.out.println("Fallo la recepci�n desde el Servidor.");
+       			
+      		}
+    		
+    		
+    		try
+    		{
+    			DataOutputStream outToClient = new DataOutputStream(socket.getOutputStream());
+    		
+    			outToClient.writeBytes("hola server \n");
+    		}
+    		catch(IOException e)
+    		{
+    			System.out.println("Fallo el envio del propietario de la bomba");
+    		}
+    	}
+    }
+    
 }
+
