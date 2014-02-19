@@ -4,5 +4,6 @@
     <dimen name="player_avatar">64dp</dimen>
     <dimen name="text_size_title1">48sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_medium">18sp</dimen>
     
 </resources>

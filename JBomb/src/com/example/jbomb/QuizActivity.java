@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.content.Intent;
 
 public class QuizActivity extends Activity {
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -1,6 +1,11 @@
 package com.example.jbomb;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import android.os.Bundle;
+import android.os.Handler;
 import android.app.Activity;
 import android.view.DragEvent;
 import android.view.Menu;
@@ -16,6 +21,40 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 public class IngameActivity extends Activity {
+	
+	public TextView timeLabel;
+	private Long detonationTime;
+	private Long startTimePoint;
+	
+	private SimpleDateFormat screenFormat = new SimpleDateFormat("mm:ss", Locale.getDefault());
+	
+	private void afterInit() {
+		timeLabel = (TextView) this.findViewById(R.id.Watch);
+		this.detonationTime = 60000L;
+		timeLabel.setText(screenFormat.format(this.detonationTime));
+		this.startTimePoint = System.currentTimeMillis();//Long.valueOf(0);
+		this.startCounting();
+	}
+	
+	private Handler tasksHandler = new Handler();
+	
+	public void startCounting() {
+		this.tasksHandler.removeCallbacks(timeTickRunnable);
+		this.tasksHandler.postDelayed(timeTickRunnable, 100);
+	}
+	
+	public String currentTimeString() {
+		Long interval = detonationTime - (System.currentTimeMillis() - startTimePoint);
+		final Date date = new Date(interval);
+		return screenFormat.format(date);
+	}
+	
+	private Runnable timeTickRunnable = new Runnable() {
+		public void run() {
+			IngameActivity.this.timeLabel.setText(currentTimeString());
+			IngameActivity.this.tasksHandler.postDelayed(timeTickRunnable, 100);
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +72,8 @@ public class IngameActivity extends Activity {
 	    SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
 	    
 		tv.setText(settings.getString("InetIPAddress", "IP"));
+		
+		this.afterInit();
 	}
 
 
