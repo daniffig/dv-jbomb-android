@@ -18,7 +18,11 @@ public class JBombComunicationObject implements Serializable{
 	private String QuizQuestion;
 	private Vector<String> QuizAnswers;
 	private String SelectedQuizAnswer;
-
+	
+	private String  GameName;
+	private Integer CurrentRound;
+	private Integer MaxRounds;
+	private String  GamePlayersOverMaxGamePlayers;	
 	
 	public JBombRequestResponse getType() {
 		return Type;
@@ -61,5 +65,30 @@ public class JBombComunicationObject implements Serializable{
 	}
 	public void setSelectedQuizAnswer(String selectedQuizAnswer) {
 		SelectedQuizAnswer = selectedQuizAnswer;
+	}
+	public String getGameName() {
+		return GameName;
+	}
+	public void setGameName(String gameName) {
+		GameName = gameName;
+	}
+	public Integer getCurrentRound() {
+		return CurrentRound;
+	}
+	public void setCurrentRound(Integer currentRound) {
+		CurrentRound = currentRound;
+	}
+	public Integer getMaxRounds() {
+		return MaxRounds;
+	}
+	public void setMaxRounds(Integer maxRounds) {
+		MaxRounds = maxRounds;
+	}
+	public String getGamePlayersOverMaxGamePlayers() {
+		return GamePlayersOverMaxGamePlayers;
+	}
+	public void setGamePlayersOverMaxGamePlayers(
+			String gamePlayersOverMaxGamePlayers) {
+		GamePlayersOverMaxGamePlayers = gamePlayersOverMaxGamePlayers;
 	}
 }
