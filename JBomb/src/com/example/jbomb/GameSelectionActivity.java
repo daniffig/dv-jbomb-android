@@ -76,8 +76,6 @@ public class GameSelectionActivity extends Activity {
 		{			
 			RadioButton rb = new RadioButton(this.getBaseContext());
 			
-			System.out.println(ag.getId());
-			
 			rb.setId(ag.getId());
 			rb.setText(ag.getName());
 			
