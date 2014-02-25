@@ -52,7 +52,7 @@ public class GameServerService extends Service {
 		new Thread(new sendObjectThread()).start();
 	}
 	
-	public Object receiveString(){
+	public JBombComunicationObject receiveObject(){
 		Thread t = new Thread(new receiveObjectThread());
 		t.start();
 		try{
