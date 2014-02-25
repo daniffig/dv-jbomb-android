@@ -76,9 +76,9 @@ public class GameClient {
 		switch (i)
 		{
 		case 0:
-			return R.id.PlayerTop;
+			return R.id.InetPortText;
 		case 1:
-			return R.id.PlayerRight;
+			return R.id.InetIPAddressText;
 		case 2:
 			return R.id.PlayerBottom;
 		case 3:

@@ -11,7 +11,20 @@
     tools:context=".ClientSettingsActivity" >
 
     <TextView
-        android:id="@+id/PlayerRight"
+        android:id="@+id/PlayerNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/player_name"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <EditText
+        android:id="@+id/PlayerNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" />
+
+    <TextView
+        android:id="@+id/InetIPAddressText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/inet_ip_address"
@@ -28,7 +41,7 @@
     </EditText>
 
     <TextView
-        android:id="@+id/PlayerTop"
+        android:id="@+id/InetPortText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/inet_port"

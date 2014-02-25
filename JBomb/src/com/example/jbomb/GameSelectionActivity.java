@@ -22,8 +22,8 @@ import android.widget.Toast;
 
 public class GameSelectionActivity extends Activity {
 	
-	private GameServerService GameServerService;
-    private boolean isBound = false;
+	private static GameServerService GameServerService;
+    private static boolean isBound = false;
     private Toast connecting;
     private Toast loading;
 
@@ -37,9 +37,18 @@ public class GameSelectionActivity extends Activity {
 		this.connecting = Toast.makeText(this.getApplicationContext(), "Conectando con el servidor " + settings.getString("InetIPAddress", null) + "...", Toast.LENGTH_SHORT);
 		this.connecting.show();
 		
-        this.startService(new Intent(this, GameServerService.class));
-    	
-    	this.getApplicationContext().bindService(new Intent(this, GameServerService.class), mConnection, Context.BIND_AUTO_CREATE);
+		if (GameSelectionActivity.isBound)
+		{    		
+    		loading = Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Cargando juegos...", Toast.LENGTH_SHORT);
+    		loading.show();
+            
+            GameSelectionActivity.this.onServiceConnected();			
+		}
+		else
+		{			
+	        this.startService(new Intent(this, GameServerService.class));	    	
+	    	this.getApplicationContext().bindService(new Intent(this, GameServerService.class), mConnection, Context.BIND_AUTO_CREATE);			
+		}
 	}
 	
 	// Una mentira.

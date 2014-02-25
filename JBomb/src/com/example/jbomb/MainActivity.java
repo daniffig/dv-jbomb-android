@@ -20,7 +20,8 @@ public class MainActivity extends Activity {
         SharedPreferences settings_ro = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
 	    
 	    Editor settings_rw = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0).edit();
-	    
+
+	    settings_rw.putString("PlayerName", settings_ro.getString("PlayerName", "default"));    
 	    settings_rw.putString("InetIPAddress", settings_ro.getString("InetIPAddress", "127.0.0.1"));    
 	    settings_rw.putInt("InetPort", settings_ro.getInt("InetPort", 4321));
 	    

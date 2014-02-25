@@ -14,6 +14,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 public class ClientSettingsActivity extends Activity {
+	
+	// Push trucho para probar el git.
 
     public static final String PREFS_NAME = "ClientSettingsFile";
     
@@ -25,9 +27,11 @@ public class ClientSettingsActivity extends Activity {
 		// Restore preferences
 	    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 	    
+	    EditText PlayerNameEditText = (EditText) this.findViewById(R.id.PlayerNameEditText);
 	    EditText InetIPAddressEditText = (EditText) this.findViewById(R.id.InetIPAddressEditText);
 	    EditText InetPortEditText = (EditText) this.findViewById(R.id.InetPortEditText);
 	    
+	    PlayerNameEditText.setText(settings.getString("PlayerName", "default"));	    
 	    InetIPAddressEditText.setText(settings.getString("InetIPAddress", "127.0.0.1"));
 	    InetPortEditText.setText(String.valueOf(settings.getInt("InetPort", 4321)));
 	}
@@ -60,9 +64,11 @@ public class ClientSettingsActivity extends Activity {
     {
 	    Editor settings = getSharedPreferences(PREFS_NAME, 0).edit();
 	    
+	    EditText PlayerNameEditText = (EditText) this.findViewById(R.id.PlayerNameEditText);
 	    EditText InetIPAddressEditText = (EditText) this.findViewById(R.id.InetIPAddressEditText);
 	    EditText InetPortEditText = (EditText) this.findViewById(R.id.InetPortEditText);
 	    
+	    settings.putString("PlayerName", PlayerNameEditText.getText().toString());
 	    settings.putString("InetIPAddress", InetIPAddressEditText.getText().toString());    
 	    settings.putInt("InetPort", Integer.parseInt(InetPortEditText.getText().toString()));
 	    
