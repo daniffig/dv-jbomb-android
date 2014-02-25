@@ -34,11 +34,12 @@
     
 </ScrollView>
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/connect"
-        android:onClick="connectToGame" />
+<ImageButton
+    android:id="@+id/imageButton1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:src="@drawable/connect"
+    android:onClick="connectToGame"
+    android:background="@null" />
 
 </LinearLayout>

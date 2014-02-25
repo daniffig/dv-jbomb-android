@@ -18,32 +18,26 @@
         android:text="@string/loading_players"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <LinearLayout
+    <ProgressBar
+        android:id="@+id/loadingPlayersProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
-        android:orientation="horizontal" >
+        android:layout_height="wrap_content" />
 
-        <ImageView
-            android:id="@+id/playerLoading0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="TODO"
-            android:src="@drawable/loading_player" />
-
-        <ImageView
-            android:id="@+id/playerLoading1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/loading_player" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/button1"
+    <ImageView
+        android:id="@+id/imageView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/play"
-        android:visibility="invisible" />
+        android:src="@drawable/get_ready" 
+        android:contentDescription="@string/todo"/>
+
+    <ImageButton
+        android:id="@+id/imageButton1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/play"
+        android:background="@null"
+        android:visibility="invisible" 
+        android:contentDescription="@string/todo" />
 
 </LinearLayout>

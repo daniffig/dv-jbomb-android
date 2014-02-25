@@ -19,47 +19,29 @@
         android:orientation="vertical" >
 
         <ImageView
-            android:id="@+id/PlayerLeftImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="center"
-            android:src="@drawable/gameplay_bomb" />
-
-        <TextView
-            android:id="@+id/Titulo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/app_name"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="@dimen/text_size_title1" />
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/jbomb_title" android:contentDescription="@string/todo"/>
 
     </LinearLayout>
 
-    <LinearLayout
+    <ImageButton
+        android:id="@+id/imageButton2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.70" >
+        android:layout_weight="0.70"
+        android:background="@null"
+        android:src="@drawable/find_games"
+        android:onClick="openGameSelection" android:contentDescription="@string/todo"/>
 
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/playButton"
+    <ImageButton
+        android:id="@+id/imageButton1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|center_horizontal"
-        android:layout_marginTop="10dp"
-        android:onClick="openGameSelection"
-        android:text="@string/play"
-        android:textSize="@dimen/text_size_small" />
-
-    <Button
-        android:id="@+id/settingsButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:onClick="openClientSettings"
-        android:text="@string/settings"
-        android:textSize="@dimen/text_size_small" />
+        android:layout_weight="0.70"
+        android:background="@null"
+        android:src="@drawable/configuration"
+        android:onClick="openClientSettings" android:contentDescription="@string/todo"/>
 
 </LinearLayout>

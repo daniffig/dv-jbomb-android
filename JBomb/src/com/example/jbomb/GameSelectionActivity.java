@@ -76,6 +76,8 @@ public class GameSelectionActivity extends Activity {
 		{			
 			RadioButton rb = new RadioButton(this.getBaseContext());
 			
+			System.out.println("El ID del juego es: " + ag.getUID());
+			
 			rb.setId(ag.getUID());
 			rb.setText(ag.getName() + " " + ag.getGamePlayersOverMaxGamePlayers() + " | " + ag.getMode());
 			
@@ -106,6 +108,8 @@ public class GameSelectionActivity extends Activity {
 		GameServerService.sendObject(jbo);		
 		
 		RadioButton selectedGame = (RadioButton)findViewById(availableGamesRadioGroup.getCheckedRadioButtonId());
+		
+		System.out.println("Me quiero conectar con: " + availableGamesRadioGroup.getCheckedRadioButtonId());
 		
 		Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Conectando con " + selectedGame.getText() + "...", Toast.LENGTH_SHORT).show();
     	

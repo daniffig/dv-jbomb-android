@@ -2,7 +2,9 @@ package com.example.jbomb;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.view.Menu;
+import android.widget.ProgressBar;
 
 public class PlayersLoadingActivity extends Activity {
 
@@ -10,6 +12,11 @@ public class PlayersLoadingActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_players_loading);
+		
+		ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);
+		
+		pb.setProgress(0);
+		pb.setProgress(50);
 	}
 
 	@Override
