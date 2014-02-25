@@ -66,12 +66,6 @@ public class GameSelectionActivity extends Activity {
 		this.loading.cancel();
     	
     	JBombComunicationObject response = GameServerService.receiveObject();
-		
-		
-		if(response.getType().equals(JBombRequestResponse.GAME_LIST_RESPONSE))
-		{
-			System.out.println("Me dieron un response v�lido wacho pistola");
-		}
     	
     	this.loadGames((RadioGroup) this.findViewById(R.id.availableGamesRadioGroup), response.getAvailableGames());    	
 	}
@@ -100,9 +94,26 @@ public class GameSelectionActivity extends Activity {
 	
 	public void connectToGame(View view)
 	{
+        SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
+        
 		RadioGroup availableGamesRadioGroup = (RadioGroup) findViewById(R.id.availableGamesRadioGroup);
 		
-		Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Seleccionaste el juego: " + availableGamesRadioGroup.getCheckedRadioButtonId(), Toast.LENGTH_SHORT).show();
+		JBombComunicationObject jbo = new JBombComunicationObject();
+		
+		jbo.setType(JBombRequestResponse.JOIN_GAME_REQUEST);
+
+		jbo.setRequestedGameId(availableGamesRadioGroup.getCheckedRadioButtonId());
+		jbo.setMyPlayerName(settings.getString("PlayerName", "default"));
+		
+		GameServerService.sendObject(jbo);		
+		
+		RadioButton selectedGame = (RadioButton)availableGamesRadioGroup.getChildAt(availableGamesRadioGroup.getCheckedRadioButtonId());
+		
+		Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Conectando con " + selectedGame.getText() + "...", Toast.LENGTH_SHORT).show();
+    	
+    	JBombComunicationObject response = GameServerService.receiveObject();
+
+		Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Player ID: " + response.getMyPlayerId(), Toast.LENGTH_SHORT).show();
 	}
     
     
