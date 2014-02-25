@@ -52,8 +52,11 @@ public class GameSelectionActivity extends Activity {
     	
     	JBombComunicationObject response = GameServerService.receiveObject();
 		
-		System.out.println("Muero aca?");
 		
+		if(response.getType().equals(JBombRequestResponse.GAME_LIST_RESPONSE))
+		{
+			System.out.println("Me dieron un response válido wacho pistola");
+		}
 		/*
     	
     	this.loadGames((RadioGroup) this.findViewById(R.id.availableGamesRadioGroup), response.getAvailableGames());
