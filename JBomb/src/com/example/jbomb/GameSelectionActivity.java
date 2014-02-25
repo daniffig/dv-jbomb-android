@@ -79,7 +79,7 @@ public class GameSelectionActivity extends Activity {
 			System.out.println("El ID del juego es: " + ag.getUID());
 			
 			rb.setId(ag.getUID());
-			rb.setText(ag.getName() + " " + ag.getGamePlayersOverMaxGamePlayers() + " | " + ag.getMode());
+			rb.setText(ag.getName() + " " + ag.getTotalPlayers() + "/" + ag.getMaxPlayers() + " | " + ag.getMode());
 			
 			availableGamesRadioGroup.addView(rb);			
 		}		

@@ -9,7 +9,9 @@ public class GamePlayInformation implements Serializable{
 	private String  Name;
 	private Integer CurrentRound;
 	private Integer MaxRounds;
-	private String  GamePlayersOverMaxGamePlayers;
+	private Integer TotalPlayers;
+	private Integer MaxPlayers;
+	
 	public Integer getId() {
 		return Id;
 	}
@@ -34,13 +36,19 @@ public class GamePlayInformation implements Serializable{
 	public void setMaxRounds(Integer maxRounds) {
 		MaxRounds = maxRounds;
 	}
-	public String getGamePlayersOverMaxGamePlayers() {
-		return GamePlayersOverMaxGamePlayers;
+	public Integer getTotalPlayers() {
+		return TotalPlayers;
 	}
-	public void setGamePlayersOverMaxGamePlayers(
-			String gamePlayersOverMaxGamePlayers) {
-		GamePlayersOverMaxGamePlayers = gamePlayersOverMaxGamePlayers;
+	public void setTotalPlayers(Integer totalPlayers) {
+		TotalPlayers = totalPlayers;
 	}
+	public Integer getMaxPlayers() {
+		return MaxPlayers;
+	}
+	public void setMaxPlayers(Integer maxPlayers) {
+		MaxPlayers = maxPlayers;
+	}
+
 
 
 }

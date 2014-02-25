@@ -7,9 +7,10 @@ public class GameInformation  implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Integer UID;
-	private String Name;
-	private String Mode;
-	private String GamePlayersOverMaxGamePlayers;
+	private String  Name;
+	private String  Mode;
+	private Integer TotalPlayers;
+	private Integer MaxPlayers;
 	
 	
 	public Integer getUID() {
@@ -30,12 +31,18 @@ public class GameInformation  implements Serializable{
 	public void setMode(String mode) {
 		Mode = mode;
 	}
-    public String getGamePlayersOverMaxGamePlayers() {
-		return GamePlayersOverMaxGamePlayers;
+	public Integer getTotalPlayers() {
+		return TotalPlayers;
 	}
-	public void setGamePlayersOverMaxGamePlayers(
-			String gamePlayersOverMaxGamePlayers) {
-		GamePlayersOverMaxGamePlayers = gamePlayersOverMaxGamePlayers;
+	public void setTotalPlayers(Integer totalPlayers) {
+		TotalPlayers = totalPlayers;
 	}
+	public Integer getMaxPlayers() {
+		return MaxPlayers;
+	}
+	public void setMaxPlayers(Integer maxPlayers) {
+		MaxPlayers = maxPlayers;
+	}
+
 	
 }
