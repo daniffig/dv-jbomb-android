@@ -14,6 +14,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 public class ClientSettingsActivity extends Activity {
+	
+	// Push trucho para probar el git.
 
     public static final String PREFS_NAME = "ClientSettingsFile";
     
