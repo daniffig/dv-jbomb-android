@@ -3,7 +3,6 @@ package core;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.jbomb.MainActivity;
 import com.example.jbomb.R;
 
 public class GameClient {

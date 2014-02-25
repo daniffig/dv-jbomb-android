@@ -16,9 +16,7 @@ import android.view.View;
 import android.view.View.DragShadowBuilder;
 import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
@@ -57,6 +55,7 @@ public class IngameActivity extends Activity {
 	}
 	
 	private Runnable timeTickRunnable = new Runnable() {
+		@Override
 		public void run() {
 			IngameActivity.this.timeLabel.setText(currentTimeString());
 			IngameActivity.this.tasksHandler.postDelayed(timeTickRunnable, 100);

@@ -64,7 +64,7 @@ public class GameServerService extends Service {
 	}
 		
     public class GameServerServiceBinder extends Binder {
-    	GameServerService getService() {
+    	public GameServerService getService() {
             return GameServerService.this;
         }
     }
@@ -75,9 +75,9 @@ public class GameServerService extends Service {
 		@Override
 		public void run() {
 			try{
-				socket = new Socket("192.168.1.101", 4321);
+				socket = new Socket("192.168.1.32", 4321);
 				
-				Log.i("GAME_SERVER_SERVICE", "Establecida la conexión con el server");
+				Log.i("GAME_SERVER_SERVICE", "Establecida la conexiï¿½n con el server");
 			} 
 			catch(UnknownHostException e1){
 				e1.printStackTrace();
@@ -105,7 +105,7 @@ public class GameServerService extends Service {
 			}
 			catch(Exception e)
 			{
-				Log.e("GAME_SERVER_SERVICE", "Falló el envio del objeto - " + e.toString());
+				Log.e("GAME_SERVER_SERVICE", "Fallï¿½ el envio del objeto - " + e.toString());
 			}
 		}
     }
@@ -122,7 +122,7 @@ public class GameServerService extends Service {
 			}
 			catch(Exception e)
 			{
-				Log.e("GAME_SERVER_SERVICE", "Falló la recepción del objeto - " + e.toString());
+				Log.e("GAME_SERVER_SERVICE", "Fallï¿½ la recepciï¿½n del objeto - " + e.toString());
 			}
 		}
 

@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|center_horizontal"
         android:layout_marginTop="10dp"
-        android:onClick="openGameplay"
+        android:onClick="openGameSelection"
         android:text="@string/play"
         android:textSize="@dimen/text_size_small" />
 
