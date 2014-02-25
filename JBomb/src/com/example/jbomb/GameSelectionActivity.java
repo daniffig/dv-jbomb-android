@@ -32,22 +32,25 @@ public class GameSelectionActivity extends Activity {
     	
     	this.getApplicationContext().bindService(new Intent(this, GameServerService.class), mConnection, Context.BIND_AUTO_CREATE);
     	
-    	JBombComunicationObject jbo = new JBombComunicationObject();
-    	jbo.setType(JBombRequestResponse.GAME_LIST_REQUEST);
-    	
     	System.out.println(123);
     	
     	if (this.isBound)
     	{        	
-
-    		GameServerService.sendObject(jbo);
     	
     	// ¿Qué hacemos mientras espera?
-    	
-        	JBombComunicationObject response = GameServerService.receiveObject();
-        	
-        	this.loadGames((RadioGroup) this.findViewById(R.id.availableGamesRadioGroup), response.getAvailableGames());
     	}
+	}
+	
+	protected void onServiceConnected()
+	{    	
+    	JBombComunicationObject jbo = new JBombComunicationObject();
+    	jbo.setType(JBombRequestResponse.GAME_LIST_REQUEST);
+
+		GameServerService.sendObject(jbo);
+    	
+    	JBombComunicationObject response = GameServerService.receiveObject();
+    	
+    	this.loadGames((RadioGroup) this.findViewById(R.id.availableGamesRadioGroup), response.getAvailableGames());		
 	}
 	
 	private void loadGames(RadioGroup availableGamesRadioGroup, Vector<GameInformation> availableGames)
@@ -81,6 +84,8 @@ public class GameSelectionActivity extends Activity {
         	GameServerServiceBinder binder = (GameServerServiceBinder) service;
             GameServerService = binder.getService();
             isBound = true;
+            
+            GameSelectionActivity.this.onServiceConnected();
         }
 
         @Override
