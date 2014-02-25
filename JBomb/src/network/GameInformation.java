@@ -11,6 +11,8 @@ public class GameInformation  implements Serializable{
 	private String Mode;
 	private String GamePlayersOverMaxGamePlayers;
 	
+	
+	
 	public Integer getId() {
 		return id;
 	}
