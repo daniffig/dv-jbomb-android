@@ -20,6 +20,7 @@ import android.os.NetworkOnMainThreadException;
 import android.util.Log;
 
 public class GameServerService extends Service {
+	private static final String LOGCAT = "GAME_SERVER_SERVICE";
 	private Socket socket;
 	private JBombComunicationObject communication_object;
 
@@ -27,21 +28,21 @@ public class GameServerService extends Service {
 	
 	@Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("GAME_SERVER_SERVICE", "Received start id " + startId + ": " + intent);
+        Log.i(LOGCAT, "Received start id " + startId + ": " + intent);
         
         return START_STICKY;
     }
 	
 	@Override
 	public void onCreate(){
-		Log.i("GAME_SERVER_SERVICE", "El servicio fue creado");
+		Log.i(LOGCAT, "El servicio fue creado");
 		
         this.stablishConnection();
 	}
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		Log.i("GAME_SERVER_SERVICE", "I'm being binded to a client");
+		Log.i(LOGCAT, "I'm being binded to a client");
 		
 		return mBinder;
 	}
@@ -61,7 +62,7 @@ public class GameServerService extends Service {
 		try{
 			t.join();
 		}catch(InterruptedException e){
-			Log.e("GAME_SERVER_SERVICE", e.toString());
+			Log.e(LOGCAT, e.toString());
 		}
 		return this.communication_object;
 	}
@@ -82,19 +83,19 @@ public class GameServerService extends Service {
 			try{
 				socket = new Socket(settings.getString("InetIPAddress", null), settings.getInt("InetPort", 0));
 				
-				Log.i("GAME_SERVER_SERVICE", "Establecida la conexi�n con el server");
+				Log.i(LOGCAT, "Establecida la conexi�n con el server");
 			} 
 			catch(UnknownHostException e1){
 				e1.printStackTrace();
-				Log.e("GAME_SERVER_SERVICE", "Uknown host");
+				Log.e(LOGCAT, "Uknown host");
 			}
 			catch(IOException e1){
 				e1.printStackTrace();
-				Log.e("GAME_SERVER_SERVICE", "Error de IO");
+				Log.e(LOGCAT, "Error de IO");
 			}
 			catch(NetworkOnMainThreadException e1){
 				e1.printStackTrace();
-				Log.e("GAME_SERVER_SERVICE", "SE ESTA CREANDO LA RED EN EL MAIN THREAD!");
+				Log.e(LOGCAT, "SE ESTA CREANDO LA RED EN EL MAIN THREAD!");
 			}
 			
 		}
@@ -111,7 +112,7 @@ public class GameServerService extends Service {
 			}
 			catch(Exception e)
 			{
-				Log.e("GAME_SERVER_SERVICE", "Fall� el envio del objeto - " + e.toString());
+				Log.e(LOGCAT, "Fall� el envio del objeto - " + e.toString());
 			}
 		}
     }
@@ -128,7 +129,7 @@ public class GameServerService extends Service {
 			}
 			catch(Exception e)
 			{
-				Log.e("GAME_SERVER_SERVICE", "Fall� la recepci�n del objeto - " + e.toString());
+				Log.e(LOGCAT, "Fall� la recepci�n del objeto - " + e.toString());
 			}
 		}
 
