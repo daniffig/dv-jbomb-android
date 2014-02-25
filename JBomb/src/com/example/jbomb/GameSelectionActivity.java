@@ -76,8 +76,8 @@ public class GameSelectionActivity extends Activity {
 		{			
 			RadioButton rb = new RadioButton(this.getBaseContext());
 			
-			rb.setId(ag.getId());
-			rb.setText(ag.getName());
+			rb.setId(ag.getUID());
+			rb.setText(ag.getName() + " " + ag.getGamePlayersOverMaxGamePlayers() + " | " + ag.getMode());
 			
 			availableGamesRadioGroup.addView(rb);			
 		}		
