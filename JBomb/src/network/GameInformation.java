@@ -6,11 +6,17 @@ public class GameInformation  implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
+	private Integer id;
 	private String Name;
 	private String Mode;
 	private String GamePlayersOverMaxGamePlayers;
 	
-	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public String getName() {
 		return Name;
 	}
