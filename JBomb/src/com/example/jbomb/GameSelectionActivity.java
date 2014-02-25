@@ -17,6 +17,7 @@ import android.content.ServiceConnection;
 import android.view.Menu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 public class GameSelectionActivity extends Activity {
 	
@@ -27,6 +28,8 @@ public class GameSelectionActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_selection);
+		
+		Toast.makeText(this.getApplicationContext(), "Conectando con el servidor...", Toast.LENGTH_SHORT).show();
 		
         this.startService(new Intent(this, GameServerService.class));
     	
@@ -40,6 +43,8 @@ public class GameSelectionActivity extends Activity {
     	// ¿Qué hacemos mientras espera?
     	}
 	}
+	
+	// Una mentira.
 	
 	protected void onServiceConnected()
 	{    	
@@ -84,6 +89,8 @@ public class GameSelectionActivity extends Activity {
         	GameServerServiceBinder binder = (GameServerServiceBinder) service;
             GameServerService = binder.getService();
             isBound = true;
+    		
+    		Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Cargando juegos...", Toast.LENGTH_SHORT).show();
             
             GameSelectionActivity.this.onServiceConnected();
         }
