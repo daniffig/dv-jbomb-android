@@ -23,25 +23,20 @@ public class GameSelectionActivity extends Activity {
 	
 	private GameServerService GameServerService;
     private boolean isBound = false;
+    private Toast connecting;
+    private Toast loading;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_selection);
 		
-		Toast.makeText(this.getApplicationContext(), "Conectando con el servidor...", Toast.LENGTH_SHORT).show();
+		this.connecting = Toast.makeText(this.getApplicationContext(), "Conectando con el servidor...", Toast.LENGTH_SHORT);
+		this.connecting.show();
 		
         this.startService(new Intent(this, GameServerService.class));
     	
     	this.getApplicationContext().bindService(new Intent(this, GameServerService.class), mConnection, Context.BIND_AUTO_CREATE);
-    	
-    	System.out.println(123);
-    	
-    	if (this.isBound)
-    	{        	
-    	
-    	// ¿Qué hacemos mientras espera?
-    	}
 	}
 	
 	// Una mentira.
@@ -52,10 +47,18 @@ public class GameSelectionActivity extends Activity {
     	jbo.setType(JBombRequestResponse.GAME_LIST_REQUEST);
 
 		GameServerService.sendObject(jbo);
+	    
+		this.loading.cancel();
     	
     	JBombComunicationObject response = GameServerService.receiveObject();
+		
+		System.out.println("Muero aca?");
+		
+		/*
     	
-    	this.loadGames((RadioGroup) this.findViewById(R.id.availableGamesRadioGroup), response.getAvailableGames());		
+    	this.loadGames((RadioGroup) this.findViewById(R.id.availableGamesRadioGroup), response.getAvailableGames());
+    	
+    			*/
 	}
 	
 	private void loadGames(RadioGroup availableGamesRadioGroup, Vector<GameInformation> availableGames)
@@ -89,8 +92,11 @@ public class GameSelectionActivity extends Activity {
         	GameServerServiceBinder binder = (GameServerServiceBinder) service;
             GameServerService = binder.getService();
             isBound = true;
+            
+            connecting.cancel();
     		
-    		Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Cargando juegos...", Toast.LENGTH_SHORT).show();
+    		loading = Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Cargando juegos...", Toast.LENGTH_SHORT);
+    		loading.show();
             
             GameSelectionActivity.this.onServiceConnected();
         }
