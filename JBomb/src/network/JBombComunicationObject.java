@@ -25,6 +25,15 @@ public class JBombComunicationObject implements Serializable{
 	private Integer MaxRounds;
 	private String  GamePlayersOverMaxGamePlayers;	
 	
+	public JBombComunicationObject(){
+		super();
+	}
+	
+	public JBombComunicationObject(JBombRequestResponse jbrr){
+		super();
+		this.Type = jbrr;
+	}
+	
 	public JBombRequestResponse getType() {
 		return Type;
 	}
