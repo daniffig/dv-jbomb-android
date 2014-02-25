@@ -2,6 +2,8 @@ package com.example.jbomb;
 
 import java.util.Vector;
 
+import core.GameClient;
+
 import network.*;
 import reference.JBombRequestResponse;
 import services.GameServerService;
@@ -16,6 +18,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.view.Menu;
+import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -79,6 +82,8 @@ public class GameSelectionActivity extends Activity {
 		{			
 			RadioButton rb = new RadioButton(this.getBaseContext());
 			
+			System.out.println(ag.getId());
+			
 			rb.setId(availableGamesRadioGroup.getChildCount());
 			rb.setText(ag.getName());
 			
@@ -91,6 +96,13 @@ public class GameSelectionActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.game_selection, menu);
 		return true;
+	}
+	
+	public void connectToGame(View view)
+	{
+		RadioGroup availableGamesRadioGroup = (RadioGroup) findViewById(R.id.availableGamesRadioGroup);
+		
+		Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Seleccionaste el juego: " + availableGamesRadioGroup.getCheckedRadioButtonId(), Toast.LENGTH_SHORT).show();
 	}
     
     
@@ -117,5 +129,4 @@ public class GameSelectionActivity extends Activity {
             isBound = false;
         }
     };
-
 }
