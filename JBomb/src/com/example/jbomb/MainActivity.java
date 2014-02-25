@@ -5,15 +5,26 @@ import core.GameClient;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.view.Menu;
 import android.view.View;
 
 public class MainActivity extends Activity {
 	
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {    	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences settings_ro = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
+	    
+	    Editor settings_rw = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0).edit();
+	    
+	    settings_rw.putString("InetIPAddress", settings_ro.getString("InetIPAddress", "127.0.0.1"));    
+	    settings_rw.putInt("InetPort", settings_ro.getInt("InetPort", 4321));
+	    
+	    settings_rw.commit();
     }
 
 

@@ -7,10 +7,13 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import com.example.jbomb.ClientSettingsActivity;
+
 import network.JBombComunicationObject;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.NetworkOnMainThreadException;
@@ -71,11 +74,13 @@ public class GameServerService extends Service {
     
     
     public class ConnectionThread implements Runnable{
+    	
+        SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
 
 		@Override
 		public void run() {
 			try{
-				socket = new Socket("192.168.1.32", 4321);
+				socket = new Socket(settings.getString("InetIPAddress", null), settings.getInt("InetPort", 0));
 				
 				Log.i("GAME_SERVER_SERVICE", "Establecida la conexi�n con el server");
 			} 

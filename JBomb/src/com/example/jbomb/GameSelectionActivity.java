@@ -14,6 +14,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.view.Menu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -30,8 +31,10 @@ public class GameSelectionActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_selection);
+
+        SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
 		
-		this.connecting = Toast.makeText(this.getApplicationContext(), "Conectando con el servidor...", Toast.LENGTH_SHORT);
+		this.connecting = Toast.makeText(this.getApplicationContext(), "Conectando con el servidor " + settings.getString("InetIPAddress", null) + "...", Toast.LENGTH_SHORT);
 		this.connecting.show();
 		
         this.startService(new Intent(this, GameServerService.class));
@@ -71,8 +74,7 @@ public class GameSelectionActivity extends Activity {
 			rb.setText(ag.getName());
 			
 			availableGamesRadioGroup.addView(rb);			
-		}
-		
+		}		
 	}
 
 	@Override

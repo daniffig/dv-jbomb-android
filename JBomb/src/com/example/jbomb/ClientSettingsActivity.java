@@ -9,11 +9,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
-import android.annotation.TargetApi;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.Build;
 
 public class ClientSettingsActivity extends Activity {
 
@@ -32,19 +30,6 @@ public class ClientSettingsActivity extends Activity {
 	    
 	    InetIPAddressEditText.setText(settings.getString("InetIPAddress", "127.0.0.1"));
 	    InetPortEditText.setText(String.valueOf(settings.getInt("InetPort", 4321)));
-		
-		// Show the Up button in the action bar.
-		setupActionBar();		
-	}
-
-	/**
-	 * Set up the {@link android.app.ActionBar}, if the API is available.
-	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void setupActionBar() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
-		}
 	}
 
 	@Override
