@@ -37,5 +37,7 @@
     <string name="select_game">Seleccione un juego...</string>
     <string name="connect">¡Conectar!</string>
     <string name="player_name">Nombre del jugador</string>
+    <string name="title_activity_players_loading">PlayersLoadingActivity</string>
+    <string name="loading_players">Cargando jugadores...</string>
 
 </resources>

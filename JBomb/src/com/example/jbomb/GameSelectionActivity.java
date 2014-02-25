@@ -78,7 +78,7 @@ public class GameSelectionActivity extends Activity {
 			
 			System.out.println(ag.getId());
 			
-			rb.setId(availableGamesRadioGroup.getChildCount());
+			rb.setId(ag.getId());
 			rb.setText(ag.getName());
 			
 			availableGamesRadioGroup.addView(rb);			
@@ -113,7 +113,11 @@ public class GameSelectionActivity extends Activity {
     	
     	JBombComunicationObject response = GameServerService.receiveObject();
 
-		Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Player ID: " + response.getGamePlayInformation().getName(), Toast.LENGTH_SHORT).show();
+		Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Player ID: " + response.getMyPlayerId(), Toast.LENGTH_SHORT).show();
+
+    	Intent myIntent = new Intent(GameSelectionActivity.this, PlayersLoadingActivity.class);
+
+    	GameSelectionActivity.this.startActivity(myIntent);
 	}
     
     
