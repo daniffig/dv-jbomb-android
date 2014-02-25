@@ -20,10 +20,9 @@ public class JBombComunicationObject implements Serializable{
 	private Vector<String> QuizAnswers;
 	private String SelectedQuizAnswer;
 	
-	private String  GameName;
-	private Integer CurrentRound;
-	private Integer MaxRounds;
-	private String  GamePlayersOverMaxGamePlayers;	
+	private Integer MyPlayerId;
+	private Integer RequestedGameId;
+	private GamePlayInformation GamePlayInformation = null;
 	
 	public JBombComunicationObject(){
 		super();
@@ -76,31 +75,22 @@ public class JBombComunicationObject implements Serializable{
 	public void setSelectedQuizAnswer(String selectedQuizAnswer) {
 		SelectedQuizAnswer = selectedQuizAnswer;
 	}
-	public String getGameName() {
-		return GameName;
+	public Integer getMyPlayerId() {
+		return MyPlayerId;
 	}
-	public void setGameName(String gameName) {
-		GameName = gameName;
+
+	public void setMyPlayerId(Integer myPlayerId) {
+		MyPlayerId = myPlayerId;
 	}
-	public Integer getCurrentRound() {
-		return CurrentRound;
+
+	public Integer getRequestedGameId() {
+		return RequestedGameId;
 	}
-	public void setCurrentRound(Integer currentRound) {
-		CurrentRound = currentRound;
+
+	public void setRequestedGameId(Integer requestedGameId) {
+		RequestedGameId = requestedGameId;
 	}
-	public Integer getMaxRounds() {
-		return MaxRounds;
-	}
-	public void setMaxRounds(Integer maxRounds) {
-		MaxRounds = maxRounds;
-	}
-	public String getGamePlayersOverMaxGamePlayers() {
-		return GamePlayersOverMaxGamePlayers;
-	}
-	public void setGamePlayersOverMaxGamePlayers(
-			String gamePlayersOverMaxGamePlayers) {
-		GamePlayersOverMaxGamePlayers = gamePlayersOverMaxGamePlayers;
-	}
+
 	public Vector<GameInformation> getAvailableGames() {
 		return AvailableGames;
 	}
@@ -111,6 +101,19 @@ public class JBombComunicationObject implements Serializable{
 	public void addGameInformation(GameInformation gi)
 	{
 		this.AvailableGames.add(gi);
+	}
+	
+	public GamePlayInformation getGamePlayInformation() {
+		return GamePlayInformation;
+	}
+
+	public void setGamePlayInformation(GamePlayInformation gamePlayInformation) {
+		GamePlayInformation = gamePlayInformation;
+	}
+
+	public boolean hasGamePlayInformation()
+	{
+		return GamePlayInformation.equals(null);
 	}
 }
 
