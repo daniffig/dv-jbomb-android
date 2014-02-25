@@ -12,7 +12,8 @@ public class JBombComunicationObject implements Serializable{
 	//Define el proposito de la comunicación, a partir de este se infiere que atributos se tienen que tomar en cuenta y cuales no
 	private JBombRequestResponse Type;
 
-	private Vector<String> Players;
+	private Vector<GameInformation> AvailableGames = new Vector<GameInformation>();
+	private Vector<String> Players = new Vector<String>();
 	private String BombOwner;
 	private String Loser;
 	private String QuizQuestion;
@@ -91,4 +92,16 @@ public class JBombComunicationObject implements Serializable{
 			String gamePlayersOverMaxGamePlayers) {
 		GamePlayersOverMaxGamePlayers = gamePlayersOverMaxGamePlayers;
 	}
+	public Vector<GameInformation> getAvailableGames() {
+		return AvailableGames;
+	}
+	public void setAvailableGames(Vector<GameInformation> availableGames) {
+		AvailableGames = availableGames;
+	}
+	
+	public void addGameInformation(GameInformation gi)
+	{
+		this.AvailableGames.add(gi);
+	}
 }
+
