@@ -105,7 +105,7 @@ public class GameSelectionActivity extends Activity {
 		
 		GameServerService.sendObject(jbo);		
 		
-		RadioButton selectedGame = (RadioButton)availableGamesRadioGroup.getChildAt(availableGamesRadioGroup.getCheckedRadioButtonId());
+		RadioButton selectedGame = (RadioButton)findViewById(availableGamesRadioGroup.getCheckedRadioButtonId());
 		
 		Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Conectando con " + selectedGame.getText() + "...", Toast.LENGTH_SHORT).show();
     	
