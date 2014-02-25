@@ -75,7 +75,7 @@ public class GameServerService extends Service {
 		@Override
 		public void run() {
 			try{
-				socket = new Socket("192.168.1.100", 4321);
+				socket = new Socket("192.168.1.32", 4321);
 				
 				Log.i("GAME_SERVER_SERVICE", "Establecida la conexi�n con el server");
 			} 

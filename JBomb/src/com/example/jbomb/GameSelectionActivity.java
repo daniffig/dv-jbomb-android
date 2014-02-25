@@ -55,13 +55,10 @@ public class GameSelectionActivity extends Activity {
 		
 		if(response.getType().equals(JBombRequestResponse.GAME_LIST_RESPONSE))
 		{
-			System.out.println("Me dieron un response válido wacho pistola");
+			System.out.println("Me dieron un response vï¿½lido wacho pistola");
 		}
-		/*
     	
-    	this.loadGames((RadioGroup) this.findViewById(R.id.availableGamesRadioGroup), response.getAvailableGames());
-    	
-    			*/
+    	this.loadGames((RadioGroup) this.findViewById(R.id.availableGamesRadioGroup), response.getAvailableGames());    	
 	}
 	
 	private void loadGames(RadioGroup availableGamesRadioGroup, Vector<GameInformation> availableGames)
@@ -71,7 +68,7 @@ public class GameSelectionActivity extends Activity {
 			RadioButton rb = new RadioButton(this.getBaseContext());
 			
 			rb.setId(availableGamesRadioGroup.getChildCount());
-			rb.setText("Fede");
+			rb.setText(ag.getName());
 			
 			availableGamesRadioGroup.addView(rb);			
 		}

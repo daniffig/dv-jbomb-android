@@ -17,7 +17,7 @@ import android.os.Build;
 
 public class ClientSettingsActivity extends Activity {
 
-    public static final String PREFS_NAME = "ClientSettingsFile3";
+    public static final String PREFS_NAME = "ClientSettingsFile";
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +34,7 @@ public class ClientSettingsActivity extends Activity {
 	    InetPortEditText.setText(String.valueOf(settings.getInt("InetPort", 4321)));
 		
 		// Show the Up button in the action bar.
-		setupActionBar();
-		
+		setupActionBar();		
 	}
 
 	/**
