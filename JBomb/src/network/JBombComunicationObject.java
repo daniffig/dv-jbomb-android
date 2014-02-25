@@ -11,7 +11,9 @@ public class JBombComunicationObject implements Serializable{
 	
 	//Define el proposito de la comunicación, a partir de este se infiere que atributos se tienen que tomar en cuenta y cuales no
 	private JBombRequestResponse Type;
-
+	
+	private String Flash;
+	
 	private Vector<GameInformation> AvailableGames = new Vector<GameInformation>();
 	private Vector<String> Players = new Vector<String>();
 	private String BombOwner;
@@ -21,6 +23,7 @@ public class JBombComunicationObject implements Serializable{
 	private String SelectedQuizAnswer;
 	
 	private Integer MyPlayerId;
+	private String  MyPlayerName;
 	private Integer RequestedGameId;
 	private GamePlayInformation GamePlayInformation = null;
 	
@@ -39,6 +42,15 @@ public class JBombComunicationObject implements Serializable{
 	public void setType(JBombRequestResponse type) {
 		Type = type;
 	}
+	
+	public String getFlash() {
+		return Flash;
+	}
+
+	public void setFlash(String flash) {
+		Flash = flash;
+	}
+
 	public Vector<String> getPlayers() {
 		return Players;
 	}
@@ -81,6 +93,14 @@ public class JBombComunicationObject implements Serializable{
 
 	public void setMyPlayerId(Integer myPlayerId) {
 		MyPlayerId = myPlayerId;
+	}
+
+	public String getMyPlayerName() {
+		return MyPlayerName;
+	}
+
+	public void setMyPlayerName(String myPlayerName) {
+		MyPlayerName = myPlayerName;
 	}
 
 	public Integer getRequestedGameId() {
