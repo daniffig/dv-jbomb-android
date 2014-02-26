@@ -36,7 +36,7 @@ public class QuizActivity extends Activity {
 		tv.setText("Debes responder la siguiente pregunta para pasar la bomba a " + this.getIntent().getExtras().getString("TARGET_PLAYER_NAME"));
 		
 		TextView qq = (TextView) this.findViewById(R.id.quizQuestion);
-		qq.setText(GameClient.getInstance().getQuizQuestion());
+		qq.setText(this.getIntent().getExtras().getString("QUIZ_QUESTION"));
 		
 		RadioGroup qqa = (RadioGroup) this.findViewById(R.id.quizQuestionAnswers);
 		
