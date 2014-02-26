@@ -41,7 +41,7 @@ public class PlayersLoadingActivity extends Activity {
 		}
 		else
 		{			
-	        this.startService(new Intent(this, GameServerService.class));	    	
+	        //this.startService(new Intent(this, GameServerService.class));	    	
 	    	this.getApplicationContext().bindService(new Intent(this, GameServerService.class), mConnection, Context.BIND_AUTO_CREATE);			
 		}
 	}

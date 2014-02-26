@@ -41,7 +41,6 @@ public class IngameActivity extends Activity {
 	
 	private static GameServerService GameServerService;
     private static boolean isBound = false;
-    private Thread t;
 	
 	public static int REQUEST_CODE = 17;
 	
@@ -106,7 +105,7 @@ public class IngameActivity extends Activity {
 		}
 		else
 		{			
-	        this.startService(new Intent(this, GameServerService.class));	    	
+	        //this.startService(new Intent(this, GameServerService.class));	    	
 	    	this.getApplicationContext().bindService(new Intent(this, GameServerService.class), mConnection, Context.BIND_AUTO_CREATE);			
 		}
 		
@@ -126,20 +125,16 @@ public class IngameActivity extends Activity {
     	{
     		this.loadPlayers(response.getPlayers());
     	}		
-    	
-    	this.startGame();
-	}
-	
-	private void startGame()
-	{
-		t = new Thread(new Runnable()
+
+		Thread t = new Thread(new Runnable()
 		{
-			@Override
+			JBombComunicationObject response;
+			@Override			
 			public void run() {
 				// TODO Auto-generated method stub
 				try
 				{
-					JBombComunicationObject response = GameServerService.receiveObject();
+					response = GameServerService.receiveObject();
 					Log.w("setBomb", "Recibi algo del servidor magico feo antes.");
 
 					TextView tv = (TextView) IngameActivity.this.findViewById(R.id.notificationText);
