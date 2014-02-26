@@ -132,13 +132,12 @@ public class IngameActivity extends Activity {
 	{
 		Thread t = new Thread(new Runnable()
 		{
-
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
 				try
 				{
-					JBombComunicationObject response = GameServerService.receiveObject();
+					final JBombComunicationObject response = GameServerService.receiveObject();
 
 					TextView tv = (TextView) IngameActivity.this.findViewById(R.id.notificationText);
 					//JBombRequestResponse.
@@ -150,7 +149,16 @@ public class IngameActivity extends Activity {
 						switch(response.getType())
 						{
 						case BOMB_OWNER_RESPONSE:
-							setBomb(response.getMyPlayer(), response.getBombOwner());
+							runOnUiThread(new Runnable()
+							{
+
+								@Override
+								public void run() {
+									// TODO Auto-generated method stub
+									setBomb(response.getMyPlayer(), response.getBombOwner());
+								}
+								
+							});
 							break;
 						case QUIZ_QUESTION_RESPONSE:
 							setQuizQuestion(response.getBombTargetPlayer(), response.getQuizQuestion(), response.getQuizAnswers());
@@ -167,6 +175,8 @@ public class IngameActivity extends Activity {
 			}
 			
 		});
+		
+		t.start();
 	}
 		
 	private void setQuizQuestion(Player targetPlayer, String quizQuestion, Vector<String> quizAnswers)
@@ -183,11 +193,15 @@ public class IngameActivity extends Activity {
 	
 	private void setBomb(Player currentPlayer, Player bombOwner)
 	{
+		System.out.println("SOy: " + currentPlayer.getUID() + ", la bomba la tiene " + bombOwner.getUID());
+		
 		if (currentPlayer.getUID() == bombOwner.getUID())
 		{
 			// Tengo la bomba!
 			
-			this.findViewById(R.id.ingameBombImage).setVisibility(View.VISIBLE);
+			ImageView iv = (ImageView) this.findViewById(R.id.ingameBombImage);
+			
+			iv.setVisibility(View.VISIBLE);
 			
 			Toast.makeText(this.getApplicationContext(), "¡Tenés la bomba!", Toast.LENGTH_SHORT).show();
 		}
@@ -195,19 +209,22 @@ public class IngameActivity extends Activity {
 		{
 			// No tengo la bomba
 			
-			this.findViewById(R.id.ingameBombImage).setVisibility(View.INVISIBLE);
+			ImageView iv = (ImageView) this.findViewById(R.id.ingameBombImage);
+			
+			iv.setVisibility(View.INVISIBLE);
 		}
 	}
 	
 	private void hidePlayers() {
-		this.findViewById(R.id.PlayerTop).setVisibility(View.GONE);
-		this.findViewById(R.id.PlayerRight).setVisibility(View.GONE);
-		this.findViewById(R.id.PlayerBottom).setVisibility(View.GONE);
-		this.findViewById(R.id.PlayerLeft).setVisibility(View.GONE);	
-		this.findViewById(R.id.PlayerTopImage).setVisibility(View.GONE);
-		this.findViewById(R.id.PlayerRightImage).setVisibility(View.GONE);
-		this.findViewById(R.id.PlayerBottomImage).setVisibility(View.GONE);
-		this.findViewById(R.id.PlayerLeftImage).setVisibility(View.GONE);		
+		this.findViewById(R.id.PlayerTop).setVisibility(View.INVISIBLE);
+		this.findViewById(R.id.PlayerRight).setVisibility(View.INVISIBLE);
+		this.findViewById(R.id.PlayerBottom).setVisibility(View.INVISIBLE);
+		this.findViewById(R.id.PlayerLeft).setVisibility(View.INVISIBLE);	
+		this.findViewById(R.id.PlayerTopImage).setVisibility(View.INVISIBLE);
+		this.findViewById(R.id.PlayerRightImage).setVisibility(View.INVISIBLE);
+		this.findViewById(R.id.PlayerBottomImage).setVisibility(View.INVISIBLE);
+		this.findViewById(R.id.PlayerLeftImage).setVisibility(View.INVISIBLE);		
+		this.findViewById(R.id.ingameBombImage).setVisibility(View.INVISIBLE);
 	}
 	
 	private void loadPlayers(Vector<Player> players)
@@ -289,6 +306,8 @@ public class IngameActivity extends Activity {
 				
 				targetPlayer.setUID(ingameImage.getId());
 				targetPlayer.setName(String.valueOf(ingameImage.getContentDescription()));
+				
+				System.out.println("Tengo la bomba, dropeo.");
 				
 				GameServerService.sendObject(jbo);
 				break;

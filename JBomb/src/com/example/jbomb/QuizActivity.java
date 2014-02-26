@@ -2,8 +2,6 @@ package com.example.jbomb;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Vector;
-
 import reference.JBombRequestResponse;
 import network.JBombComunicationObject;
 import core.GameClient;
