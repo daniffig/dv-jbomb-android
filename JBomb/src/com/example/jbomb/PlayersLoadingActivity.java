@@ -12,8 +12,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class PlayersLoadingActivity extends Activity {
 	
@@ -25,16 +30,11 @@ public class PlayersLoadingActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_players_loading);
 		
-		ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);	
-
-    	System.out.println("Actuales jugadores2: " + GameClient.getInstance().getCurrentPlayers());
-    	System.out.println("Maximos jugadores2: " + GameClient.getInstance().getMaxPlayers());	
+		ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);
     	
     	Integer progressStatus = (GameClient.getInstance().getCurrentPlayers() * 100) / GameClient.getInstance().getMaxPlayers();
 
 		pb.setProgress(progressStatus);
-		
-		System.out.println("Tengo: " + progressStatus + "%");
 		
 		if (PlayersLoadingActivity.isBound)
 		{            
@@ -56,49 +56,58 @@ public class PlayersLoadingActivity extends Activity {
 	
 	private void onServiceConnected()
 	{		
-		final ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);
-
-		
-		System.out.println("Entre aca, al loading.");
-		
-
-		
-
-		Thread t = new Thread(new Runnable(){
+		Thread t = new Thread(new Runnable() 
+		{
 			@Override
 			public void run() {
 				
-				//fede
-
-				System.out.println("VOy a esperar.");
-				JBombComunicationObject response = GameServerService.receiveObject();
-
-				System.out.println("Recibi algo1.");
-				GameClient instance = GameClient.getInstance();
-		while (!response.getType().equals(JBombRequestResponse.FINISH_CONNECTION_REQUEST) && instance.getCurrentPlayers() < instance.getMaxPlayers())
-		{
-			if (response.getType().equals(JBombRequestResponse.PLAYER_ADDED))
-			{
-				System.out.println("Lei que había: " + response.getGamePlayInformation().getTotalPlayers() + " jugadores.");
-				
-				GameClient.getInstance().setCurrentPlayers(response.getGamePlayInformation().getTotalPlayers());
-
-		    	Integer progressStatus = (GameClient.getInstance().getCurrentPlayers() * 100) / GameClient.getInstance().getMaxPlayers();
-				
-				pb.setProgress(progressStatus);
-				
-				System.out.println("Progreso: " + progressStatus + "%");
-			}
-
-			System.out.println("Recibi algo2.");
+				try
+				{
+					JBombComunicationObject response = GameServerService.receiveObject();
+					
+					ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);
+					
+					while (!response.getType().equals(JBombRequestResponse.MAX_PLAYERS_REACHED))
+					{
+						if (response.getType().equals(JBombRequestResponse.PLAYER_ADDED))
+						{						
+							GameClient.getInstance().setCurrentPlayers(response.getGamePlayInformation().getTotalPlayers());
 			
-			response = GameServerService.receiveObject();
-		}	
-			}});		
+					    	Integer progressStatus = (GameClient.getInstance().getCurrentPlayers() * 100) / GameClient.getInstance().getMaxPlayers();
+							
+							pb.setProgress(progressStatus);
+						}
+						
+						response = GameServerService.receiveObject();
+					}
+				}
+				catch (Exception e)
+				{
+					
+				}
+
+				PlayersLoadingActivity.this.showPlayButton();
+			}
+			
+		});
 		
-			t.start();
-		
+		t.start();		
 	}    
+	
+	private void showPlayButton()
+	{		
+		TextView tv = (TextView) PlayersLoadingActivity.this.findViewById(R.id.loadingPlayersTitle);
+		ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);		
+		ImageView iv = (ImageView) PlayersLoadingActivity.this.findViewById(R.id.loadingPlayersGetReady);
+			
+		tv.setVisibility(View.INVISIBLE);
+		pb.setVisibility(View.INVISIBLE);
+		iv.setVisibility(View.INVISIBLE);					
+			
+		ImageButton b = (ImageButton) PlayersLoadingActivity.this.findViewById(R.id.playButton);
+			
+		b.setVisibility(View.VISIBLE);	
+	}
     
     private ServiceConnection mConnection = new ServiceConnection() {
 
