@@ -129,6 +129,7 @@ public class IngameActivity extends Activity {
 		Thread t = new Thread(new Runnable()
 		{
 			JBombComunicationObject response;
+			
 			@Override			
 			public void run() {
 				// TODO Auto-generated method stub
@@ -149,6 +150,33 @@ public class IngameActivity extends Activity {
 						switch(response.getType())
 						{
 						case BOMB_OWNER_RESPONSE:
+							runOnUiThread(new Runnable()
+							{
+								@Override
+								public void run() {
+									Log.w("setBomb", "Soy " + response.getMyPlayer().getUID() + " y entre al setBomb.");
+									
+									if (response.getMyPlayer().getUID() == response.getBombOwner().getUID())
+									{
+										// Tengo la bomba!
+										
+										ImageView iv = (ImageView) findViewById(R.id.ingameBombImage);
+										
+										iv.setVisibility(View.VISIBLE);
+										
+										Toast.makeText(getApplicationContext(), "¡Tenés la bomba!", Toast.LENGTH_SHORT).show();
+									}
+									else
+									{
+										// No tengo la bomba
+										
+										ImageView iv = (ImageView) findViewById(R.id.ingameBombImage);
+										
+										iv.setVisibility(View.INVISIBLE);
+									}									
+								}
+								
+							});
 							setBomb(response.getMyPlayer(), response.getBombOwner());
 							break;
 						case QUIZ_QUESTION_RESPONSE:
@@ -190,26 +218,6 @@ public class IngameActivity extends Activity {
 	
 	private void setBomb(Player currentPlayer, Player bombOwner)
 	{
-		Log.w("setBomb", "Soy " + currentPlayer.getUID() + " y entre al setBomb.");
-		
-		if (currentPlayer.getUID() == bombOwner.getUID())
-		{
-			// Tengo la bomba!
-			
-			ImageView iv = (ImageView) this.findViewById(R.id.ingameBombImage);
-			
-			iv.setVisibility(View.VISIBLE);
-			
-			Toast.makeText(this.getApplicationContext(), "¡Tenés la bomba!", Toast.LENGTH_SHORT).show();
-		}
-		else
-		{
-			// No tengo la bomba
-			
-			ImageView iv = (ImageView) this.findViewById(R.id.ingameBombImage);
-			
-			iv.setVisibility(View.INVISIBLE);
-		}
 	}
 	
 	private void hidePlayers() {
