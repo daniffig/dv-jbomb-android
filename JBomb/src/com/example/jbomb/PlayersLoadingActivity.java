@@ -54,6 +54,13 @@ public class PlayersLoadingActivity extends Activity {
 		return true;
 	}
 	
+	public void startGame(View view)
+	{
+    	Intent myIntent = new Intent(PlayersLoadingActivity.this, IngameActivity.class);
+
+    	PlayersLoadingActivity.this.startActivity(myIntent);		
+	}
+	
 	private void onServiceConnected()
 	{		
 		Thread t = new Thread(new Runnable() 

@@ -3,11 +3,20 @@ package com.example.jbomb;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Vector;
+
+import network.JBombComunicationObject;
+import network.Player;
+
+import reference.JBombRequestResponse;
+import services.GameServerService;
+import services.GameServerService.GameServerServiceBinder;
 
 import core.GameClient;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.app.Activity;
 import android.view.DragEvent;
 import android.view.Menu;
@@ -20,10 +29,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 
 public class IngameActivity extends Activity {
+	
+	private static GameServerService GameServerService;
+    private static boolean isBound = false;
 	
 	public static int REQUEST_CODE = 17;
 	
@@ -69,16 +84,17 @@ public class IngameActivity extends Activity {
 		
 		this.findViewById(R.id.ingameBombImage).setOnTouchListener(new TouchListener());
 		
-		this.hidePlayers();		
-		this.loadPlayers();		
+		if (IngameActivity.isBound)
+		{            
+			IngameActivity.this.onServiceConnected();			
+		}
+		else
+		{			
+	        this.startService(new Intent(this, GameServerService.class));	    	
+	    	this.getApplicationContext().bindService(new Intent(this, GameServerService.class), mConnection, Context.BIND_AUTO_CREATE);			
+		}
 		
-		/*
-		this.findViewById(R.id.PlayerTopImage).setOnDragListener(new DragListener());
-		this.findViewById(R.id.PlayerRightImage).setOnDragListener(new DragListener());
-		this.findViewById(R.id.PlayerBottomImage).setOnDragListener(new DragListener());
-		this.findViewById(R.id.PlayerLeftImage).setOnDragListener(new DragListener());
-		
-		*/
+		this.hidePlayers();
 		
 		TextView tv = ((TextView) this.findViewById(R.id.ingameServerInfo));
 		
@@ -87,6 +103,21 @@ public class IngameActivity extends Activity {
 		tv.setText(settings.getString("InetIPAddress", "IP"));
 		
 		this.afterInit();
+	}
+	
+	private void onServiceConnected()
+	{
+    	JBombComunicationObject jbo = new JBombComunicationObject();
+    	jbo.setType(JBombRequestResponse.START_GAME_REQUEST);
+    	
+		GameServerService.sendObject(jbo);
+		
+    	JBombComunicationObject response = GameServerService.receiveObject();
+    	
+    	if (response.getType().equals(JBombRequestResponse.ADJACENT_PLAYERS))
+    	{
+    		this.loadPlayers(response.getPlayers());
+    	}		
 	}
 	
 	private void hidePlayers() {
@@ -100,18 +131,24 @@ public class IngameActivity extends Activity {
 		this.findViewById(R.id.PlayerLeftImage).setVisibility(View.GONE);		
 	}
 	
-	private void loadPlayers()
+	private void loadPlayers(Vector<Player> players)
 	{
-		for (int player : GameClient.getInstance().getPlayers())
+		System.out.println("Voy a cargar: " + players.size() + " jugadores.");
+		int i = 0;
+		
+		for (Player player : players)
 		{
-			this.loadPlayer((TextView) this.findViewById(GameClient.getInstance().getIdForPlayer(player)), (ImageView) this.findViewById(GameClient.getInstance().getImageForPlayer(player)), String.valueOf(player));
+			this.loadPlayer(player.getUID(), (TextView) this.findViewById(GameClient.getInstance().getIdForPlayer(i)), (ImageView) this.findViewById(GameClient.getInstance().getImageForPlayer(i)), player.getName());
+			
+			i++;
 		}
 	}
 	
-	private void loadPlayer(TextView tv, ImageView iv, String playerName)
+	private void loadPlayer(int UID, TextView tv, ImageView iv, String playerName)
 	{		
 		tv.setText(playerName);
 		iv.setOnDragListener(new DragListener());
+		iv.setId(UID);
 		iv.setContentDescription(playerName);
 		tv.setVisibility(View.VISIBLE);
 		iv.setVisibility(View.VISIBLE);
@@ -167,7 +204,8 @@ public class IngameActivity extends Activity {
 			case DragEvent.ACTION_DROP:
 
 		    	Intent myIntent = new Intent(IngameActivity.this, QuizActivity.class);
-		    	
+
+		    	myIntent.putExtra("TARGET_PLAYER_UID", ingameImage.getId());
 		    	myIntent.putExtra("TARGET_PLAYER_NAME", ingameImage.getContentDescription());
 
 		    	IngameActivity.this.startActivityForResult(myIntent, QuizActivity.REQUEST_CODE);
@@ -205,4 +243,23 @@ public class IngameActivity extends Activity {
 	        }			
 		}
 	}
+    
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+        	GameServerServiceBinder binder = (GameServerServiceBinder) service;
+            GameServerService = binder.getService();
+            isBound = true;
+            
+    		IngameActivity.this.onServiceConnected();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            isBound = false;
+        }
+    };
 }

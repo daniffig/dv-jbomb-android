@@ -38,6 +38,7 @@
         android:src="@drawable/play"
         android:background="@null"
         android:visibility="invisible" 
-        android:contentDescription="@string/todo" />
+        android:contentDescription="@string/todo"
+        android:onClick="startGame" />
 
 </LinearLayout>
