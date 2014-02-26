@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.app.Activity;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -137,7 +138,7 @@ public class IngameActivity extends Activity {
 				// TODO Auto-generated method stub
 				try
 				{
-					final JBombComunicationObject response = GameServerService.receiveObject();
+					JBombComunicationObject response = GameServerService.receiveObject();
 
 					TextView tv = (TextView) IngameActivity.this.findViewById(R.id.notificationText);
 					//JBombRequestResponse.
@@ -146,25 +147,22 @@ public class IngameActivity extends Activity {
 					{												
 						tv.setText(response.getFlash());
 						
+						System.out.println("Escribi: " + response.getFlash());
+						
 						switch(response.getType())
 						{
 						case BOMB_OWNER_RESPONSE:
-							runOnUiThread(new Runnable()
-							{
-
-								@Override
-								public void run() {
-									// TODO Auto-generated method stub
-									setBomb(response.getMyPlayer(), response.getBombOwner());
-								}
-								
-							});
+							setBomb(response.getMyPlayer(), response.getBombOwner());
 							break;
 						case QUIZ_QUESTION_RESPONSE:
 							setQuizQuestion(response.getBombTargetPlayer(), response.getQuizQuestion(), response.getQuizAnswers());
 							break;
+						default:
+							System.out.println("Recibi cualquier cosa.");
+							break;
 						}
-							
+						
+						response = GameServerService.receiveObject();							
 					}
 					
 				}
@@ -193,7 +191,7 @@ public class IngameActivity extends Activity {
 	
 	private void setBomb(Player currentPlayer, Player bombOwner)
 	{
-		System.out.println("SOy: " + currentPlayer.getUID() + ", la bomba la tiene " + bombOwner.getUID());
+		Log.w("setBomb", "Soy " + currentPlayer.getUID() + " y entre al setBomb.");
 		
 		if (currentPlayer.getUID() == bombOwner.getUID())
 		{
