@@ -8,14 +8,12 @@ import services.GameServerService.GameServerServiceBinder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.view.Menu;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 public class PlayersLoadingActivity extends Activity {
 	
@@ -27,14 +25,16 @@ public class PlayersLoadingActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_players_loading);
 		
-		ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);		
+		ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);	
 
-		GameClient instance = GameClient.getInstance();
-		pb.setProgress((int) (instance.getCurrentPlayers() / instance.getMaxPlayers()) * 100);
+    	System.out.println("Actuales jugadores2: " + GameClient.getInstance().getCurrentPlayers());
+    	System.out.println("Maximos jugadores2: " + GameClient.getInstance().getMaxPlayers());	
+    	
+    	Integer progressStatus = (GameClient.getInstance().getCurrentPlayers() * 100) / GameClient.getInstance().getMaxPlayers();
+
+		pb.setProgress(progressStatus);
 		
-		System.out.println("Tengo: " + instance.getCurrentPlayers() / instance.getMaxPlayers());
-		
-		System.out.println("Bind? " + PlayersLoadingActivity.isBound);
+		System.out.println("Tengo: " + progressStatus + "%");
 		
 		if (PlayersLoadingActivity.isBound)
 		{            
@@ -81,9 +81,13 @@ public class PlayersLoadingActivity extends Activity {
 			{
 				System.out.println("Lei que había: " + response.getGamePlayInformation().getTotalPlayers() + " jugadores.");
 				
-				instance.setCurrentPlayers(instance.getCurrentPlayers() + 1);
+				GameClient.getInstance().setCurrentPlayers(response.getGamePlayInformation().getTotalPlayers());
+
+		    	Integer progressStatus = (GameClient.getInstance().getCurrentPlayers() * 100) / GameClient.getInstance().getMaxPlayers();
 				
-				pb.setProgress((int) (instance.getCurrentPlayers() / instance.getMaxPlayers() * 100));
+				pb.setProgress(progressStatus);
+				
+				System.out.println("Progreso: " + progressStatus + "%");
 			}
 
 			System.out.println("Recibi algo2.");
@@ -94,43 +98,6 @@ public class PlayersLoadingActivity extends Activity {
 		
 			t.start();
 		
-		/*
-		
-		
-
-				
-				System.out.println("Entre al thread.");
-				
-				GameClient instance = GameClient.getInstance();
-				
-				JBombComunicationObject response = GameServerService.receiveObject();
-				
-				while (!response.getType().equals(JBombRequestResponse.FINISH_CONNECTION_REQUEST))
-				{
-					try
-					{
-						if (response.getType().equals(JBombRequestResponse.PLAYER_ADDED))
-						{
-							pb.setProgress((int) (instance.getCurrentPlayers() / instance.getMaxPlayers()));
-							
-							instance.setCurrentPlayers(instance.getCurrentPlayers() + 1);
-						}
-						
-						System.out.println("Porcentaje: " + (int) (instance.getCurrentPlayers() / instance.getMaxPlayers()));
-						
-						response = GameServerService.receiveObject();
-					}
-					catch (Exception e)
-					{
-						System.out.println(e.toString());
-					}
-				}				
-			}			
-		});		
-		
-		t.start();
-		
-		*/
 	}    
     
     private ServiceConnection mConnection = new ServiceConnection() {
