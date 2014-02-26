@@ -76,8 +76,6 @@ public class QuizActivity extends Activity {
 
 		RadioGroup qqa = (RadioGroup) findViewById(R.id.quizQuestionAnswers);
 		
-		this.getParent().getIntent().putExtra("QUIZ_ANSWER_ID", qqa.getCheckedRadioButtonId());
-		
 		RadioButton rb = (RadioButton) this.findViewById(qqa.getCheckedRadioButtonId());
 		
 		JBombComunicationObject jbo = new JBombComunicationObject();
