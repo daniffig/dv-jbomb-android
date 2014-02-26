@@ -85,29 +85,33 @@ public class PlayersLoadingActivity extends Activity {
 				{
 					
 				}
+				
+				runOnUiThread(new Runnable(){
 
-				PlayersLoadingActivity.this.showPlayButton();
+					@Override
+					public void run() {
+						TextView tv = (TextView) PlayersLoadingActivity.this.findViewById(R.id.loadingPlayersTitle);
+						ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);		
+						ImageView iv = (ImageView) PlayersLoadingActivity.this.findViewById(R.id.loadingPlayersGetReady);
+							
+						tv.setVisibility(View.INVISIBLE);
+						pb.setVisibility(View.INVISIBLE);
+						iv.setVisibility(View.INVISIBLE);					
+							
+						ImageButton b = (ImageButton) PlayersLoadingActivity.this.findViewById(R.id.playButton);
+							
+						b.setVisibility(View.VISIBLE);	
+						
+					}
+					
+				});
+
 			}
 			
 		});
 		
 		t.start();		
 	}    
-	
-	private void showPlayButton()
-	{		
-		TextView tv = (TextView) PlayersLoadingActivity.this.findViewById(R.id.loadingPlayersTitle);
-		ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);		
-		ImageView iv = (ImageView) PlayersLoadingActivity.this.findViewById(R.id.loadingPlayersGetReady);
-			
-		tv.setVisibility(View.INVISIBLE);
-		pb.setVisibility(View.INVISIBLE);
-		iv.setVisibility(View.INVISIBLE);					
-			
-		ImageButton b = (ImageButton) PlayersLoadingActivity.this.findViewById(R.id.playButton);
-			
-		b.setVisibility(View.VISIBLE);	
-	}
     
     private ServiceConnection mConnection = new ServiceConnection() {
 
