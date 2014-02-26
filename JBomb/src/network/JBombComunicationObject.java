@@ -22,8 +22,8 @@ public class JBombComunicationObject implements Serializable{
 	private Vector<String> QuizAnswers;
 	private String SelectedQuizAnswer;
 	
-	private Integer MyPlayerId;
-	private String  MyPlayerName;
+	private Player MyPlayer;
+	private Player BombTargetPlayer;
 	private Integer RequestedGameId;
 	private GamePlayInformation GamePlayInformation = null;
 	
@@ -90,20 +90,21 @@ public class JBombComunicationObject implements Serializable{
 	public void setSelectedQuizAnswer(String selectedQuizAnswer) {
 		SelectedQuizAnswer = selectedQuizAnswer;
 	}
-	public Integer getMyPlayerId() {
-		return MyPlayerId;
+
+	public Player getMyPlayer() {
+		return MyPlayer;
 	}
 
-	public void setMyPlayerId(Integer myPlayerId) {
-		MyPlayerId = myPlayerId;
+	public void setMyPlayer(Player myPlayer) {
+		MyPlayer = myPlayer;
 	}
 
-	public String getMyPlayerName() {
-		return MyPlayerName;
+	public Player getBombTargetPlayer() {
+		return BombTargetPlayer;
 	}
 
-	public void setMyPlayerName(String myPlayerName) {
-		MyPlayerName = myPlayerName;
+	public void setBombTargetPlayer(Player bombTargetPlayer) {
+		BombTargetPlayer = bombTargetPlayer;
 	}
 
 	public Integer getRequestedGameId() {
