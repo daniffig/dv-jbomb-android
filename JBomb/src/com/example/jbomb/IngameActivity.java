@@ -41,6 +41,7 @@ public class IngameActivity extends Activity {
 	
 	private static GameServerService GameServerService;
     private static boolean isBound = false;
+    private Thread t;
 	
 	public static int REQUEST_CODE = 17;
 	
@@ -91,6 +92,14 @@ public class IngameActivity extends Activity {
 		
 		this.findViewById(R.id.ingameBombImage).setOnTouchListener(new TouchListener());
 		
+		this.hidePlayers();
+		
+		TextView tv = ((TextView) this.findViewById(R.id.ingameServerInfo));
+		
+	    SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
+	    
+		tv.setText(settings.getString("InetIPAddress", "IP"));
+		
 		if (IngameActivity.isBound)
 		{            
 			IngameActivity.this.onServiceConnected();			
@@ -100,14 +109,6 @@ public class IngameActivity extends Activity {
 	        this.startService(new Intent(this, GameServerService.class));	    	
 	    	this.getApplicationContext().bindService(new Intent(this, GameServerService.class), mConnection, Context.BIND_AUTO_CREATE);			
 		}
-		
-		this.hidePlayers();
-		
-		TextView tv = ((TextView) this.findViewById(R.id.ingameServerInfo));
-		
-	    SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
-	    
-		tv.setText(settings.getString("InetIPAddress", "IP"));
 		
 		this.afterInit();
 	}
@@ -131,7 +132,7 @@ public class IngameActivity extends Activity {
 	
 	private void startGame()
 	{
-		Thread t = new Thread(new Runnable()
+		t = new Thread(new Runnable()
 		{
 			@Override
 			public void run() {
@@ -139,6 +140,7 @@ public class IngameActivity extends Activity {
 				try
 				{
 					JBombComunicationObject response = GameServerService.receiveObject();
+					Log.w("setBomb", "Recibi algo del servidor magico feo antes.");
 
 					TextView tv = (TextView) IngameActivity.this.findViewById(R.id.notificationText);
 					//JBombRequestResponse.
@@ -161,8 +163,10 @@ public class IngameActivity extends Activity {
 							System.out.println("Recibi cualquier cosa.");
 							break;
 						}
+						Log.w("setBomb", "Voy a recibir.");
 						
-						response = GameServerService.receiveObject();							
+						response = GameServerService.receiveObject();		
+						Log.w("setBomb", "Recibi algo del servidor magico feo.");
 					}
 					
 				}
