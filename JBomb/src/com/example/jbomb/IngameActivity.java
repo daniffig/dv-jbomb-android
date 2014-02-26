@@ -335,7 +335,7 @@ public class IngameActivity extends Activity {
 				
 				targetPlayer.setUID(ingameImage.getId());
 				targetPlayer.setName(String.valueOf(ingameImage.getContentDescription()));
-				
+				jbo.setBombTargetPlayer(targetPlayer);
 		    	Intent myIntent = new Intent(IngameActivity.this, QuizActivity.class);
 
 		    	myIntent.putExtra("TARGET_PLAYER_UID", targetPlayer.getUID());
