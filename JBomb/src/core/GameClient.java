@@ -11,6 +11,25 @@ public class GameClient {
 	
 	public static int CORRECT_ANSWER = 31;
 	public static int INCORRECT_ANSWER = 37;
+
+	public int currentPlayers = 0;
+	public int maxPlayers = 1;
+	
+	public int getCurrentPlayers() {
+		return currentPlayers;
+	}
+
+	public void setCurrentPlayers(int currentPlayers) {
+		this.currentPlayers = currentPlayers;
+	}
+
+	public int getMaxPlayers() {
+		return maxPlayers;
+	}
+
+	public void setMaxPlayers(int maxPlayers) {
+		this.maxPlayers = maxPlayers;
+	}
 	
 	private List<Integer> players;
 	

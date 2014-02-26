@@ -114,8 +114,9 @@ public class GameSelectionActivity extends Activity {
 		Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Conectando con " + selectedGame.getText() + "...", Toast.LENGTH_SHORT).show();
     	
     	JBombComunicationObject response = GameServerService.receiveObject();
-
-		Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Player ID: " + response.getMyPlayerId(), Toast.LENGTH_SHORT).show();
+    	
+    	GameClient.getInstance().setCurrentPlayers(response.getGamePlayInformation().getTotalPlayers());
+    	GameClient.getInstance().setMaxPlayers(response.getGamePlayInformation().getMaxPlayers());
 
     	Intent myIntent = new Intent(GameSelectionActivity.this, PlayersLoadingActivity.class);
 
