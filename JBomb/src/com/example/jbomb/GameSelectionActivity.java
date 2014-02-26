@@ -98,12 +98,16 @@ public class GameSelectionActivity extends Activity {
         
 		RadioGroup availableGamesRadioGroup = (RadioGroup) findViewById(R.id.availableGamesRadioGroup);
 		
+		Player myPlayer = new Player();
+		
+		myPlayer.setName(settings.getString("PlayerName", "default"));
+		
 		JBombComunicationObject jbo = new JBombComunicationObject();
 		
 		jbo.setType(JBombRequestResponse.JOIN_GAME_REQUEST);
 
-		jbo.setRequestedGameId(availableGamesRadioGroup.getCheckedRadioButtonId());
-		jbo.setMyPlayerName(settings.getString("PlayerName", "default"));
+		jbo.setRequestedGameId(availableGamesRadioGroup.getCheckedRadioButtonId());		
+		jbo.setMyPlayer(myPlayer);
 		
 		GameServerService.sendObject(jbo);		
 		

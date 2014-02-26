@@ -27,6 +27,7 @@ import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ComponentName;
@@ -47,6 +48,11 @@ public class IngameActivity extends Activity {
 	private Long startTimePoint;
 	
 	private SimpleDateFormat screenFormat = new SimpleDateFormat("mm:ss", Locale.getDefault());
+	
+	public static GameServerService getService()
+	{
+		return GameServerService;
+	}
 	
 	private void afterInit() {
 		timeLabel = (TextView) this.findViewById(R.id.Watch);
@@ -118,6 +124,79 @@ public class IngameActivity extends Activity {
     	{
     		this.loadPlayers(response.getPlayers());
     	}		
+    	
+    	this.startGame();
+	}
+	
+	private void startGame()
+	{
+		Thread t = new Thread(new Runnable()
+		{
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				try
+				{
+					JBombComunicationObject response = GameServerService.receiveObject();
+
+					TextView tv = (TextView) IngameActivity.this.findViewById(R.id.notificationText);
+					//JBombRequestResponse.
+					
+					while (!response.getType().equals(JBombRequestResponse.BOMB_DETONATED_RESPONSE))
+					{												
+						tv.setText(response.getFlash());
+						
+						switch(response.getType())
+						{
+						case BOMB_OWNER_RESPONSE:
+							setBomb(response.getMyPlayer(), response.getBombOwner());
+							break;
+						case QUIZ_QUESTION_RESPONSE:
+							setQuizQuestion(response.getBombTargetPlayer(), response.getQuizQuestion(), response.getQuizAnswers());
+							break;
+						}
+							
+					}
+					
+				}
+				catch (Exception e)
+				{
+					
+				}
+			}
+			
+		});
+	}
+		
+	private void setQuizQuestion(Player targetPlayer, String quizQuestion, Vector<String> quizAnswers)
+	{		
+    	Intent myIntent = new Intent(IngameActivity.this, QuizActivity.class);
+
+    	myIntent.putExtra("TARGET_PLAYER_UID", targetPlayer.getUID());
+    	myIntent.putExtra("TARGET_PLAYER_NAME", targetPlayer.getName());
+    	myIntent.putExtra("QUIZ_QUESTION", quizQuestion);
+    	myIntent.putExtra("QUIZ_ANSWERS", quizAnswers);
+
+    	IngameActivity.this.startActivityForResult(myIntent, QuizActivity.REQUEST_CODE);
+	}
+	
+	private void setBomb(Player currentPlayer, Player bombOwner)
+	{
+		if (currentPlayer.getUID() == bombOwner.getUID())
+		{
+			// Tengo la bomba!
+			
+			this.findViewById(R.id.ingameBombImage).setVisibility(View.VISIBLE);
+			
+			Toast.makeText(this.getApplicationContext(), "¡Tenés la bomba!", Toast.LENGTH_SHORT).show();
+		}
+		else
+		{
+			// No tengo la bomba
+			
+			this.findViewById(R.id.ingameBombImage).setVisibility(View.INVISIBLE);
+		}
 	}
 	
 	private void hidePlayers() {
@@ -201,13 +280,17 @@ public class IngameActivity extends Activity {
 				break;
 
 			case DragEvent.ACTION_DROP:
-
-		    	Intent myIntent = new Intent(IngameActivity.this, QuizActivity.class);
-
-		    	myIntent.putExtra("TARGET_PLAYER_UID", ingameImage.getId());
-		    	myIntent.putExtra("TARGET_PLAYER_NAME", ingameImage.getContentDescription());
-
-		    	IngameActivity.this.startActivityForResult(myIntent, QuizActivity.REQUEST_CODE);
+				
+				JBombComunicationObject jbo = new JBombComunicationObject();
+				
+				jbo.setType(JBombRequestResponse.SEND_BOMB_REQUEST);
+				
+				Player targetPlayer = new Player();
+				
+				targetPlayer.setUID(ingameImage.getId());
+				targetPlayer.setName(String.valueOf(ingameImage.getContentDescription()));
+				
+				GameServerService.sendObject(jbo);
 				break;
 			}
 		    

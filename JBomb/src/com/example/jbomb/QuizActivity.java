@@ -1,5 +1,11 @@
 package com.example.jbomb;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Vector;
+
+import reference.JBombRequestResponse;
+import network.JBombComunicationObject;
 import core.GameClient;
 import android.os.Bundle;
 import android.app.Activity;
@@ -8,6 +14,7 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.content.Intent;
 
 public class QuizActivity extends Activity {
@@ -26,17 +33,18 @@ public class QuizActivity extends Activity {
 		
 		RadioGroup qqa = (RadioGroup) this.findViewById(R.id.quizQuestionAnswers);
 		
-		for (String answer : GameClient.getInstance().getQuizQuestionAnswers()) {
-			
+		ArrayList<String> answers = this.getIntent().getExtras().getStringArrayList("QUIZ_ANSWERS");
+		
+		Collections.shuffle(answers);		
+		
+		for (String answer : answers)
+		{			
 			RadioButton rb = new RadioButton(this.getBaseContext());
-			
-			rb.setId(qqa.getChildCount());
+
 			rb.setText(answer);
 			
 			qqa.addView(rb);
-		}
-			
-		
+		}		
 		
 		// Show the Up button in the action bar.
 	}
@@ -52,16 +60,18 @@ public class QuizActivity extends Activity {
 
 		RadioGroup qqa = (RadioGroup) findViewById(R.id.quizQuestionAnswers);
 		
-		System.out.println("Id Respuesta: " + qqa.getCheckedRadioButtonId());
+		this.getParent().getIntent().putExtra("QUIZ_ANSWER_ID", qqa.getCheckedRadioButtonId());
 		
-		if (GameClient.getInstance().isCorrectQuizQuestionAnswer(qqa.getCheckedRadioButtonId())) {
-			
-			this.setResult(GameClient.CORRECT_ANSWER);
-		}
-		else {
-			
-			this.setResult(GameClient.INCORRECT_ANSWER);
-		}
+		RadioButton rb = (RadioButton) this.findViewById(qqa.getCheckedRadioButtonId());
+		
+		JBombComunicationObject jbo = new JBombComunicationObject();
+		
+		jbo.setType(JBombRequestResponse.QUIZ_ANSWER_REQUEST);
+		jbo.setSelectedQuizAnswer(String.valueOf(rb.getText()));
+		
+		Toast.makeText(this.getApplicationContext(), "Enviando respuesta al servidor...", Toast.LENGTH_SHORT).show();
+		
+		IngameActivity.getService().sendObject(jbo);
 		
 		this.finish();		
 	}
