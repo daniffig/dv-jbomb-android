@@ -39,5 +39,6 @@
     <string name="player_name">Nombre del jugador</string>
     <string name="title_activity_players_loading">PlayersLoadingActivity</string>
     <string name="loading_players">Cargando jugadores...</string>
+    <string name="waiting_for_players">Esperando a los demas jugadores...</string>
 
 </resources>

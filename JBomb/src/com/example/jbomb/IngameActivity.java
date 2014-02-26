@@ -150,7 +150,7 @@ public class IngameActivity extends Activity {
 								// TODO Auto-generated method stub
 
 								TextView tv = (TextView) IngameActivity.this.findViewById(R.id.notificationText);
-								tv.setText(response.getFlash().toString());
+								tv.setText(response.getFlash());
 							}
 							
 						});
@@ -190,7 +190,24 @@ public class IngameActivity extends Activity {
 							setBomb(response.getMyPlayer(), response.getBombOwner());
 							break;
 						case QUIZ_QUESTION_RESPONSE:
-							setQuizQuestion(response.getBombTargetPlayer(), response.getQuizQuestion(), response.getQuizAnswers());
+							runOnUiThread(new Runnable()
+							{
+
+								@Override
+								public void run() {
+									// TODO Auto-generated method stub
+
+							    	Intent myIntent = new Intent(IngameActivity.this, QuizActivity.class);
+
+							    	myIntent.putExtra("TARGET_PLAYER_UID", response.getBombTargetPlayer().getUID());
+							    	myIntent.putExtra("TARGET_PLAYER_NAME", response.getBombTargetPlayer().getName());
+							    	myIntent.putExtra("QUIZ_QUESTION", response.getQuizQuestion());
+							    	myIntent.putExtra("QUIZ_ANSWERS", response.getQuizAnswers());
+
+							    	IngameActivity.this.startActivityForResult(myIntent, QuizActivity.REQUEST_CODE);
+								}
+								
+							});
 							break;
 						default:
 							System.out.println("Recibi cualquier cosa.");
@@ -216,14 +233,6 @@ public class IngameActivity extends Activity {
 		
 	private void setQuizQuestion(Player targetPlayer, String quizQuestion, Vector<String> quizAnswers)
 	{		
-    	Intent myIntent = new Intent(IngameActivity.this, QuizActivity.class);
-
-    	myIntent.putExtra("TARGET_PLAYER_UID", targetPlayer.getUID());
-    	myIntent.putExtra("TARGET_PLAYER_NAME", targetPlayer.getName());
-    	myIntent.putExtra("QUIZ_QUESTION", quizQuestion);
-    	myIntent.putExtra("QUIZ_ANSWERS", quizAnswers);
-
-    	IngameActivity.this.startActivityForResult(myIntent, QuizActivity.REQUEST_CODE);
 	}
 	
 	private void setBomb(Player currentPlayer, Player bombOwner)

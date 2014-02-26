@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="@string/notification_text_default"
+        android:text="@string/waiting_for_players"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="@dimen/text_size_medium" />
 
