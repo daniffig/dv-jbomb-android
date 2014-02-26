@@ -27,6 +27,15 @@ public class PlayersLoadingActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_players_loading);
 		
+		ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);		
+
+		GameClient instance = GameClient.getInstance();
+		pb.setProgress((int) (instance.getCurrentPlayers() / instance.getMaxPlayers()));
+		
+		System.out.println("Tengo: " + instance.getCurrentPlayers() / instance.getMaxPlayers());
+		
+		System.out.println("Bind? " + PlayersLoadingActivity.isBound);
+		
 		if (PlayersLoadingActivity.isBound)
 		{            
     		PlayersLoadingActivity.this.onServiceConnected();			
@@ -48,33 +57,73 @@ public class PlayersLoadingActivity extends Activity {
 	private void onServiceConnected()
 	{		
 		final ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);
-		
-		Thread t = new Thread(new Runnable(){
 
+		
+		System.out.println("Entre aca, al loading.");
+		
+
+		
+
+		Thread t = new Thread(new Runnable(){
 			@Override
 			public void run() {
+
+				JBombComunicationObject response = GameServerService.receiveObject();
+				GameClient instance = GameClient.getInstance();
+		while (!response.getType().equals(JBombRequestResponse.FINISH_CONNECTION_REQUEST) && instance.getCurrentPlayers() < instance.getMaxPlayers())
+		{
+			if (response.getType().equals(JBombRequestResponse.PLAYER_ADDED))
+			{
+				System.out.println("Lei que había: " + response.getGamePlayInformation().getTotalPlayers() + " jugadores.");
+				
+				instance.setCurrentPlayers(instance.getCurrentPlayers() + 1);
+				
+				pb.setProgress((int) (instance.getCurrentPlayers() / instance.getMaxPlayers()));
+			}
+			
+			response = GameServerService.receiveObject();
+		}	
+			}});		
+		
+			t.start();
+		
+		/*
+		
+		
+
+				
+				System.out.println("Entre al thread.");
 				
 				GameClient instance = GameClient.getInstance();
 				
 				JBombComunicationObject response = GameServerService.receiveObject();
 				
-				while (response.getType() != JBombRequestResponse.ERROR_FLASH)
+				while (!response.getType().equals(JBombRequestResponse.FINISH_CONNECTION_REQUEST))
 				{
-					if (response.getType() == JBombRequestResponse.PLAYER_ADDED)
+					try
 					{
-						pb.setProgress((int) (instance.getCurrentPlayers() / instance.getMaxPlayers()));
+						if (response.getType().equals(JBombRequestResponse.PLAYER_ADDED))
+						{
+							pb.setProgress((int) (instance.getCurrentPlayers() / instance.getMaxPlayers()));
+							
+							instance.setCurrentPlayers(instance.getCurrentPlayers() + 1);
+						}
 						
-						instance.setCurrentPlayers(instance.getCurrentPlayers() + 1);
+						System.out.println("Porcentaje: " + (int) (instance.getCurrentPlayers() / instance.getMaxPlayers()));
+						
+						response = GameServerService.receiveObject();
 					}
-					
-					System.out.println("Jugadores actuales: " + instance.getCurrentPlayers());
-					
-					response = GameServerService.receiveObject();
+					catch (Exception e)
+					{
+						System.out.println(e.toString());
+					}
 				}				
 			}			
-		});
+		});		
 		
 		t.start();
+		
+		*/
 	}    
     
     private ServiceConnection mConnection = new ServiceConnection() {
