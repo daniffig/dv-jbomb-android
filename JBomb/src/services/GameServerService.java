@@ -54,6 +54,7 @@ public class GameServerService extends Service {
 	public void sendObject(JBombComunicationObject communicationObject){
 		this.communication_object = communicationObject;
 		new Thread(new sendObjectThread()).start();
+		this.communication_object = null;
 	}
 	
 	public JBombComunicationObject receiveObject(){
@@ -64,7 +65,9 @@ public class GameServerService extends Service {
 		}catch(InterruptedException e){
 			Log.e(LOGCAT, e.toString());
 		}
-		return this.communication_object;
+		JBombComunicationObject jbco = this.communication_object;
+		this.communication_object = null;
+		return jbco;
 	}
 		
     public class GameServerServiceBinder extends Binder {
