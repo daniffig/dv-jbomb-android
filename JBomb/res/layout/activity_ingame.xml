@@ -92,7 +92,7 @@
         android:src="@drawable/avatar" />
 
     <TextView
-        android:id="@+id/InetIPAddressText"
+        android:id="@+id/PlayerRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/PlayerRightImage"
@@ -128,7 +128,7 @@
         android:id="@+id/PlayerTopImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/InetPortText"
+        android:layout_above="@+id/PlayerTop"
         android:layout_centerHorizontal="true"
         android:adjustViewBounds="true"
         android:contentDescription="@string/player_top_name"
@@ -137,7 +137,7 @@
         android:src="@drawable/avatar" />
 
     <TextView
-        android:id="@+id/InetPortText"
+        android:id="@+id/PlayerTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/ingameBombImage"
