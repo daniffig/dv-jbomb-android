@@ -121,8 +121,8 @@ public class IngameActivity extends Activity {
 	}
 	
 	private void hidePlayers() {
-		this.findViewById(R.id.InetPortText).setVisibility(View.GONE);
-		this.findViewById(R.id.InetIPAddressText).setVisibility(View.GONE);
+		this.findViewById(R.id.PlayerTop).setVisibility(View.GONE);
+		this.findViewById(R.id.PlayerRight).setVisibility(View.GONE);
 		this.findViewById(R.id.PlayerBottom).setVisibility(View.GONE);
 		this.findViewById(R.id.PlayerLeft).setVisibility(View.GONE);	
 		this.findViewById(R.id.PlayerTopImage).setVisibility(View.GONE);
@@ -133,7 +133,6 @@ public class IngameActivity extends Activity {
 	
 	private void loadPlayers(Vector<Player> players)
 	{
-		System.out.println("Voy a cargar: " + players.size() + " jugadores.");
 		int i = 0;
 		
 		for (Player player : players)
