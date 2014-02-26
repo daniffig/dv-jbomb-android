@@ -30,7 +30,7 @@ public class PlayersLoadingActivity extends Activity {
 		ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);		
 
 		GameClient instance = GameClient.getInstance();
-		pb.setProgress((int) (instance.getCurrentPlayers() / instance.getMaxPlayers()));
+		pb.setProgress((int) (instance.getCurrentPlayers() / instance.getMaxPlayers()) * 100);
 		
 		System.out.println("Tengo: " + instance.getCurrentPlayers() / instance.getMaxPlayers());
 		
@@ -67,8 +67,13 @@ public class PlayersLoadingActivity extends Activity {
 		Thread t = new Thread(new Runnable(){
 			@Override
 			public void run() {
+				
+				//fede
 
+				System.out.println("VOy a esperar.");
 				JBombComunicationObject response = GameServerService.receiveObject();
+
+				System.out.println("Recibi algo1.");
 				GameClient instance = GameClient.getInstance();
 		while (!response.getType().equals(JBombRequestResponse.FINISH_CONNECTION_REQUEST) && instance.getCurrentPlayers() < instance.getMaxPlayers())
 		{
@@ -78,8 +83,10 @@ public class PlayersLoadingActivity extends Activity {
 				
 				instance.setCurrentPlayers(instance.getCurrentPlayers() + 1);
 				
-				pb.setProgress((int) (instance.getCurrentPlayers() / instance.getMaxPlayers()));
+				pb.setProgress((int) (instance.getCurrentPlayers() / instance.getMaxPlayers() * 100));
 			}
+
+			System.out.println("Recibi algo2.");
 			
 			response = GameServerService.receiveObject();
 		}	
