@@ -192,15 +192,12 @@ public class IngameActivity extends Activity {
 						case QUIZ_QUESTION_RESPONSE:
 							runOnUiThread(new Runnable()
 							{
-
 								@Override
 								public void run() {
 									// TODO Auto-generated method stub
 
 							    	Intent myIntent = new Intent(IngameActivity.this, QuizActivity.class);
-
-							    	myIntent.putExtra("TARGET_PLAYER_UID", response.getBombTargetPlayer().getUID());
-							    	myIntent.putExtra("TARGET_PLAYER_NAME", response.getBombTargetPlayer().getName());
+							    	
 							    	myIntent.putExtra("QUIZ_QUESTION", response.getQuizQuestion());
 							    	myIntent.putExtra("QUIZ_ANSWERS", response.getQuizAnswers());
 
@@ -209,14 +206,22 @@ public class IngameActivity extends Activity {
 								
 							});
 							break;
+						case QUIZ_ANSWER_RESPONSE:
+							runOnUiThread(new Runnable()
+							{
+								@Override
+								public void run() {
+									// TODO Auto-generated method stub
+									Toast.makeText(getApplicationContext(), response.getFlash(), Toast.LENGTH_SHORT).show();
+								}								
+							});
+							break;
 						default:
 							System.out.println("Recibi cualquier cosa.");
 							break;
 						}
-						Log.w("setBomb", "Voy a recibir.");
 						
 						response = GameServerService.receiveObject();		
-						Log.w("setBomb", "Recibi algo del servidor magico feo.");
 					}
 					
 				}
@@ -330,6 +335,11 @@ public class IngameActivity extends Activity {
 				
 				targetPlayer.setUID(ingameImage.getId());
 				targetPlayer.setName(String.valueOf(ingameImage.getContentDescription()));
+				
+		    	Intent myIntent = new Intent(IngameActivity.this, QuizActivity.class);
+
+		    	myIntent.putExtra("TARGET_PLAYER_UID", targetPlayer.getUID());
+		    	myIntent.putExtra("TARGET_PLAYER_NAME", targetPlayer.getName());
 				
 				System.out.println("Tengo la bomba, dropeo.");
 				
