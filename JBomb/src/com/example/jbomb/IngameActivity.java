@@ -143,7 +143,17 @@ public class IngameActivity extends Activity {
 					
 					while (!response.getType().equals(JBombRequestResponse.BOMB_DETONATED_RESPONSE))
 					{												
-						tv.setText(response.getFlash());
+						runOnUiThread(new Runnable()
+						{
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+
+								TextView tv = (TextView) IngameActivity.this.findViewById(R.id.notificationText);
+								tv.setText(response.getFlash().toString());
+							}
+							
+						});
 						
 						System.out.println("Escribi: " + response.getFlash());
 						
