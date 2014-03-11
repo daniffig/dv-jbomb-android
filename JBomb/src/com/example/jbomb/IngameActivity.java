@@ -14,6 +14,7 @@ import services.GameServerService.GameServerServiceBinder;
 
 import core.GameClient;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -175,6 +176,9 @@ public class IngameActivity extends Activity {
 										iv.setVisibility(View.VISIBLE);
 										
 										Toast.makeText(getApplicationContext(), "¡Tenés la bomba!", Toast.LENGTH_SHORT).show();
+										
+										MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.alert);
+										mp.start();
 									}
 									else
 									{

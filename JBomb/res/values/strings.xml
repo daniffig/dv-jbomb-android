@@ -40,5 +40,15 @@
     <string name="title_activity_players_loading">PlayersLoadingActivity</string>
     <string name="loading_players">Cargando jugadores...</string>
     <string name="waiting_for_players">Esperando a los demas jugadores...</string>
+    <string name="title_activity_new_game">NewGameActivity</string>
+    <string name="create_new_game">Crear nuevo juego</string>
+    <string name="new_game_name">Nombre del Juego</string>
+    <string name="new_game_topology">Topología</string>
+    <string name="new_game_quiz">Cuestionario</string>
+    <string name="new_game_mode">Modo</string>
+    <string name="new_game_max_players_allowed">Jugadores (máx.)</string>
+    <string name="new_game_max_rounds">Rondas</string>
+    <string name="new_game_round_duration">Duración</string>
+    <string name="new_game">Nuevo juego</string>
 
 </resources>

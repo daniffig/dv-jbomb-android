@@ -6,7 +6,6 @@ import reference.JBombRequestResponse;
 import services.GameServerService;
 import services.GameServerService.GameServerServiceBinder;
 import network.JBombComunicationObject;
-import core.GameClient;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.app.Activity;

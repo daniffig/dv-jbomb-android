@@ -36,10 +36,10 @@ public class MainActivity extends Activity {
         return true;
     }
  
-    public void openClientSettings(View view)
+    public void openNewGame(View view)
     {
-    	Intent myIntent = new Intent(MainActivity.this, ClientSettingsActivity.class);
-
+    	Intent myIntent = new Intent(MainActivity.this, NewGameActivity.class);
+    	
     	MainActivity.this.startActivity(myIntent);
     }
  
@@ -50,13 +50,12 @@ public class MainActivity extends Activity {
     	MainActivity.this.startActivity(myIntent);
     }
  
-    public void openGameplay(View view)
+    public void openClientSettings(View view)
     {
-    	Intent myIntent = new Intent(MainActivity.this, IngameActivity.class);
-    	
-    	MainActivity.this.startActivity(myIntent);
-    }    
+    	Intent myIntent = new Intent(MainActivity.this, ClientSettingsActivity.class);
 
+    	MainActivity.this.startActivity(myIntent);
+    }
     
     @Override
 	protected void onDestroy()

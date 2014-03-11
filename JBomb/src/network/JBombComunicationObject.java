@@ -9,13 +9,14 @@ public class JBombComunicationObject implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
-	//Define el proposito de la comunicación, a partir de este se infiere que atributos se tienen que tomar en cuenta y cuales no
+	//Define el proposito de la comunicaciï¿½n, a partir de este se infiere que atributos se tienen que tomar en cuenta y cuales no
 	private JBombRequestResponse Type;
 	
 	private String Flash;
 	
 	private Vector<GameInformation> AvailableGames = new Vector<GameInformation>();
 	private Vector<Player> Players = new Vector<Player>();
+	private Vector<QuizInformation> availableQuizzes = new Vector<QuizInformation>();
 	private Player BombOwner;
 	private Player Loser;
 	private String QuizQuestion;
@@ -146,6 +147,14 @@ public class JBombComunicationObject implements Serializable{
 	public boolean hasGamePlayInformation()
 	{
 		return GamePlayInformation.equals(null);
+	}
+
+	public Vector<QuizInformation> getAvailableQuizzes() {
+		return availableQuizzes;
+	}
+
+	public void setAvailableQuizzes(Vector<QuizInformation> availableQuizzes) {
+		this.availableQuizzes = availableQuizzes;
 	}
 }
 

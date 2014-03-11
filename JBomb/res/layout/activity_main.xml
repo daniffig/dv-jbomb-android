@@ -26,14 +26,22 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.70"
+        android:text="@string/new_game"
+        android:onClick="openNewGame" android:contentDescription="@string/todo" />
+
     <ImageButton
         android:id="@+id/imageButton2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.70"
         android:background="@null"
-        android:src="@drawable/find_games"
-        android:onClick="openGameSelection" android:contentDescription="@string/todo"/>
+        android:contentDescription="@string/todo"
+        android:onClick="openGameSelection"
+        android:src="@drawable/find_games" />
 
     <ImageButton
         android:id="@+id/playButton"
