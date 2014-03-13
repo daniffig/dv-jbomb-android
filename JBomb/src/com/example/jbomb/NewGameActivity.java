@@ -1,10 +1,8 @@
 package com.example.jbomb;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Vector;
 
 import network.JBombComunicationObject;
-import network.QuizInformation;
 
 import reference.JBombRequestResponse;
 import services.GameServerService;
@@ -19,7 +17,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.view.Menu;
 import android.widget.ArrayAdapter;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -51,57 +48,96 @@ public class NewGameActivity extends Activity {
 	protected void onServiceConnected()
 	{    	
     	JBombComunicationObject jbo = new JBombComunicationObject();
-    	jbo.setType(JBombRequestResponse.GAME_LIST_REQUEST);
+    	jbo.setType(JBombRequestResponse.GAME_SETTINGS_INFORMATION_REQUEST);
 
 		GameServerService.sendObject(jbo);
 	    
 		this.loading.cancel();
-    	
+		
     	JBombComunicationObject response = GameServerService.receiveObject();
     	
-    	this.loadTopologies((Spinner) this.findViewById(R.id.newGameTopologySpinner));
-    	this.loadQuizzes((Spinner) this.findViewById(R.id.newGameQuizSpinner));
+    	this.loadTopologies((Spinner) this.findViewById(R.id.newGameTopologySpinner), response.getGameSettingsInformation().getTopologies());
+    	this.loadQuizzes((Spinner) this.findViewById(R.id.newGameQuizSpinner), response.getGameSettingsInformation().getQuizzes());
+    	this.loadModes((Spinner) this.findViewById(R.id.newGameModeSpinner), response.getGameSettingsInformation().getModes());
+    	this.loadMaxPlayers((Spinner) this.findViewById(R.id.newGameMaxPlayersSpinner), response.getGameSettingsInformation().getMaxPlayersAllowed());
+    	this.loadMaxRounds((Spinner) this.findViewById(R.id.newGameMaxRoundsSpinner), response.getGameSettingsInformation().getMaxRoundsAllowed());
+    	this.loadRoundDurations((Spinner) this.findViewById(R.id.newGameRoundDurationSpinner), response.getGameSettingsInformation().getRoundDurations());
 	}
 	
-	private void loadTopologies(Spinner topologySpinner)
-	{		
-		List<String> topologyList = new ArrayList<String>();
-		topologyList.add("Anillo");
-		topologyList.add("Conexa");		
-
+	private void loadTopologies(Spinner topologySpinner, Vector<String> topologies)
+	{
 		ArrayAdapter<String> topologyAdapter = new ArrayAdapter<String>(this,
-			android.R.layout.simple_spinner_item, topologyList);
+			android.R.layout.simple_spinner_item, topologies);
 		
 		topologyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
 		topologySpinner.setAdapter(topologyAdapter);		
 	}
 	
-	private void loadQuizzes(Spinner quizSpinner)
-	{		
-    	JBombComunicationObject jbo = new JBombComunicationObject();
-    	jbo.setType(JBombRequestResponse.QUIZ_LIST_REQUEST);
-
-		GameServerService.sendObject(jbo);
-	    
-		this.loading.cancel();
-    	
-    	JBombComunicationObject response = GameServerService.receiveObject();
-    	
-		List<String> quizList = new ArrayList<String>();
-    	
-    	for (QuizInformation qi : response.getAvailableQuizzes())
-    	{
-    		quizList.add(qi.getQuizTitle());
-    	}    	
-
+	private void loadQuizzes(Spinner quizSpinner, Vector<String> quizzes)
+	{
 		ArrayAdapter<String> quizAdapter = new ArrayAdapter<String>(this,
-			android.R.layout.simple_spinner_item, quizList);
+			android.R.layout.simple_spinner_item, quizzes);
 		
 		quizAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
 		quizSpinner.setAdapter(quizAdapter);		
 	}
+	
+	private void loadModes(Spinner modeSpinner, Vector<String> modes)
+	{
+		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
+			android.R.layout.simple_spinner_item, modes);
+		
+		modeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		modeSpinner.setAdapter(modeAdapter);		
+	}
+	
+	private void loadMaxRounds(Spinner maxRoundsSpinner, Integer maxRoundsAllowed)
+	{
+		Vector<Integer> maxRounds = new Vector<Integer>();
+		
+		for (Integer i = 2; i <= maxRoundsAllowed; i++)
+		{
+			maxRounds.add(i);
+		}
+		
+		ArrayAdapter<Integer> maxRoundsAdapter = new ArrayAdapter<Integer>(this,
+			android.R.layout.simple_spinner_item, maxRounds);
+		
+		maxRoundsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		maxRoundsSpinner.setAdapter(maxRoundsAdapter);		
+	}
+	
+	private void loadMaxPlayers(Spinner maxPlayersSpinner, Integer maxPlayersAllowed)
+	{
+		Vector<Integer> maxPlayers = new Vector<Integer>();
+		
+		for (Integer i = 2; i <= maxPlayersAllowed; i++)
+		{
+			maxPlayers.add(i);
+		}
+		
+		ArrayAdapter<Integer> maxPlayersAdapter = new ArrayAdapter<Integer>(this,
+			android.R.layout.simple_spinner_item, maxPlayers);
+		
+		maxPlayersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		maxPlayersSpinner.setAdapter(maxPlayersAdapter);		
+	}
+	
+	private void loadRoundDurations(Spinner roundDurationSpinner, Vector<String> roundDurations)
+	{
+		ArrayAdapter<String> roundDurationAdapter = new ArrayAdapter<String>(this,
+			android.R.layout.simple_spinner_item, roundDurations);
+		
+		roundDurationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		roundDurationSpinner.setAdapter(roundDurationAdapter);		
+	}	
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

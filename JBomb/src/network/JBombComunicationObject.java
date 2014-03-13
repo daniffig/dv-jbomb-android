@@ -16,7 +16,7 @@ public class JBombComunicationObject implements Serializable{
 	
 	private Vector<GameInformation> AvailableGames = new Vector<GameInformation>();
 	private Vector<Player> Players = new Vector<Player>();
-	private Vector<QuizInformation> availableQuizzes = new Vector<QuizInformation>();
+	private GameSettingsInformation gameSettingsInformation;
 	private Player BombOwner;
 	private Player Loser;
 	private String QuizQuestion;
@@ -149,12 +149,12 @@ public class JBombComunicationObject implements Serializable{
 		return GamePlayInformation.equals(null);
 	}
 
-	public Vector<QuizInformation> getAvailableQuizzes() {
-		return availableQuizzes;
+	public GameSettingsInformation getGameSettingsInformation() {
+		return gameSettingsInformation;
 	}
 
-	public void setAvailableQuizzes(Vector<QuizInformation> availableQuizzes) {
-		this.availableQuizzes = availableQuizzes;
+	public void setGameSettingsInformation(GameSettingsInformation gameSettingsInformation) {
+		this.gameSettingsInformation = gameSettingsInformation;
 	}
 }
 
