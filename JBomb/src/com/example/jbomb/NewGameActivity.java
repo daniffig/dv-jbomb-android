@@ -1,5 +1,7 @@
 package com.example.jbomb;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import network.JBombComunicationObject;
@@ -10,21 +12,29 @@ import services.GameServerService.GameServerServiceBinder;
 
 import android.os.Bundle;
 import android.os.IBinder;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+@SuppressLint("UseSparseArrays")
 public class NewGameActivity extends Activity {
 
 	private static GameServerService GameServerService;
     private static boolean isBound = false;
     private Toast loading;
+    
+    private Map<Integer, String> topologyIDs = new HashMap<Integer, String>();
+    private Map<Integer, String> quizIDs = new HashMap<Integer, String>();
+    private Map<Integer, String> modeIDs = new HashMap<Integer, String>();
+    private Map<Integer, String> roundDurationIDs = new HashMap<Integer, String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,42 +66,37 @@ public class NewGameActivity extends Activity {
 		
     	JBombComunicationObject response = GameServerService.receiveObject();
     	
-    	this.loadTopologies((Spinner) this.findViewById(R.id.newGameTopologySpinner), response.getGameSettingsInformation().getTopologies());
-    	this.loadQuizzes((Spinner) this.findViewById(R.id.newGameQuizSpinner), response.getGameSettingsInformation().getQuizzes());
-    	this.loadModes((Spinner) this.findViewById(R.id.newGameModeSpinner), response.getGameSettingsInformation().getModes());
+    	this.setTopologyIDs(response.getGameSettingsInformation().getTopologies());
+    	this.loadSpinner((Spinner) this.findViewById(R.id.newGameTopologySpinner), this.getTopologyIDs());
+    	
+    	this.setQuizIDs(response.getGameSettingsInformation().getQuizzes());
+    	this.loadSpinner((Spinner) this.findViewById(R.id.newGameQuizSpinner), this.getQuizIDs());
+    	
+    	this.setModeIDs(response.getGameSettingsInformation().getModes());
+    	this.loadSpinner((Spinner) this.findViewById(R.id.newGameModeSpinner), this.getModeIDs());
+    	
     	this.loadMaxPlayers((Spinner) this.findViewById(R.id.newGameMaxPlayersSpinner), response.getGameSettingsInformation().getMaxPlayersAllowed());
     	this.loadMaxRounds((Spinner) this.findViewById(R.id.newGameMaxRoundsSpinner), response.getGameSettingsInformation().getMaxRoundsAllowed());
-    	this.loadRoundDurations((Spinner) this.findViewById(R.id.newGameRoundDurationSpinner), response.getGameSettingsInformation().getRoundDurations());
+    	
+    	this.setRoundDurationIDs(response.getGameSettingsInformation().getRoundDurations());
+    	this.loadSpinner((Spinner) this.findViewById(R.id.newGameRoundDurationSpinner), this.getRoundDurationIDs());
 	}
 	
-	private void loadTopologies(Spinner topologySpinner, Vector<String> topologies)
-	{
-		ArrayAdapter<String> topologyAdapter = new ArrayAdapter<String>(this,
-			android.R.layout.simple_spinner_item, topologies);
+	private void loadSpinner(Spinner spinner, Map<Integer, String> map)
+	{		
+		Vector<String> vector = new Vector<String>();
 		
-		topologyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		for (String s : map.values())
+		{
+			vector.add(s);
+		}
 		
-		topologySpinner.setAdapter(topologyAdapter);		
-	}
-	
-	private void loadQuizzes(Spinner quizSpinner, Vector<String> quizzes)
-	{
-		ArrayAdapter<String> quizAdapter = new ArrayAdapter<String>(this,
-			android.R.layout.simple_spinner_item, quizzes);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+			android.R.layout.simple_spinner_item, vector);
 		
-		quizAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
-		quizSpinner.setAdapter(quizAdapter);		
-	}
-	
-	private void loadModes(Spinner modeSpinner, Vector<String> modes)
-	{
-		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
-			android.R.layout.simple_spinner_item, modes);
-		
-		modeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		
-		modeSpinner.setAdapter(modeAdapter);		
+		spinner.setAdapter(adapter);		
 	}
 	
 	private void loadMaxRounds(Spinner maxRoundsSpinner, Integer maxRoundsAllowed)
@@ -126,18 +131,7 @@ public class NewGameActivity extends Activity {
 		maxPlayersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
 		maxPlayersSpinner.setAdapter(maxPlayersAdapter);		
-	}
-	
-	private void loadRoundDurations(Spinner roundDurationSpinner, Vector<String> roundDurations)
-	{
-		ArrayAdapter<String> roundDurationAdapter = new ArrayAdapter<String>(this,
-			android.R.layout.simple_spinner_item, roundDurations);
-		
-		roundDurationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		
-		roundDurationSpinner.setAdapter(roundDurationAdapter);		
 	}	
-	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -145,9 +139,51 @@ public class NewGameActivity extends Activity {
 		getMenuInflater().inflate(R.menu.new_game, menu);
 		return true;
 	}
-    
-    
-    private ServiceConnection myConnection = new ServiceConnection() {
+
+
+	public Map<Integer, String> getTopologyIDs() {
+		return topologyIDs;
+	}
+
+	public void setTopologyIDs(Map<Integer, String> topologyIDs) {
+		this.topologyIDs = topologyIDs;
+	}
+
+	public Map<Integer, String> getQuizIDs() {
+		return quizIDs;
+	}
+
+	public void setQuizIDs(Map<Integer, String> quizIDs) {
+		this.quizIDs = quizIDs;
+	}
+
+	public Map<Integer, String> getModeIDs() {
+		return modeIDs;
+	}
+
+	public void setModeIDs(Map<Integer, String> modeIDs) {
+		this.modeIDs = modeIDs;
+	}
+
+	public Map<Integer, String> getRoundDurationIDs() {
+		return roundDurationIDs;
+	}
+
+	public void setRoundDurationIDs(Map<Integer, String> roundDurationIDs) {
+		this.roundDurationIDs = roundDurationIDs;
+	}
+ 
+    public void createGame(View view)
+    {
+    	/*
+    	 * TODO: Validaciones!
+    	 */
+    	
+    	
+    }
+
+
+	private ServiceConnection myConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName className,

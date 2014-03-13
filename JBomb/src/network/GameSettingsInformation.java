@@ -1,37 +1,22 @@
 package network;
 
+import android.annotation.SuppressLint;
 import java.io.Serializable;
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.Map;
 
+@SuppressLint("UseSparseArrays")
 public class GameSettingsInformation implements Serializable {
 	
 		private static final long serialVersionUID = 1L;
 		
-		private Vector<String> topologies = new Vector<String>();
-		private Vector<String> quizzes = new Vector<String>();
-		private Vector<String> modes = new Vector<String>();
+		private Map<Integer, String> topologies = new HashMap<Integer, String>();
+		private Map<Integer, String> quizzes = new HashMap<Integer, String>();
+		private Map<Integer, String> modes = new HashMap<Integer, String>();
 		private Integer maxPlayersAllowed = 16;
 		private Integer maxRoundsAllowed = 9;
-		private Vector<String> roundDurations = new Vector<String>();
+		private Map<Integer, String> roundDurations = new HashMap<Integer, String>();
 		
-		public Vector<String> getTopologies() {
-			return topologies;
-		}
-		public void setTopologies(Vector<String> topologies) {
-			this.topologies = topologies;
-		}
-		public Vector<String> getQuizzes() {
-			return quizzes;
-		}
-		public void setQuizzes(Vector<String> quizzes) {
-			this.quizzes = quizzes;
-		}
-		public Vector<String> getModes() {
-			return modes;
-		}
-		public void setModes(Vector<String> modes) {
-			this.modes = modes;
-		}
 		public Integer getMaxPlayersAllowed() {
 			return maxPlayersAllowed;
 		}
@@ -44,10 +29,28 @@ public class GameSettingsInformation implements Serializable {
 		public void setMaxRoundsAllowed(Integer maxRoundsAllowed) {
 			this.maxRoundsAllowed = maxRoundsAllowed;
 		}
-		public Vector<String> getRoundDurations() {
+		public Map<Integer, String> getTopologies() {
+			return topologies;
+		}
+		public void setTopologies(Map<Integer, String> topologies) {
+			this.topologies = topologies;
+		}
+		public Map<Integer, String> getQuizzes() {
+			return quizzes;
+		}
+		public void setQuizzes(Map<Integer, String> quizzes) {
+			this.quizzes = quizzes;
+		}
+		public Map<Integer, String> getModes() {
+			return modes;
+		}
+		public void setModes(Map<Integer, String> modes) {
+			this.modes = modes;
+		}
+		public Map<Integer, String> getRoundDurations() {
 			return roundDurations;
 		}
-		public void setRoundDurations(Vector<String> roundDurations) {
+		public void setRoundDurations(Map<Integer, String> roundDurations) {
 			this.roundDurations = roundDurations;
 		}
 
