@@ -1,8 +1,5 @@
 package com.example.jbomb;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Vector;
 
 import network.JBombComunicationObject;
@@ -10,14 +7,10 @@ import network.Player;
 
 import reference.JBombRequestResponse;
 import services.GameServerService;
-import services.GameServerService.GameServerServiceBinder;
-
 import core.GameClient;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
 import android.app.Activity;
 import android.util.Log;
 import android.view.DragEvent;
@@ -32,59 +25,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 
 public class IngameActivity extends Activity {
 	
-	private static GameServerService GameServerService;
-    private static boolean isBound = false;
+	public static Integer REQUEST_CODE = 19;
 	
-	public static int REQUEST_CODE = 17;
+	private GameServerService myService = MainActivity.getService();
+	private Thread listenerThread;
 	
-	public TextView timeLabel;
-	private Long detonationTime;
-	private Long startTimePoint;
-	
-	private SimpleDateFormat screenFormat = new SimpleDateFormat("mm:ss", Locale.getDefault());
-	
-	public static GameServerService getService()
-	{
-		return GameServerService;
-	}
-	
-	private void afterInit() {
-		timeLabel = (TextView) this.findViewById(R.id.Watch);
-		this.detonationTime = 60000L;
-		timeLabel.setText(screenFormat.format(this.detonationTime));
-		this.startTimePoint = System.currentTimeMillis();//Long.valueOf(0);
-		this.startCounting();
-	}
-	
-	private Handler tasksHandler = new Handler();
-	
-	public void startCounting() {
-		this.tasksHandler.removeCallbacks(timeTickRunnable);
-		this.tasksHandler.postDelayed(timeTickRunnable, 100);
-	}
-	
-	public String currentTimeString() {
-		Long interval = detonationTime - (System.currentTimeMillis() - startTimePoint);
-		final Date date = new Date(interval);
-		return screenFormat.format(date);
-	}
-	
-	private Runnable timeTickRunnable = new Runnable() {
-		@Override
-		public void run() {
-			IngameActivity.this.timeLabel.setText(currentTimeString());
-			IngameActivity.this.tasksHandler.postDelayed(timeTickRunnable, 100);
-		}
-	};
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -98,36 +48,26 @@ public class IngameActivity extends Activity {
 		
 	    SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
 	    
-		tv.setText(settings.getString("InetIPAddress", "IP"));
-		
-		if (IngameActivity.isBound)
-		{            
-			IngameActivity.this.onServiceConnected();			
-		}
-		else
-		{			
-	        //this.startService(new Intent(this, GameServerService.class));	    	
-	    	this.getApplicationContext().bindService(new Intent(this, GameServerService.class), mConnection, Context.BIND_AUTO_CREATE);			
-		}
-		
-		this.afterInit();
-	}
-	
-	private void onServiceConnected()
-	{
+		tv.setText(settings.getString("InetIPAddress", "IP"));		
+
     	JBombComunicationObject jbo = new JBombComunicationObject();
     	jbo.setType(JBombRequestResponse.START_GAME_REQUEST);
     	
-		GameServerService.sendObject(jbo);
+    	myService.sendObject(jbo);
 		
-    	JBombComunicationObject response = GameServerService.receiveObject();
+    	JBombComunicationObject response = myService.receiveObject();
     	
     	if (response.getType().equals(JBombRequestResponse.ADJACENT_PLAYERS))
     	{
     		this.loadPlayers(response.getPlayers());
-    	}		
-
-		Thread t = new Thread(new Runnable()
+    	}
+    	
+    	this.startListening();
+	}
+	
+	private void startListening()
+	{
+		this.listenerThread = new Thread(new Runnable()
 		{
 			JBombComunicationObject response;
 			
@@ -136,7 +76,7 @@ public class IngameActivity extends Activity {
 				// TODO Auto-generated method stub
 				try
 				{
-					response = GameServerService.receiveObject();
+					response = myService.receiveObject();
 					Log.w("setBomb", "Recibi algo del servidor magico feo antes.");
 
 					TextView tv = (TextView) IngameActivity.this.findViewById(R.id.notificationText);
@@ -184,6 +124,8 @@ public class IngameActivity extends Activity {
 									{
 										// No tengo la bomba
 										
+										Log.w("setBomb", "Voy a ocultar la bomba.");
+										
 										ImageView iv = (ImageView) findViewById(R.id.ingameBombImage);
 										
 										iv.setVisibility(View.INVISIBLE);
@@ -221,11 +163,11 @@ public class IngameActivity extends Activity {
 							});
 							break;
 						default:
-							System.out.println("Recibi cualquier cosa.");
+							System.out.println("Recibi cualquier cosa." + response.getType().toString());
 							break;
 						}
 						
-						response = GameServerService.receiveObject();		
+						response = myService.receiveObject();		
 					}
 					
 				}
@@ -237,7 +179,7 @@ public class IngameActivity extends Activity {
 			
 		});
 		
-		t.start();
+		this.listenerThread.start();
 	}
 		
 	private void setQuizQuestion(Player targetPlayer, String quizQuestion, Vector<String> quizAnswers)
@@ -347,7 +289,7 @@ public class IngameActivity extends Activity {
 				
 				System.out.println("Tengo la bomba, dropeo.");
 				
-				GameServerService.sendObject(jbo);
+				myService.sendObject(jbo);
 				break;
 			}
 		    
@@ -355,6 +297,18 @@ public class IngameActivity extends Activity {
 		}		
 	}
 	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		
+		if (!this.listenerThread.equals(null) && this.listenerThread.isAlive())
+		{
+			this.listenerThread.interrupt();
+		}
+	}
+	
+	/*
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
@@ -382,23 +336,5 @@ public class IngameActivity extends Activity {
 	        }			
 		}
 	}
-    
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-        	GameServerServiceBinder binder = (GameServerServiceBinder) service;
-            GameServerService = binder.getService();
-            isBound = true;
-            
-    		IngameActivity.this.onServiceConnected();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            isBound = false;
-        }
-    };
+	*/
 }

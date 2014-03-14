@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import reference.JBombRequestResponse;
 import services.GameServerService;
-import services.GameServerService.GameServerServiceBinder;
 import network.JBombComunicationObject;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.View;
@@ -15,22 +13,19 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 
 public class QuizActivity extends Activity {
 	
-	public static int REQUEST_CODE = 19;
+	public static Integer REQUEST_CODE = 19;
 	
-	private static GameServerService GameServerService;
-    private static boolean isBound = false;
+	private GameServerService myService = MainActivity.getService();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_quiz);
+		
 		TextView tv = (TextView)findViewById(R.id.quizNotice);  
 		tv.setText("Debes responder la siguiente pregunta para pasar la bomba a " + this.getIntent().getExtras().getString("TARGET_PLAYER_NAME"));
 		
@@ -51,17 +46,6 @@ public class QuizActivity extends Activity {
 			
 			qqa.addView(rb);
 		}		
-		
-		if (QuizActivity.isBound)
-		{            
-		}
-		else
-		{			
-	        //this.startService(new Intent(this, GameServerService.class));	    	
-	    	this.getApplicationContext().bindService(new Intent(this, GameServerService.class), mConnection, Context.BIND_AUTO_CREATE);			
-		}
-		
-		// Show the Up button in the action bar.
 	}
 
 	@Override
@@ -86,9 +70,9 @@ public class QuizActivity extends Activity {
 		
 		Toast.makeText(this.getApplicationContext(), "Enviando respuesta al servidor...", Toast.LENGTH_SHORT).show();
 		
-		GameServerService.sendObject(jbo);
+		myService.sendObject(jbo);
 		
-		this.finish();		
+		QuizActivity.this.finish();		
 	}
 	
 	public void openGameOver(View view)
@@ -103,22 +87,4 @@ public class QuizActivity extends Activity {
     	QuizActivity.this.setResult(RESULT_OK);    	
     	QuizActivity.this.finish();
 	}
-    
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-        	GameServerServiceBinder binder = (GameServerServiceBinder) service;
-            GameServerService = binder.getService();
-            isBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            isBound = false;
-        }
-    };
-
 }

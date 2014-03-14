@@ -15,7 +15,7 @@ import android.content.SharedPreferences.Editor;
 
 public class ClientSettingsActivity extends Activity {
 	
-	// Push trucho para probar el git. 1234
+	public static Integer REQUEST_CODE = 23;
 
     public static final String PREFS_NAME = "ClientSettingsFile";
     
@@ -76,13 +76,9 @@ public class ClientSettingsActivity extends Activity {
 	    
 	    Toast.makeText(this.getApplicationContext(), "Se han guardado los cambios", Toast.LENGTH_SHORT).show();
 	    
-	    this.closeClientSettings(view);
-    }
-    
-    public void closeClientSettings(View view)
-    {
+	    this.setResult(ClientSettingsActivity.REQUEST_CODE);
+	    
     	this.finish();
     }
-    
 }
 

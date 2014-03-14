@@ -24,7 +24,7 @@ public class GameServerService extends Service {
 	private Socket socket;
 	private JBombComunicationObject communication_object;
 
-	private final IBinder mBinder = new GameServerServiceBinder();
+	private final IBinder myBinder = new GameServerServiceBinder();
 	
 	@Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -44,7 +44,7 @@ public class GameServerService extends Service {
 	public IBinder onBind(Intent intent) {
 		Log.i(LOGCAT, "I'm being binded to a client");
 		
-		return mBinder;
+		return myBinder;
 	}
 	
 	private void stablishConnection(){

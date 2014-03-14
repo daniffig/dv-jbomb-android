@@ -4,14 +4,9 @@ import core.GameClient;
 import network.JBombComunicationObject;
 import reference.JBombRequestResponse;
 import services.GameServerService;
-import services.GameServerService.GameServerServiceBinder;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
@@ -20,9 +15,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class PlayersLoadingActivity extends Activity {
-	
-	private static GameServerService GameServerService;
-    private static boolean isBound = false;
+
+	private GameServerService myService = MainActivity.getService();
+	private Thread listenerThread;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +30,7 @@ public class PlayersLoadingActivity extends Activity {
 
 		pb.setProgress(progressStatus);
 		
-		if (PlayersLoadingActivity.isBound)
-		{            
-    		PlayersLoadingActivity.this.onServiceConnected();			
-		}
-		else
-		{			
-	        //this.startService(new Intent(this, GameServerService.class));	    	
-	    	this.getApplicationContext().bindService(new Intent(this, GameServerService.class), mConnection, Context.BIND_AUTO_CREATE);			
-		}
+		this.startListening();
 	}
 
 	@Override
@@ -57,19 +44,21 @@ public class PlayersLoadingActivity extends Activity {
 	{
     	Intent myIntent = new Intent(PlayersLoadingActivity.this, IngameActivity.class);
 
-    	PlayersLoadingActivity.this.startActivity(myIntent);		
+    	PlayersLoadingActivity.this.startActivity(myIntent);	
+    	
+    	this.finish();
 	}
 	
-	private void onServiceConnected()
+	private void startListening()
 	{		
-		Thread t = new Thread(new Runnable() 
+		this.listenerThread = new Thread(new Runnable() 
 		{
 			@Override
 			public void run() {
 				
 				try
 				{
-					JBombComunicationObject response = GameServerService.receiveObject();
+					JBombComunicationObject response = myService.receiveObject();
 					
 					ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);
 					
@@ -84,7 +73,7 @@ public class PlayersLoadingActivity extends Activity {
 							pb.setProgress(progressStatus);
 						}
 						
-						response = GameServerService.receiveObject();
+						response = myService.receiveObject();
 					}
 				}
 				catch (Exception e)
@@ -116,26 +105,18 @@ public class PlayersLoadingActivity extends Activity {
 			
 		});
 		
-		t.start();		
-	}    
-    
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-        	GameServerServiceBinder binder = (GameServerServiceBinder) service;
-            GameServerService = binder.getService();
-            isBound = true;
-            
-    		PlayersLoadingActivity.this.onServiceConnected();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            isBound = false;
-        }
-    };
+		this.listenerThread.start();		
+	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		
+		if (!this.listenerThread.equals(null) && this.listenerThread.isAlive())
+		{
+			this.listenerThread.interrupt();
+		}
+	}
 
 }

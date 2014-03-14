@@ -7,15 +7,10 @@ import core.GameClient;
 import network.*;
 import reference.JBombRequestResponse;
 import services.GameServerService;
-import services.GameServerService.GameServerServiceBinder;
 
 import android.os.Bundle;
-import android.os.IBinder;
 import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.View;
@@ -25,8 +20,8 @@ import android.widget.Toast;
 
 public class GameSelectionActivity extends Activity {
 	
-	private static GameServerService GameServerService;
-    private static boolean isBound = false;
+	private GameServerService myService = MainActivity.getService();
+	
     private Toast connecting;
     private Toast loading;
 
@@ -37,37 +32,21 @@ public class GameSelectionActivity extends Activity {
 
         SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
 		
-		this.connecting = Toast.makeText(this.getApplicationContext(), "Conectando con el servidor " + settings.getString("InetIPAddress", null) + "...", Toast.LENGTH_SHORT);
-		this.connecting.show();
+		connecting = Toast.makeText(this.getApplicationContext(), "Conectando con el servidor " + settings.getString("InetIPAddress", null) + "...", Toast.LENGTH_SHORT);
+		connecting.show();		
+
+		loading = Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Cargando juegos...", Toast.LENGTH_SHORT);
+		loading.show();
 		
-		if (GameSelectionActivity.isBound)
-		{    		
-    		loading = Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Cargando juegos...", Toast.LENGTH_SHORT);
-    		loading.show();
-            
-            GameSelectionActivity.this.onServiceConnected();			
-		}
-		else
-		{			
-	        this.startService(new Intent(this, GameServerService.class));	    	
-	    	this.getApplicationContext().bindService(new Intent(this, GameServerService.class), mConnection, Context.BIND_AUTO_CREATE);			
-		}
-	}
-	
-	// Una mentira.
-	
-	protected void onServiceConnected()
-	{    	
     	JBombComunicationObject jbo = new JBombComunicationObject();
     	jbo.setType(JBombRequestResponse.GAME_LIST_REQUEST);
 
-		GameServerService.sendObject(jbo);
+    	myService.sendObject(jbo);
+    	
+    	JBombComunicationObject response = myService.receiveObject();
 	    
-		this.loading.cancel();
-    	
-    	JBombComunicationObject response = GameServerService.receiveObject();
-    	
-    	this.loadGames((RadioGroup) this.findViewById(R.id.availableGamesRadioGroup), response.getAvailableGames());    	
+		loading.cancel();
+    	this.loadGames((RadioGroup) this.findViewById(R.id.availableGamesRadioGroup), response.getAvailableGames()); 
 	}
 	
 	private void loadGames(RadioGroup availableGamesRadioGroup, Vector<GameInformation> availableGames)
@@ -109,7 +88,7 @@ public class GameSelectionActivity extends Activity {
 		jbo.setRequestedGameId(availableGamesRadioGroup.getCheckedRadioButtonId());		
 		jbo.setMyPlayer(myPlayer);
 		
-		GameServerService.sendObject(jbo);		
+		myService.sendObject(jbo);		
 		
 		RadioButton selectedGame = (RadioButton)findViewById(availableGamesRadioGroup.getCheckedRadioButtonId());
 		
@@ -117,7 +96,7 @@ public class GameSelectionActivity extends Activity {
 		
 		Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Conectando con " + selectedGame.getText() + "...", Toast.LENGTH_SHORT).show();
     	
-    	JBombComunicationObject response = GameServerService.receiveObject();
+    	JBombComunicationObject response = myService.receiveObject();
     	
     	GameClient.getInstance().setCurrentPlayers(response.getGamePlayInformation().getTotalPlayers());
     	GameClient.getInstance().setMaxPlayers(response.getGamePlayInformation().getMaxPlayers());
@@ -126,29 +105,4 @@ public class GameSelectionActivity extends Activity {
 
     	GameSelectionActivity.this.startActivity(myIntent);
 	}
-    
-    
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-        	GameServerServiceBinder binder = (GameServerServiceBinder) service;
-            GameServerService = binder.getService();
-            isBound = true;
-            
-            connecting.cancel();
-    		
-    		loading = Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Cargando juegos...", Toast.LENGTH_SHORT);
-    		loading.show();
-            
-            GameSelectionActivity.this.onServiceConnected();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            isBound = false;
-        }
-    };
 }
