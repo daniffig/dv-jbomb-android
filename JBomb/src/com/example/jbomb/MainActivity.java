@@ -111,6 +111,8 @@ public class MainActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		System.out.println("Recibi: " + resultCode);
+
+	    System.out.println("¿Voy a explotar?");
 		
 		if (resultCode == ClientSettingsActivity.REQUEST_CODE)
 		{	    	

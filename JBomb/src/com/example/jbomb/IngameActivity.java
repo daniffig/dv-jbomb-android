@@ -91,7 +91,7 @@ public class IngameActivity extends Activity {
 								// TODO Auto-generated method stub
 
 								TextView tv = (TextView) IngameActivity.this.findViewById(R.id.notificationText);
-								tv.setText(response.getFlash());
+								tv.setText(response.getType().toString());
 							}
 							
 						});
@@ -167,13 +167,19 @@ public class IngameActivity extends Activity {
 							break;
 						}
 						
+						System.out.println("tengo: " + response.getType().toString() + " y voy a recibir algo.");
+						
 						response = myService.receiveObject();		
+						
+
+						
+						System.out.println("recibi: " + response.getType().toString());
 					}
 					
 				}
 				catch (Exception e)
 				{
-					
+					System.out.println("Se rompió todo.");
 				}
 			}
 			

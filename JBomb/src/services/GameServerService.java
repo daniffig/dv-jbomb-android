@@ -23,6 +23,10 @@ public class GameServerService extends Service {
 	private static final String LOGCAT = "GAME_SERVER_SERVICE";
 	private Socket socket;
 	private JBombComunicationObject communication_object;
+	
+	private Thread connectionThread;
+	private Thread sendThread;
+	private Thread receiveThread;
 
 	private final IBinder myBinder = new GameServerServiceBinder();
 	
@@ -48,19 +52,40 @@ public class GameServerService extends Service {
 	}
 	
 	private void stablishConnection(){
-		new Thread(new ConnectionThread()).start();
+		
+		if (!(this.connectionThread == null) && this.connectionThread.isAlive())
+		{
+			this.connectionThread.interrupt();
+		}
+		
+		this.connectionThread = new ConnectionThread();		
+		this.connectionThread.start();
 	}
 	
 	public void sendObject(JBombComunicationObject communicationObject){
 		this.communication_object = communicationObject;
-		new Thread(new sendObjectThread()).start();
+		
+		if (!(this.sendThread == null) && this.sendThread.isAlive())
+		{
+			this.sendThread.interrupt();
+		}
+		
+		this.sendThread = new sendObjectThread();
+		this.sendThread.start();
 	}
 	
 	public JBombComunicationObject receiveObject(){
-		Thread t = new Thread(new receiveObjectThread());
-		t.start();
+		
+		if (!(this.receiveThread == null) && this.receiveThread.isAlive())
+		{
+			this.receiveThread.interrupt();
+		}
+		
+		this.receiveThread = new receiveObjectThread();
+		this.receiveThread.start();
+		
 		try{
-			t.join();
+			this.receiveThread.join();
 		}catch(InterruptedException e){
 			Log.e(LOGCAT, e.toString());
 		}
@@ -75,7 +100,7 @@ public class GameServerService extends Service {
     }
     
     
-    public class ConnectionThread implements Runnable{
+    public class ConnectionThread extends Thread {
     	
         SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
 
@@ -102,7 +127,7 @@ public class GameServerService extends Service {
 		}
     }
     
-    public class sendObjectThread implements Runnable{
+    public class sendObjectThread extends Thread {
 		@Override
 		public void run(){
 			try
@@ -118,7 +143,7 @@ public class GameServerService extends Service {
 		}
     }
 
-	public class receiveObjectThread implements Runnable{
+	public class receiveObjectThread extends Thread {
 		
 		@Override
 		public void run(){

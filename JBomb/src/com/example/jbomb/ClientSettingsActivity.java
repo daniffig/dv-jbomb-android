@@ -78,7 +78,18 @@ public class ClientSettingsActivity extends Activity {
 	    
 	    this.setResult(ClientSettingsActivity.REQUEST_CODE);
 	    
+	    System.out.println("Cerré la configuración.");
+	    
     	this.finish();
+    }
+    
+    public void closeClientSettings(View view)
+    {    
+	    this.setResult(ClientSettingsActivity.RESULT_CANCELED);
+	    
+	    System.out.println("Cerré la configuración.");
+	    
+    	this.finish();    	
     }
 }
 
