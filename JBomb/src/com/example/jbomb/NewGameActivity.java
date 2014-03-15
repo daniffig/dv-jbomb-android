@@ -49,6 +49,15 @@ public class NewGameActivity extends Activity {
     	jbo.setType(JBombRequestResponse.GAME_SETTINGS_INFORMATION_REQUEST);
 
 		myService.sendObject(jbo);
+		
+		if (myService.hasErrorState)
+		{
+			Toast.makeText(this.getApplicationContext(), "Ocurrió un error.", Toast.LENGTH_SHORT).show();
+			
+			this.finish();
+			
+			return;
+		}
 	    
 		loading.cancel();
 		

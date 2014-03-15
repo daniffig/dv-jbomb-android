@@ -78,8 +78,6 @@ public class IngameActivity extends Activity {
 				{
 					response = myService.receiveObject();
 					Log.w("setBomb", "Recibi algo del servidor magico feo antes.");
-
-					TextView tv = (TextView) IngameActivity.this.findViewById(R.id.notificationText);
 					//JBombRequestResponse.
 					
 					while (!response.getType().equals(JBombRequestResponse.BOMB_DETONATED_RESPONSE))
@@ -91,12 +89,10 @@ public class IngameActivity extends Activity {
 								// TODO Auto-generated method stub
 
 								TextView tv = (TextView) IngameActivity.this.findViewById(R.id.notificationText);
-								tv.setText(response.getType().toString());
+								tv.setText(response.getFlash());
 							}
 							
 						});
-						
-						System.out.println("Escribi: " + response.getFlash());
 						
 						switch(response.getType())
 						{
@@ -133,7 +129,6 @@ public class IngameActivity extends Activity {
 								}
 								
 							});
-							setBomb(response.getMyPlayer(), response.getBombOwner());
 							break;
 						case QUIZ_QUESTION_RESPONSE:
 							runOnUiThread(new Runnable()
@@ -167,13 +162,23 @@ public class IngameActivity extends Activity {
 							break;
 						}
 						
-						System.out.println("tengo: " + response.getType().toString() + " y voy a recibir algo.");
+						response = myService.receiveObject();
 						
-						response = myService.receiveObject();		
-						
+						if (myService.hasErrorState)
+						{
+							runOnUiThread(new Runnable()
+							{
+								@Override
+								public void run() {
+									// TODO Auto-generated method stub
 
-						
-						System.out.println("recibi: " + response.getType().toString());
+									Toast.makeText(IngameActivity.this.getApplicationContext(), "Ocurrió un error.", Toast.LENGTH_SHORT).show();
+								}
+								
+							});
+							
+							break;
+						}
 					}
 					
 				}
@@ -187,16 +192,9 @@ public class IngameActivity extends Activity {
 		
 		this.listenerThread.start();
 	}
-		
-	private void setQuizQuestion(Player targetPlayer, String quizQuestion, Vector<String> quizAnswers)
-	{		
-	}
-	
-	private void setBomb(Player currentPlayer, Player bombOwner)
-	{
-	}
 	
 	private void hidePlayers() {
+		/*
 		this.findViewById(R.id.PlayerTop).setVisibility(View.INVISIBLE);
 		this.findViewById(R.id.PlayerRight).setVisibility(View.INVISIBLE);
 		this.findViewById(R.id.PlayerBottom).setVisibility(View.INVISIBLE);
@@ -206,6 +204,7 @@ public class IngameActivity extends Activity {
 		this.findViewById(R.id.PlayerBottomImage).setVisibility(View.INVISIBLE);
 		this.findViewById(R.id.PlayerLeftImage).setVisibility(View.INVISIBLE);		
 		this.findViewById(R.id.ingameBombImage).setVisibility(View.INVISIBLE);
+		*/
 	}
 	
 	private void loadPlayers(Vector<Player> players)
@@ -293,9 +292,17 @@ public class IngameActivity extends Activity {
 		    	myIntent.putExtra("TARGET_PLAYER_UID", targetPlayer.getUID());
 		    	myIntent.putExtra("TARGET_PLAYER_NAME", targetPlayer.getName());
 				
-				System.out.println("Tengo la bomba, dropeo.");
-				
 				myService.sendObject(jbo);
+				
+				if (myService.hasErrorState)
+				{
+					Toast.makeText(IngameActivity.this.getApplicationContext(), "Ocurrió un error.", Toast.LENGTH_SHORT).show();
+					
+					IngameActivity.this.finish();
+					
+					return false;
+				}
+				
 				break;
 			}
 		    
@@ -313,34 +320,4 @@ public class IngameActivity extends Activity {
 			this.listenerThread.interrupt();
 		}
 	}
-	
-	/*
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
-		System.out.println("IngameActivity request: " + requestCode);
-		
-		TextView na = (TextView) this.findViewById(R.id.notificationText);
-		
-		if (requestCode == QuizActivity.REQUEST_CODE) {
-			
-			System.out.println("IngameActivity result: " + resultCode);
-			
-			if (resultCode == GameClient.CORRECT_ANSWER) {
-				
-				na.setText(R.string.correct_answer);
-			}
-			
-			if (resultCode == GameClient.INCORRECT_ANSWER) {
-				
-				na.setText(R.string.incorrect_answer);
-			}			
-			
-	        if (resultCode == RESULT_OK) {
-	        	
-	        	IngameActivity.this.finish();
-	        }			
-		}
-	}
-	*/
 }

@@ -51,5 +51,7 @@
     <string name="new_game_round_duration">Duración</string>
     <string name="new_game">Nuevo juego</string>
     <string name="create_game">Crear juego</string>
+    <string name="title_activity_game_positions">GamePositionsActivity</string>
+    <string name="game_positions">Tabla de posiciones</string>
 
 </resources>

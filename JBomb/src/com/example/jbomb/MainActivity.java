@@ -109,15 +109,9 @@ public class MainActivity extends Activity {
     
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		System.out.println("Recibi: " + resultCode);
-
-	    System.out.println("¿Voy a explotar?");
-		
+	{		
 		if (resultCode == ClientSettingsActivity.REQUEST_CODE)
-		{	    	
-			System.out.println("Le pego una reseteada.");
-			
+		{	    				
 			if (this.isBound)
 			{
 		    	this.unbindService(myConnection);

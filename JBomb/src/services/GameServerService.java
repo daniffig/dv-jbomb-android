@@ -27,6 +27,8 @@ public class GameServerService extends Service {
 	private Thread connectionThread;
 	private Thread sendThread;
 	private Thread receiveThread;
+	
+	public Boolean hasErrorState = false;
 
 	private final IBinder myBinder = new GameServerServiceBinder();
 	
@@ -88,6 +90,8 @@ public class GameServerService extends Service {
 			this.receiveThread.join();
 		}catch(InterruptedException e){
 			Log.e(LOGCAT, e.toString());
+			
+			return null;
 		}
 		
 		return this.communication_object;
@@ -129,7 +133,7 @@ public class GameServerService extends Service {
     
     public class sendObjectThread extends Thread {
 		@Override
-		public void run(){
+		public void run() {
 			try
 			{
 				ObjectOutputStream outToClient = new ObjectOutputStream(socket.getOutputStream());
@@ -156,6 +160,8 @@ public class GameServerService extends Service {
 			catch(Exception e)
 			{
 				Log.e(LOGCAT, "Fall� la recepci�n del objeto - " + e.toString());
+			
+				communication_object =  null;
 			}
 		}
 

@@ -87,7 +87,11 @@
             android:name="com.example.jbomb.NewGameActivity"
             android:label="@string/title_activity_new_game"
             android:screenOrientation="sensorPortrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"  >
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+        </activity>
+        <activity
+            android:name="com.example.jbomb.GamePositionsActivity"
+            android:label="@string/title_activity_game_positions" >
         </activity>
     </application>
 
