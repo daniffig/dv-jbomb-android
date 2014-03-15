@@ -42,15 +42,6 @@ public class GameSelectionActivity extends Activity {
     	jbo.setType(JBombRequestResponse.GAME_LIST_REQUEST);
 
     	myService.sendObject(jbo);
-		
-		if (myService.hasErrorState)
-		{
-			Toast.makeText(this.getApplicationContext(), "Ocurrió un error.", Toast.LENGTH_SHORT).show();
-			
-			this.finish();
-			
-			return;
-		}
     	
     	JBombComunicationObject response = myService.receiveObject();
 	    

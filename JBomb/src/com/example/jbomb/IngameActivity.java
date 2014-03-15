@@ -29,8 +29,6 @@ import android.content.SharedPreferences;
 
 public class IngameActivity extends Activity {
 	
-	public static Integer REQUEST_CODE = 19;
-	
 	private GameServerService myService = MainActivity.getService();
 	private Thread listenerThread;
 	
@@ -51,6 +49,8 @@ public class IngameActivity extends Activity {
 
     	JBombComunicationObject jbo = new JBombComunicationObject();
     	jbo.setType(JBombRequestResponse.START_GAME_REQUEST);
+		
+		GameClient.printNotification(String.format("Voy a pedir los jugadores al servidor. Envío: %s", jbo.getType().toString()));
     	
     	myService.sendObject(jbo);
 		
@@ -76,20 +76,6 @@ public class IngameActivity extends Activity {
 				try
 				{
 					response = myService.receiveObject();
-					
-					if (myService.hasErrorState)
-					{
-						runOnUiThread(new Runnable()
-						{
-							@Override
-							public void run() {
-								// TODO Auto-generated method stub
-								
-								Toast.makeText(IngameActivity.this.getApplicationContext(), "Ocurrió un error.", Toast.LENGTH_SHORT).show();
-							}
-							
-						});
-					}
 					
 					while (!response.getType().equals(JBombRequestResponse.BOMB_DETONATED_RESPONSE))
 					{												
@@ -129,6 +115,7 @@ public class IngameActivity extends Activity {
 										Toast.makeText(getApplicationContext(), "¡Tenés la bomba!", Toast.LENGTH_SHORT).show();
 										
 										MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.alert);
+										
 										mp.start();
 									}
 									else
@@ -158,13 +145,13 @@ public class IngameActivity extends Activity {
 							    	myIntent.putExtra("QUIZ_QUESTION", response.getQuizQuestion());
 							    	myIntent.putExtra("QUIZ_ANSWERS", response.getQuizAnswers());
 
-							    	IngameActivity.this.startActivityForResult(myIntent, QuizActivity.REQUEST_CODE);
+							    	IngameActivity.this.startActivity(myIntent);
 								}
 								
 							});
 							break;
 						case QUIZ_ANSWER_RESPONSE:
-							
+
 							GameClient.printNotification(String.format("¿La respuesta era correcta?: %s", response.getCorrectAnswer()));
 							
 							runOnUiThread(new Runnable()
@@ -178,34 +165,13 @@ public class IngameActivity extends Activity {
 							break;
 						case NOTICE_FLASH:
 							GameClient.printNotification("Recibi una actualización de estado.");
-							// Esto se maneja por defecto arriba, siempre, así que no hacemos nada.
 							break;
 						default:							
 							GameClient.printNotification("Recibi cualquier cosa.");
 							break;
 						}
 						
-
-						GameClient.printNotification("Puedo fallar.");
-						
 						response = myService.receiveObject();
-						GameClient.printNotification("No fallé. Tengo error: " + myService.hasErrorState);
-						
-						if (myService.hasErrorState)
-						{
-							runOnUiThread(new Runnable()
-							{
-								@Override
-								public void run() {
-									// TODO Auto-generated method stub
-
-									Toast.makeText(IngameActivity.this.getApplicationContext(), "Ocurrió un error.", Toast.LENGTH_SHORT).show();
-								}
-								
-							});
-							
-							break;
-						}
 					}
 					
 				}

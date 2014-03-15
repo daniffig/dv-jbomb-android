@@ -6,6 +6,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 import com.example.jbomb.ClientSettingsActivity;
 
@@ -23,10 +25,6 @@ public class GameServerService extends Service {
 	private static final String LOGCAT = "GAME_SERVER_SERVICE";
 	private Socket socket;
 	private JBombComunicationObject communication_object;
-	
-	private Thread connectionThread;
-	
-	public Boolean hasErrorState = false;
 
 	private final IBinder myBinder = new GameServerServiceBinder();
 	
@@ -53,38 +51,32 @@ public class GameServerService extends Service {
 	
 	private void stablishConnection(){
 		
-		if (this.connectionThread == null)
-		{			
-			this.connectionThread = new ConnectionThread();		
-			this.connectionThread.start();
-		}
+		new Thread(new ConnectionThread()).start();
 	}
 	
 	public void sendObject(JBombComunicationObject communicationObject){
 		
 		this.communication_object = communicationObject;
 		
-		(new sendObjectThread()).start();
-		//this.sendThread.start();
+		new Thread(new SendObjectThread()).start();
 	}
 	
 	public JBombComunicationObject receiveObject(){
 		
-		Thread receiveThread = new receiveObjectThread();
+		Log.i("RECEIVE_OBJECT", "Voy a recibir algo.");
 		
-		receiveThread.start();
-		Log.e(LOGCAT, "Estoy vivo?" + receiveThread.isAlive());
+		Thread t = new Thread(new ReceiveObjectThread());
+		
+		t.start();
 		
 		try{
-			receiveThread.join();
+			t.join();
 		}catch(InterruptedException e){
-			Log.e(LOGCAT, e.toString());
+			Log.e("RECEIVE_OBJECT", "Fallé donde siempre... - " + e.toString());
 			
-			hasErrorState = true;
-			
-			communication_object =  null;
+			t.interrupt();
 		}
-		
+
 		return this.communication_object;
 	}
 		
@@ -95,7 +87,7 @@ public class GameServerService extends Service {
     }
     
     
-    public class ConnectionThread extends Thread {
+    public class ConnectionThread implements Runnable {
     	
         SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
 
@@ -122,9 +114,12 @@ public class GameServerService extends Service {
 		}
     }
     
-    public class sendObjectThread extends Thread {
+    public class SendObjectThread implements Runnable {
 		@Override
 		public void run() {
+			
+			Log.i("SEND_OBJECT", communication_object.getType().toString());
+			
 			try
 			{
 				ObjectOutputStream outToClient = new ObjectOutputStream(socket.getOutputStream());
@@ -134,13 +129,11 @@ public class GameServerService extends Service {
 			catch(Exception e)
 			{
 				Log.e(LOGCAT, "Fall� el envio del objeto - " + e.toString());
-				
-				hasErrorState = true;
 			}
 		}
     }
 
-	public class receiveObjectThread extends Thread {
+	public class ReceiveObjectThread implements Runnable {
 		
 		@Override
 		public void run(){
@@ -153,10 +146,6 @@ public class GameServerService extends Service {
 			catch(Exception e)
 			{
 				Log.e(LOGCAT, "Fallé al recibir un objeto. - " + e.toString());
-			
-				communication_object =  null;
-				
-				hasErrorState = true;
 			}
 		}
 

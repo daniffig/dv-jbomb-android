@@ -19,8 +19,6 @@ import android.content.Intent;
 
 public class QuizActivity extends Activity {
 	
-	public static Integer REQUEST_CODE = 19;
-	
 	private GameServerService myService = MainActivity.getService();
 	
 	@Override
