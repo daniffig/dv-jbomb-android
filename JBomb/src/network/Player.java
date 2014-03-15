@@ -8,6 +8,7 @@ public class Player implements Serializable {
 	
 	private Integer UID;
 	private String Name;
+	private Integer Points;
 	
 	public Player()
 	{
@@ -32,6 +33,14 @@ public class Player implements Serializable {
 	}
 	public void setName(String name) {
 		Name = name;
+	}
+
+	public Integer getPoints() {
+		return Points;
+	}
+
+	public void setPoints(Integer points) {
+		Points = points;
 	}
 	
 	
