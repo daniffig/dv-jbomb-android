@@ -1,6 +1,7 @@
 package network;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Vector;
 
 import reference.JBombRequestResponse;
@@ -29,6 +30,9 @@ public class JBombComunicationObject implements Serializable{
 	private Player  BombTargetPlayer;
 	private Integer RequestedGameId;
 	private GamePlayInformation GamePlayInformation = null;
+	
+	private HashMap<String, Integer> LastRoundScores;
+	private HashMap<String, Integer> GeneralScores;
 	
 	public JBombComunicationObject(){
 		super();
@@ -167,4 +171,22 @@ public class JBombComunicationObject implements Serializable{
 	public void setGameSettings(GameSettings gameSettings) {
 		this.gameSettings = gameSettings;
 	}
+
+	public HashMap<String, Integer> getLastRoundScores() {
+		return LastRoundScores;
+	}
+
+	public void setLastRoundScores(HashMap<String, Integer> lastRoundScores) {
+		LastRoundScores = lastRoundScores;
+	}
+
+	public HashMap<String, Integer> getGeneralScores() {
+		return GeneralScores;
+	}
+
+	public void setGeneralScores(HashMap<String, Integer> generalScores) {
+		GeneralScores = generalScores;
+	}
+	
+	
 }
