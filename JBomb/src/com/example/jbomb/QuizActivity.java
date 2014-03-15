@@ -2,6 +2,8 @@ package com.example.jbomb;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import core.GameClient;
 import reference.JBombRequestResponse;
 import services.GameServerService;
 import network.JBombComunicationObject;
@@ -59,6 +61,13 @@ public class QuizActivity extends Activity {
 
 		RadioGroup qqa = (RadioGroup) findViewById(R.id.quizQuestionAnswers);
 		
+		if (qqa.getCheckedRadioButtonId() == -1)
+		{			
+			Toast.makeText(this.getApplicationContext(), "Debe seleccionar una opción.", Toast.LENGTH_SHORT).show();
+			
+			return;
+		}
+		
 		RadioButton rb = (RadioButton) this.findViewById(qqa.getCheckedRadioButtonId());
 		
 		JBombComunicationObject jbo = new JBombComunicationObject();
@@ -66,7 +75,7 @@ public class QuizActivity extends Activity {
 		jbo.setType(JBombRequestResponse.QUIZ_ANSWER_REQUEST);
 		jbo.setSelectedQuizAnswer(String.valueOf(rb.getText()));
 		
-		System.out.println("Te respondí: " + jbo.getSelectedQuizAnswer());
+		GameClient.printNotification(String.format("Envié una respuesta: %s", jbo.getSelectedQuizAnswer()));
 		
 		Toast.makeText(this.getApplicationContext(), "Enviando respuesta al servidor...", Toast.LENGTH_SHORT).show();
 		

@@ -229,6 +229,7 @@ public class NewGameActivity extends Activity {
         	
         	GameClient.getInstance().setCurrentPlayers(response.getGamePlayInformation().getTotalPlayers());
         	GameClient.getInstance().setMaxPlayers(response.getGamePlayInformation().getMaxPlayers());
+        	GameClient.getInstance().myPlayerName = myPlayer.getName();
 
         	Intent myIntent = new Intent(NewGameActivity.this, PlayersLoadingActivity.class);
 

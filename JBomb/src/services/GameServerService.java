@@ -25,8 +25,6 @@ public class GameServerService extends Service {
 	private JBombComunicationObject communication_object;
 	
 	private Thread connectionThread;
-	private Thread sendThread;
-	private Thread receiveThread;
 	
 	public Boolean hasErrorState = false;
 
@@ -55,43 +53,36 @@ public class GameServerService extends Service {
 	
 	private void stablishConnection(){
 		
-		if (!(this.connectionThread == null) && this.connectionThread.isAlive())
-		{
-			this.connectionThread.interrupt();
+		if (this.connectionThread == null)
+		{			
+			this.connectionThread = new ConnectionThread();		
+			this.connectionThread.start();
 		}
-		
-		this.connectionThread = new ConnectionThread();		
-		this.connectionThread.start();
 	}
 	
 	public void sendObject(JBombComunicationObject communicationObject){
+		
 		this.communication_object = communicationObject;
 		
-		if (!(this.sendThread == null) && this.sendThread.isAlive())
-		{
-			this.sendThread.interrupt();
-		}
-		
-		this.sendThread = new sendObjectThread();
-		this.sendThread.start();
+		(new sendObjectThread()).start();
+		//this.sendThread.start();
 	}
 	
 	public JBombComunicationObject receiveObject(){
 		
-		if (!(this.receiveThread == null) && this.receiveThread.isAlive())
-		{
-			this.receiveThread.interrupt();
-		}
+		Thread receiveThread = new receiveObjectThread();
 		
-		this.receiveThread = new receiveObjectThread();
-		this.receiveThread.start();
+		receiveThread.start();
+		Log.e(LOGCAT, "Estoy vivo?" + receiveThread.isAlive());
 		
 		try{
-			this.receiveThread.join();
+			receiveThread.join();
 		}catch(InterruptedException e){
 			Log.e(LOGCAT, e.toString());
 			
-			return null;
+			hasErrorState = true;
+			
+			communication_object =  null;
 		}
 		
 		return this.communication_object;
@@ -143,6 +134,8 @@ public class GameServerService extends Service {
 			catch(Exception e)
 			{
 				Log.e(LOGCAT, "Fall� el envio del objeto - " + e.toString());
+				
+				hasErrorState = true;
 			}
 		}
     }
@@ -159,9 +152,11 @@ public class GameServerService extends Service {
 			}
 			catch(Exception e)
 			{
-				Log.e(LOGCAT, "Fall� la recepci�n del objeto - " + e.toString());
+				Log.e(LOGCAT, "Fallé al recibir un objeto. - " + e.toString());
 			
 				communication_object =  null;
+				
+				hasErrorState = true;
 			}
 		}
 

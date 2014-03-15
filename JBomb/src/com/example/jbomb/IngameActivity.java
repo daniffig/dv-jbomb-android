@@ -12,7 +12,6 @@ import core.GameClient;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Activity;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -77,8 +76,20 @@ public class IngameActivity extends Activity {
 				try
 				{
 					response = myService.receiveObject();
-					Log.w("setBomb", "Recibi algo del servidor magico feo antes.");
-					//JBombRequestResponse.
+					
+					if (myService.hasErrorState)
+					{
+						runOnUiThread(new Runnable()
+						{
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								
+								Toast.makeText(IngameActivity.this.getApplicationContext(), "Ocurrió un error.", Toast.LENGTH_SHORT).show();
+							}
+							
+						});
+					}
 					
 					while (!response.getType().equals(JBombRequestResponse.BOMB_DETONATED_RESPONSE))
 					{												
@@ -94,18 +105,22 @@ public class IngameActivity extends Activity {
 							
 						});
 						
+						GameClient.printNotification(String.format("Recibì desde el servidor: %s", response.getType().toString()));
+						
 						switch(response.getType())
 						{
 						case BOMB_OWNER_RESPONSE:
+							
+							GameClient.printNotification(String.format("La bomba la tiene: %s", response.getBombOwner().getName()));
+							
 							runOnUiThread(new Runnable()
 							{
 								@Override
 								public void run() {
-									Log.w("setBomb", "Soy " + response.getMyPlayer().getUID() + " y entre al setBomb.");
 									
 									if (response.getMyPlayer().getUID() == response.getBombOwner().getUID())
-									{
-										// Tengo la bomba!
+									{										
+										GameClient.printNotification(String.format("¡Tengo la bomba!"));
 										
 										ImageView iv = (ImageView) findViewById(R.id.ingameBombImage);
 										
@@ -117,10 +132,8 @@ public class IngameActivity extends Activity {
 										mp.start();
 									}
 									else
-									{
-										// No tengo la bomba
-										
-										Log.w("setBomb", "Voy a ocultar la bomba.");
+									{									
+										GameClient.printNotification(String.format("No tengo la bomba. :)"));
 										
 										ImageView iv = (ImageView) findViewById(R.id.ingameBombImage);
 										
@@ -131,6 +144,9 @@ public class IngameActivity extends Activity {
 							});
 							break;
 						case QUIZ_QUESTION_RESPONSE:
+							
+							GameClient.printNotification(String.format("Me enviaron una pregunta: %s", response.getQuizQuestion()));
+							
 							runOnUiThread(new Runnable()
 							{
 								@Override
@@ -148,6 +164,9 @@ public class IngameActivity extends Activity {
 							});
 							break;
 						case QUIZ_ANSWER_RESPONSE:
+							
+							GameClient.printNotification(String.format("¿La respuesta era correcta?: %s", response.getCorrectAnswer()));
+							
 							runOnUiThread(new Runnable()
 							{
 								@Override
@@ -157,12 +176,20 @@ public class IngameActivity extends Activity {
 								}								
 							});
 							break;
-						default:
-							System.out.println("Recibi cualquier cosa." + response.getType().toString());
+						case NOTICE_FLASH:
+							GameClient.printNotification("Recibi una actualización de estado.");
+							// Esto se maneja por defecto arriba, siempre, así que no hacemos nada.
+							break;
+						default:							
+							GameClient.printNotification("Recibi cualquier cosa.");
 							break;
 						}
 						
+
+						GameClient.printNotification("Puedo fallar.");
+						
 						response = myService.receiveObject();
+						GameClient.printNotification("No fallé. Tengo error: " + myService.hasErrorState);
 						
 						if (myService.hasErrorState)
 						{
@@ -194,7 +221,6 @@ public class IngameActivity extends Activity {
 	}
 	
 	private void hidePlayers() {
-		/*
 		this.findViewById(R.id.PlayerTop).setVisibility(View.INVISIBLE);
 		this.findViewById(R.id.PlayerRight).setVisibility(View.INVISIBLE);
 		this.findViewById(R.id.PlayerBottom).setVisibility(View.INVISIBLE);
@@ -204,18 +230,23 @@ public class IngameActivity extends Activity {
 		this.findViewById(R.id.PlayerBottomImage).setVisibility(View.INVISIBLE);
 		this.findViewById(R.id.PlayerLeftImage).setVisibility(View.INVISIBLE);		
 		this.findViewById(R.id.ingameBombImage).setVisibility(View.INVISIBLE);
-		*/
 	}
 	
 	private void loadPlayers(Vector<Player> players)
-	{
-		int i = 0;
+	{					
+		this.loadPlayer(players.get(0).getUID(), (TextView) this.findViewById(R.id.PlayerTop), (ImageView) this.findViewById(R.id.PlayerTopImage), players.get(0).getName());
 		
-		for (Player player : players)
+		if (players.size() > 1)
 		{
-			this.loadPlayer(player.getUID(), (TextView) this.findViewById(GameClient.getInstance().getIdForPlayer(i)), (ImageView) this.findViewById(GameClient.getInstance().getImageForPlayer(i)), player.getName());
-			
-			i++;
+			this.loadPlayer(players.get(1).getUID(), (TextView) this.findViewById(R.id.PlayerRight), (ImageView) this.findViewById(R.id.PlayerRightImage), players.get(1).getName());
+		}
+		if (players.size() > 2)
+		{
+			this.loadPlayer(players.get(2).getUID(), (TextView) this.findViewById(R.id.PlayerBottom), (ImageView) this.findViewById(R.id.PlayerBottomImage), players.get(2).getName());
+		}
+		if (players.size() > 3)
+		{
+			this.loadPlayer(players.get(3).getUID(), (TextView) this.findViewById(R.id.PlayerLeft), (ImageView) this.findViewById(R.id.PlayerLeftImage), players.get(3).getName());
 		}
 	}
 	
@@ -293,15 +324,6 @@ public class IngameActivity extends Activity {
 		    	myIntent.putExtra("TARGET_PLAYER_NAME", targetPlayer.getName());
 				
 				myService.sendObject(jbo);
-				
-				if (myService.hasErrorState)
-				{
-					Toast.makeText(IngameActivity.this.getApplicationContext(), "Ocurrió un error.", Toast.LENGTH_SHORT).show();
-					
-					IngameActivity.this.finish();
-					
-					return false;
-				}
 				
 				break;
 			}

@@ -27,27 +27,34 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="@dimen/text_size_small" />
 
-    <LinearLayout
-        android:id="@+id/AnswersLayout"
+    <ScrollView
+        android:id="@+id/QuizQuestionAnswersScroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp" >
 
-        <RadioGroup
-            android:id="@+id/quizQuestionAnswers"
+        <LinearLayout
+            android:id="@+id/AnswersLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
             android:orientation="vertical" >
-        </RadioGroup>
-    </LinearLayout>
 
-    <Button
-        android:id="@+id/enviarRespuestaButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:onClick="sendAnswer"
-        android:text="@string/send_answer" />
+            <RadioGroup
+                android:id="@+id/quizQuestionAnswers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/enviarRespuestaButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:onClick="sendAnswer"
+                android:text="@string/send_answer" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

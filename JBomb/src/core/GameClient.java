@@ -3,6 +3,8 @@ package core;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.example.jbomb.R;
 
 public class GameClient {
@@ -14,6 +16,9 @@ public class GameClient {
 
 	public int currentPlayers = 0;
 	public int maxPlayers = 1;
+	
+	public String myPlayerName;
+	public int myPlayer;
 	
 	public int getCurrentPlayers() {
 		return currentPlayers;
@@ -62,10 +67,6 @@ public class GameClient {
 	
 	public List<Integer> getPlayers() {
 		return GameClient.instance.players;
-	}
-	
-	private Boolean hasTheBomb() {
-		return true;
 	}
 	
 	public String getQuizQuestion()
@@ -122,5 +123,11 @@ public class GameClient {
 		}
 		
 		return -1;
+	}
+	
+	public static void printNotification(String notification)
+	{
+		Log.i(String.format("[%s]", GameClient.getInstance().myPlayerName), notification);
+		//System.out.println(String.format("[%s] %s", GameClient.getInstance().myPlayerName, notification));
 	}
 }
