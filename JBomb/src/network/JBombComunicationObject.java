@@ -43,112 +43,72 @@ public class JBombComunicationObject implements Serializable{
 		this.Type = jbrr;
 	}
 	
-	public JBombRequestResponse getType() {
-		return Type;
-	}
-	public void setType(JBombRequestResponse type) {
-		Type = type;
-	}
-	
-	public String getFlash() {
-		return Flash;
-	}
-
-	public void setFlash(String flash) {
-		Flash = flash;
-	}
-
-	public Vector<Player> getPlayers() {
-		return Players;
-	}
-	public void setPlayers(Vector<Player> players) {
-		Players = players;
+	public void addGameInformation(GameInformation gi)
+	{
+		this.AvailableGames.add(gi);
 	}
 	public void addPlayer(Player p){
 		Players.add(p);
 	}
 	
+	public Vector<GameInformation> getAvailableGames() {
+		return AvailableGames;
+	}
+
 	public Player getBombOwner() {
 		return BombOwner;
-	}
-	public void setBombOwner(Player bombOwner) {
-		BombOwner = bombOwner;
-	}
-	public Player getLoser() {
-		return Loser;
-	}
-	public void setLoser(Player loser) {
-		Loser = loser;
-	}
-	public String getQuizQuestion() {
-		return QuizQuestion;
-	}
-	public void setQuizQuestion(String quizQuestion) {
-		QuizQuestion = quizQuestion;
-	}
-	public Vector<String> getQuizAnswers() {
-		return QuizAnswers;
-	}
-	public void setQuizAnswers(Vector<String> quizAnswers) {
-		QuizAnswers = quizAnswers;
-	}
-	public String getSelectedQuizAnswer() {
-		return SelectedQuizAnswer;
-	}
-	public void setSelectedQuizAnswer(String selectedQuizAnswer) {
-		SelectedQuizAnswer = selectedQuizAnswer;
-	}
-	public Boolean getCorrectAnswer() {
-		return CorrectAnswer;
-	}
-
-	public void setCorrectAnswer(Boolean correctAnswer) {
-		CorrectAnswer = correctAnswer;
-	}
-
-	public Player getMyPlayer() {
-		return MyPlayer;
-	}
-
-	public void setMyPlayer(Player myPlayer) {
-		MyPlayer = myPlayer;
 	}
 
 	public Player getBombTargetPlayer() {
 		return BombTargetPlayer;
 	}
-
-	public void setBombTargetPlayer(Player bombTargetPlayer) {
-		BombTargetPlayer = bombTargetPlayer;
+	public Boolean getCorrectAnswer() {
+		return CorrectAnswer;
 	}
-
-	
-	public Integer getRequestedGameId() {
-		return RequestedGameId;
-	}
-
-	public void setRequestedGameId(Integer requestedGameId) {
-		RequestedGameId = requestedGameId;
-	}
-
-	public Vector<GameInformation> getAvailableGames() {
-		return AvailableGames;
-	}
-	public void setAvailableGames(Vector<GameInformation> availableGames) {
-		AvailableGames = availableGames;
-	}
-	
-	public void addGameInformation(GameInformation gi)
-	{
-		this.AvailableGames.add(gi);
+	public String getFlash() {
+		return Flash;
 	}
 	
 	public GamePlayInformation getGamePlayInformation() {
 		return GamePlayInformation;
 	}
+	public GameSettings getGameSettings() {
+		return gameSettings;
+	}
+	public GameSettingsInformation getGameSettingsInformation() {
+		return gameSettingsInformation;
+	}
+	public HashMap<String, Integer> getGeneralScores() {
+		return GeneralScores;
+	}
+	public HashMap<String, Integer> getLastRoundScores() {
+		return LastRoundScores;
+	}
+	public Player getLoser() {
+		return Loser;
+	}
+	public Player getMyPlayer() {
+		return MyPlayer;
+	}
+	public Vector<Player> getPlayers() {
+		return Players;
+	}
+	public Vector<String> getQuizAnswers() {
+		return QuizAnswers;
+	}
+	public String getQuizQuestion() {
+		return QuizQuestion;
+	}
+	public Integer getRequestedGameId() {
+		return RequestedGameId;
+	}
 
-	public void setGamePlayInformation(GamePlayInformation gamePlayInformation) {
-		GamePlayInformation = gamePlayInformation;
+	public String getSelectedQuizAnswer() {
+		return SelectedQuizAnswer;
+	}
+
+	public JBombRequestResponse getType() {
+		return Type;
 	}
 
 	public boolean hasGamePlayInformation()
@@ -156,36 +116,76 @@ public class JBombComunicationObject implements Serializable{
 		return GamePlayInformation.equals(null);
 	}
 
-	public GameSettingsInformation getGameSettingsInformation() {
-		return gameSettingsInformation;
+	public void setAvailableGames(Vector<GameInformation> availableGames) {
+		AvailableGames = availableGames;
 	}
 
+	public void setBombOwner(Player bombOwner) {
+		BombOwner = bombOwner;
+	}
+
+	
+	public void setBombTargetPlayer(Player bombTargetPlayer) {
+		BombTargetPlayer = bombTargetPlayer;
+	}
+
+	public void setCorrectAnswer(Boolean correctAnswer) {
+		CorrectAnswer = correctAnswer;
+	}
+
+	public void setFlash(String flash) {
+		Flash = flash;
+	}
+	public void setGamePlayInformation(GamePlayInformation gamePlayInformation) {
+		GamePlayInformation = gamePlayInformation;
+	}
+	
+	public void setGameSettings(GameSettings gameSettings) {
+		this.gameSettings = gameSettings;
+	}
+	
 	public void setGameSettingsInformation(GameSettingsInformation gameSettingsInformation) {
 		this.gameSettingsInformation = gameSettingsInformation;
 	}
 
-	public GameSettings getGameSettings() {
-		return gameSettings;
-	}
-
-	public void setGameSettings(GameSettings gameSettings) {
-		this.gameSettings = gameSettings;
-	}
-
-	public HashMap<String, Integer> getLastRoundScores() {
-		return LastRoundScores;
+	public void setGeneralScores(HashMap<String, Integer> generalScores) {
+		GeneralScores = generalScores;
 	}
 
 	public void setLastRoundScores(HashMap<String, Integer> lastRoundScores) {
 		LastRoundScores = lastRoundScores;
 	}
 
-	public HashMap<String, Integer> getGeneralScores() {
-		return GeneralScores;
+	public void setLoser(Player loser) {
+		Loser = loser;
 	}
 
-	public void setGeneralScores(HashMap<String, Integer> generalScores) {
-		GeneralScores = generalScores;
+	public void setMyPlayer(Player myPlayer) {
+		MyPlayer = myPlayer;
+	}
+
+	public void setPlayers(Vector<Player> players) {
+		Players = players;
+	}
+
+	public void setQuizAnswers(Vector<String> quizAnswers) {
+		QuizAnswers = quizAnswers;
+	}
+
+	public void setQuizQuestion(String quizQuestion) {
+		QuizQuestion = quizQuestion;
+	}
+
+	public void setRequestedGameId(Integer requestedGameId) {
+		RequestedGameId = requestedGameId;
+	}
+
+	public void setSelectedQuizAnswer(String selectedQuizAnswer) {
+		SelectedQuizAnswer = selectedQuizAnswer;
+	}
+
+	public void setType(JBombRequestResponse type) {
+		Type = type;
 	}
 	
 	

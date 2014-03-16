@@ -20,44 +20,44 @@ public class GameSettings implements Serializable {
 	public Integer getMaxPlayers() {
 		return maxPlayers;
 	}
-	public void setMaxPlayers(Integer maxPlayers) {
-		this.maxPlayers = maxPlayers;
-	}
 	public Integer getMaxRounds() {
 		return maxRounds;
-	}
-	public void setMaxRounds(Integer maxRounds) {
-		this.maxRounds = maxRounds;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public Integer getTopologyId() {
-		return topologyId;
-	}
-	public void setTopologyId(Integer topologyId) {
-		this.topologyId = topologyId;
 	}
 	public Integer getModeId() {
 		return modeId;
 	}
-	public void setModeId(Integer modeId) {
-		this.modeId = modeId;
-	}
-	public Integer getRoundDurationId() {
-		return roundDurationId;
-	}
-	public void setRoundDurationId(Integer roundDurationId) {
-		this.roundDurationId = roundDurationId;
+	public String getName() {
+		return name;
 	}
 	public Integer getQuizId() {
 		return quizId;
 	}
+	public Integer getRoundDurationId() {
+		return roundDurationId;
+	}
+	public Integer getTopologyId() {
+		return topologyId;
+	}
+	public void setMaxPlayers(Integer maxPlayers) {
+		this.maxPlayers = maxPlayers;
+	}
+	public void setMaxRounds(Integer maxRounds) {
+		this.maxRounds = maxRounds;
+	}
+	public void setModeId(Integer modeId) {
+		this.modeId = modeId;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public void setQuizId(Integer quizId) {
 		this.quizId = quizId;
+	}
+	public void setRoundDurationId(Integer roundDurationId) {
+		this.roundDurationId = roundDurationId;
+	}
+	public void setTopologyId(Integer topologyId) {
+		this.topologyId = topologyId;
 	}
 
 }

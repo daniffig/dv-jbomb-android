@@ -12,41 +12,41 @@ public class GamePlayInformation implements Serializable{
 	private Integer TotalPlayers;
 	private Integer MaxPlayers;
 	
-	public Integer getId() {
-		return Id;
-	}
-	public void setId(Integer id) {
-		Id = id;
-	}
-	public String getName() {
-		return Name;
-	}
-	public void setName(String name) {
-		Name = name;
-	}
 	public Integer getCurrentRound() {
 		return CurrentRound;
 	}
-	public void setCurrentRound(Integer currentRound) {
-		CurrentRound = currentRound;
-	}
-	public Integer getMaxRounds() {
-		return MaxRounds;
-	}
-	public void setMaxRounds(Integer maxRounds) {
-		MaxRounds = maxRounds;
-	}
-	public Integer getTotalPlayers() {
-		return TotalPlayers;
-	}
-	public void setTotalPlayers(Integer totalPlayers) {
-		TotalPlayers = totalPlayers;
+	public Integer getId() {
+		return Id;
 	}
 	public Integer getMaxPlayers() {
 		return MaxPlayers;
 	}
+	public Integer getMaxRounds() {
+		return MaxRounds;
+	}
+	public String getName() {
+		return Name;
+	}
+	public Integer getTotalPlayers() {
+		return TotalPlayers;
+	}
+	public void setCurrentRound(Integer currentRound) {
+		CurrentRound = currentRound;
+	}
+	public void setId(Integer id) {
+		Id = id;
+	}
 	public void setMaxPlayers(Integer maxPlayers) {
 		MaxPlayers = maxPlayers;
+	}
+	public void setMaxRounds(Integer maxRounds) {
+		MaxRounds = maxRounds;
+	}
+	public void setName(String name) {
+		Name = name;
+	}
+	public void setTotalPlayers(Integer totalPlayers) {
+		TotalPlayers = totalPlayers;
 	}
 
 

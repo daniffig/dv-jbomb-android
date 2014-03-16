@@ -40,11 +40,22 @@ public class PlayersLoadingActivity extends Activity {
 		return true;
 	}
 	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		
+		if (!this.listenerThread.equals(null) && this.listenerThread.isAlive())
+		{
+			this.listenerThread.interrupt();
+		}
+	}
+	
 	public void startGame(View view)
 	{
-    	Intent myIntent = new Intent(PlayersLoadingActivity.this, IngameActivity.class);
+    	Intent myIntent = new Intent(this, IngameActivity.class);
 
-    	PlayersLoadingActivity.this.startActivity(myIntent);	
+    	this.startActivity(myIntent);	
     	
     	this.finish();
 	}
@@ -106,17 +117,6 @@ public class PlayersLoadingActivity extends Activity {
 		});
 		
 		this.listenerThread.start();		
-	}
-	
-	@Override
-	protected void onDestroy()
-	{
-		super.onDestroy();
-		
-		if (!this.listenerThread.equals(null) && this.listenerThread.isAlive())
-		{
-			this.listenerThread.interrupt();
-		}
 	}
 
 }

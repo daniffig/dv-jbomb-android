@@ -1,43 +1,33 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
+import network.Player;
+
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.example.jbomb.R;
 
+@SuppressLint("UseSparseArrays")
 public class GameClient {
 
 	private static GameClient instance;
 	
 	public static int CORRECT_ANSWER = 31;
 	public static int INCORRECT_ANSWER = 37;
-
-	public int currentPlayers = 0;
-	public int maxPlayers = 1;
 	
-	public String myPlayerName;
-	public int myPlayer;
-	
-	public int getCurrentPlayers() {
-		return currentPlayers;
-	}
+//	public Vector<Integer> adjacentPlayersUIDs = new Vector<Integer>();	
+	public Map<Integer, Player> adjacentPlayers = new HashMap<Integer, Player>();
 
-	public void setCurrentPlayers(int currentPlayers) {
-		this.currentPlayers = currentPlayers;
+	public static void destroyInstance()
+	{
+		GameClient.instance = null;
 	}
-
-	public int getMaxPlayers() {
-		return maxPlayers;
-	}
-
-	public void setMaxPlayers(int maxPlayers) {
-		this.maxPlayers = maxPlayers;
-	}
-	
-	private List<Integer> players;
-	
 	public static GameClient getInstance() {
 		
 		if (GameClient.instance == null)
@@ -56,38 +46,24 @@ public class GameClient {
 		return GameClient.instance;
 	}
 	
-	public static void destroyInstance()
+	public static void printNotification(String notification)
 	{
-		GameClient.instance = null;
+		Log.i(String.format("[%s]", GameClient.getInstance().myPlayerName), notification);
 	}
+	public int currentPlayers = 0;
 	
-	public Integer getPlayersCount() {
-		return GameClient.instance.players.size();
-	}
+	public int maxPlayers = 1;
 	
-	public List<Integer> getPlayers() {
-		return GameClient.instance.players;
-	}
+	public String myPlayerName;
+
+	public int myPlayer;
+
+	public Boolean isBombExploded = false;
+
+	private List<Integer> players;
 	
-	public String getQuizQuestion()
-	{
-		return "¿Quién es la mejor persona del planeta?";
-	}
-	
-	public List<String> getQuizQuestionAnswers()
-	{
-		List<String> answers = new ArrayList<String>();
-		
-		answers.add("Federico Almendra");
-		answers.add("Andrés Cimadamore");
-		answers.add("Duilio Gervasio Ray");
-		
-		return answers;
-	}
-	
-	public Boolean isCorrectQuizQuestionAnswer(int pos)
-	{
-		return pos == 0;
+	public int getCurrentPlayers() {
+		return currentPlayers;
 	}
 	
 	// MUY MUY MAL HACER ESTO, pero hay que sacarlo funcionando ya.
@@ -125,9 +101,44 @@ public class GameClient {
 		return -1;
 	}
 	
-	public static void printNotification(String notification)
+	public int getMaxPlayers() {
+		return maxPlayers;
+	}
+	
+	public List<Integer> getPlayers() {
+		return GameClient.instance.players;
+	}
+	
+	public Integer getPlayersCount() {
+		return GameClient.instance.players.size();
+	}
+	
+	public String getQuizQuestion()
 	{
-		Log.i(String.format("[%s]", GameClient.getInstance().myPlayerName), notification);
-		//System.out.println(String.format("[%s] %s", GameClient.getInstance().myPlayerName, notification));
+		return "¿Quién es la mejor persona del planeta?";
+	}
+	
+	public List<String> getQuizQuestionAnswers()
+	{
+		List<String> answers = new ArrayList<String>();
+		
+		answers.add("Federico Almendra");
+		answers.add("Andrés Cimadamore");
+		answers.add("Duilio Gervasio Ray");
+		
+		return answers;
+	}
+	
+	public Boolean isCorrectQuizQuestionAnswer(int pos)
+	{
+		return pos == 0;
+	}
+	
+	public void setCurrentPlayers(int currentPlayers) {
+		this.currentPlayers = currentPlayers;
+	}
+	
+	public void setMaxPlayers(int maxPlayers) {
+		this.maxPlayers = maxPlayers;
 	}
 }

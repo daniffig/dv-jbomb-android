@@ -29,7 +29,7 @@
         android:layout_alignParentRight="true"
         android:text="@string/waiting_for_players"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="@dimen/text_size_small" />
+        android:textSize="@dimen/text_size_medium" />
 
     <TextView
         android:id="@+id/ingameServerInfo"
@@ -41,106 +41,115 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="@dimen/text_size_small" />
 
-    <ImageView
-        android:id="@+id/ingameBombImage"
+    <RelativeLayout
+        android:id="@+id/gamePlayArea"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/the_bomb"
-        android:maxHeight="@dimen/ingame_bomb"
-        android:maxWidth="@dimen/ingame_bomb"
-        android:scaleType="fitCenter"
-        android:src="@drawable/gameplay_bomb" />
+        android:layout_above="@+id/notificationText"
+        android:layout_below="@+id/ingameServerInfo" >
 
-    <TextView
-        android:id="@+id/PlayerLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:adjustViewBounds="true"
-        android:gravity="center_horizontal"
-        android:text="@string/player_left_name"
-        android:textSize="@dimen/text_size_small" />
+        <ImageView
+            android:id="@+id/ingameBombImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/the_bomb"
+            android:maxHeight="@dimen/ingame_bomb"
+            android:maxWidth="@dimen/ingame_bomb"
+            android:scaleType="fitCenter"
+            android:src="@drawable/gameplay_bomb" />
 
-    <TextView
-        android:id="@+id/PlayerRight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:gravity="center_horizontal"
-        android:text="@string/player_right_name"
-        android:textSize="@dimen/text_size_small" />
+        <ImageView
+            android:id="@+id/PlayerRightImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/player_right_name"
+            android:maxHeight="@dimen/player_avatar"
+            android:maxWidth="@dimen/player_avatar"
+            android:src="@drawable/avatar" />
 
-    <TextView
-        android:id="@+id/PlayerBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
-        android:text="@string/player_bottom_name"
-        android:textSize="@dimen/text_size_small" />
+        <ImageView
+            android:id="@+id/PlayerTopImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/player_top_name"
+            android:maxHeight="@dimen/player_avatar"
+            android:maxWidth="@dimen/player_avatar"
+            android:src="@drawable/avatar" />
 
-    <TextView
-        android:id="@+id/PlayerTop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
-        android:text="@string/player_top_name"
-        android:textSize="@dimen/text_size_small" />
+        <ImageView
+            android:id="@+id/PlayerLeftImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/player_left_name"
+            android:maxHeight="@dimen/player_avatar"
+            android:maxWidth="@dimen/player_avatar"
+            android:scaleType="centerInside"
+            android:src="@drawable/avatar" />
 
-    <ImageView
-        android:id="@+id/PlayerLeftImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/PlayerLeft"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/player_left_name"
-        android:maxHeight="@dimen/player_avatar"
-        android:maxWidth="@dimen/player_avatar"
-        android:scaleType="centerInside"
-        android:src="@drawable/avatar" />
+        <ImageView
+            android:id="@+id/PlayerBottomImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/player_bottom_name"
+            android:maxHeight="@dimen/player_avatar"
+            android:maxWidth="@dimen/player_avatar"
+            android:src="@drawable/avatar" />
 
-    <ImageView
-        android:id="@+id/PlayerRightImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/PlayerRight"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/player_right_name"
-        android:maxHeight="@dimen/player_avatar"
-        android:maxWidth="@dimen/player_avatar"
-        android:src="@drawable/avatar" />
+        <TextView
+            android:id="@+id/PlayerBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/PlayerBottomImage"
+            android:layout_toRightOf="@+id/PlayerBottomImage"
+            android:gravity="center_horizontal"
+            android:text="@string/player_bottom_name"
+            android:textSize="@dimen/text_size_small" />
 
-    <ImageView
-        android:id="@+id/PlayerBottomImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/PlayerBottom"
-        android:layout_centerHorizontal="true"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/player_bottom_name"
-        android:maxHeight="@dimen/player_avatar"
-        android:maxWidth="@dimen/player_avatar"
-        android:src="@drawable/avatar" />
+        <TextView
+            android:id="@+id/PlayerRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/PlayerRightImage"
+            android:layout_toLeftOf="@+id/PlayerRightImage"
+            android:gravity="center_horizontal"
+            android:text="@string/player_right_name"
+            android:textSize="@dimen/text_size_small" />
 
-    <ImageView
-        android:id="@+id/PlayerTopImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/PlayerTop"
-        android:layout_centerHorizontal="true"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/player_top_name"
-        android:maxHeight="@dimen/player_avatar"
-        android:maxWidth="@dimen/player_avatar"
-        android:src="@drawable/avatar" />
+        <TextView
+            android:id="@+id/PlayerTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/PlayerTopImage"
+            android:gravity="center_horizontal"
+            android:text="@string/player_top_name"
+            android:textSize="@dimen/text_size_small" />
+
+        <TextView
+            android:id="@+id/PlayerLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/PlayerLeftImage"
+            android:adjustViewBounds="true"
+            android:gravity="center_horizontal"
+            android:text="@string/player_left_name"
+            android:textSize="@dimen/text_size_small" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

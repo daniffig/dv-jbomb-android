@@ -19,6 +19,15 @@ public class ClientSettingsActivity extends Activity {
 
     public static final String PREFS_NAME = "ClientSettingsFile";
     
+	public void closeClientSettings(View view)
+    {    
+	    this.setResult(Activity.RESULT_CANCELED);
+	    
+	    System.out.println("Cerré la configuración.");
+	    
+    	this.finish();    	
+    }
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,8 +51,8 @@ public class ClientSettingsActivity extends Activity {
 		getMenuInflater().inflate(R.menu.client_settings, menu);
 		return true;
 	}
-
-	@Override
+ 
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
@@ -59,7 +68,7 @@ public class ClientSettingsActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
- 
+    
     public void saveClientSettings(View view)
     {
 	    Editor settings = getSharedPreferences(PREFS_NAME, 0).edit();
@@ -81,15 +90,6 @@ public class ClientSettingsActivity extends Activity {
 	    System.out.println("Cerré la configuración.");
 	    
     	this.finish();
-    }
-    
-    public void closeClientSettings(View view)
-    {    
-	    this.setResult(Activity.RESULT_CANCELED);
-	    
-	    System.out.println("Cerré la configuración.");
-	    
-    	this.finish();    	
     }
 }
 

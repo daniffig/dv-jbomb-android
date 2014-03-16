@@ -20,57 +20,13 @@ import android.widget.Toast;
 
 public class GameSelectionActivity extends Activity {
 	
+	// Probando un commit.
+	
 	private GameServerService myService = MainActivity.getService();
 	
     private Toast connecting;
     private Toast loading;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_game_selection);
-
-        SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
-		
-		connecting = Toast.makeText(this.getApplicationContext(), "Conectando con el servidor " + settings.getString("InetIPAddress", null) + "...", Toast.LENGTH_SHORT);
-		connecting.show();		
-
-		loading = Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Cargando juegos...", Toast.LENGTH_SHORT);
-		loading.show();
-		
-    	JBombComunicationObject jbo = new JBombComunicationObject();
-    	jbo.setType(JBombRequestResponse.GAME_LIST_REQUEST);
-
-    	myService.sendObject(jbo);
-    	
-    	JBombComunicationObject response = myService.receiveObject();
-	    
-		loading.cancel();
-    	this.loadGames((RadioGroup) this.findViewById(R.id.availableGamesRadioGroup), response.getAvailableGames()); 
-	}
-	
-	private void loadGames(RadioGroup availableGamesRadioGroup, Vector<GameInformation> availableGames)
-	{
-		for (GameInformation ag : availableGames)
-		{			
-			RadioButton rb = new RadioButton(this.getBaseContext());
-			
-			System.out.println("El ID del juego es: " + ag.getUID());
-			
-			rb.setId(ag.getUID());
-			rb.setText(ag.getName() + " " + ag.getTotalPlayers() + "/" + ag.getMaxPlayers() + " | " + ag.getMode());
-			
-			availableGamesRadioGroup.addView(rb);			
-		}		
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.game_selection, menu);
-		return true;
-	}
-	
 	public void connectToGame(View view)
 	{
         SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
@@ -100,12 +56,55 @@ public class GameSelectionActivity extends Activity {
     	
     	GameClient.getInstance().setCurrentPlayers(response.getGamePlayInformation().getTotalPlayers());
     	GameClient.getInstance().setMaxPlayers(response.getGamePlayInformation().getMaxPlayers());
-    	GameClient.getInstance().myPlayerName = myPlayer.getName();
 
     	Intent myIntent = new Intent(GameSelectionActivity.this, PlayersLoadingActivity.class);
 
     	GameSelectionActivity.this.startActivity(myIntent);
     	
     	this.finish();
+	}
+	
+	private void loadGames(RadioGroup availableGamesRadioGroup, Vector<GameInformation> availableGames)
+	{
+		for (GameInformation ag : availableGames)
+		{			
+			RadioButton rb = new RadioButton(this.getBaseContext());
+			
+			rb.setId(ag.getUID());
+			rb.setText(ag.getName() + " " + ag.getTotalPlayers() + "/" + ag.getMaxPlayers() + " | " + ag.getMode());
+			
+			availableGamesRadioGroup.addView(rb);			
+		}		
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_game_selection);
+
+        SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
+		
+		connecting = Toast.makeText(this.getApplicationContext(), "Conectando con el servidor " + settings.getString("InetIPAddress", null) + "...", Toast.LENGTH_SHORT);
+		connecting.show();		
+
+		loading = Toast.makeText(GameSelectionActivity.this.getApplicationContext(), "Cargando juegos...", Toast.LENGTH_SHORT);
+		loading.show();
+		
+    	JBombComunicationObject jbo = new JBombComunicationObject();
+    	jbo.setType(JBombRequestResponse.GAME_LIST_REQUEST);
+
+    	myService.sendObject(jbo);
+    	
+    	JBombComunicationObject response = myService.receiveObject();
+	    
+		loading.cancel();
+    	this.loadGames((RadioGroup) this.findViewById(R.id.availableGamesRadioGroup), response.getAvailableGames()); 
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.game_selection, menu);
+		return true;
 	}
 }

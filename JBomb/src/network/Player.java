@@ -22,25 +22,25 @@ public class Player implements Serializable {
 		this.Name = n;
 	}
 	
-	public Integer getUID() {
-		return UID;
-	}
-	public void setUID(Integer uID) {
-		UID = uID;
-	}
 	public String getName() {
 		return Name;
+	}
+	public Integer getPoints() {
+		return Points;
+	}
+	public Integer getUID() {
+		return UID;
 	}
 	public void setName(String name) {
 		Name = name;
 	}
 
-	public Integer getPoints() {
-		return Points;
-	}
-
 	public void setPoints(Integer points) {
 		Points = points;
+	}
+
+	public void setUID(Integer uID) {
+		UID = uID;
 	}
 	
 	

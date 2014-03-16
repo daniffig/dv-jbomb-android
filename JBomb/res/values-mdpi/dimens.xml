@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="ingame_bomb">96dp</dimen>
+    <dimen name="ingame_bomb">128dp</dimen>
     <dimen name="player_avatar">100dp</dimen>
     <dimen name="text_size_title1">40sp</dimen>
     <dimen name="text_size_small">24sp</dimen>
