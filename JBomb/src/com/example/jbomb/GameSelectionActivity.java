@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 public class GameSelectionActivity extends Activity {
 	
+	// Probando un commit.
+	
 	private GameServerService myService = MainActivity.getService();
 	
     private Toast connecting;
