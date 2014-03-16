@@ -6,9 +6,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
-
 import com.example.jbomb.ClientSettingsActivity;
 
 import network.JBombComunicationObject;
@@ -22,72 +19,7 @@ import android.os.NetworkOnMainThreadException;
 import android.util.Log;
 
 public class GameServerService extends Service {
-	private static final String LOGCAT = "GAME_SERVER_SERVICE";
-	private Socket socket;
-	private JBombComunicationObject communication_object;
-
-	private final IBinder myBinder = new GameServerServiceBinder();
-	
-	@Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i(LOGCAT, "Received start id " + startId + ": " + intent);
-        
-        return START_STICKY;
-    }
-	
-	@Override
-	public void onCreate(){
-		Log.i(LOGCAT, "El servicio fue creado");
-		
-        this.stablishConnection();
-	}
-
-	@Override
-	public IBinder onBind(Intent intent) {
-		Log.i(LOGCAT, "I'm being binded to a client");
-		
-		return myBinder;
-	}
-	
-	private void stablishConnection(){
-		
-		new Thread(new ConnectionThread()).start();
-	}
-	
-	public void sendObject(JBombComunicationObject communicationObject){
-		
-		this.communication_object = communicationObject;
-		
-		new Thread(new SendObjectThread()).start();
-	}
-	
-	public JBombComunicationObject receiveObject(){
-		
-		Log.i("RECEIVE_OBJECT", "Voy a recibir algo.");
-		
-		Thread t = new Thread(new ReceiveObjectThread());
-		
-		t.start();
-		
-		try{
-			t.join();
-		}catch(InterruptedException e){
-			Log.e("RECEIVE_OBJECT", "Fallé donde siempre... - " + e.toString());
-			
-			t.interrupt();
-		}
-
-		return this.communication_object;
-	}
-		
-    public class GameServerServiceBinder extends Binder {
-    	public GameServerService getService() {
-            return GameServerService.this;
-        }
-    }
-    
-    
-    public class ConnectionThread implements Runnable {
+	public class ConnectionThread implements Runnable {
     	
         SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
 
@@ -113,13 +45,34 @@ public class GameServerService extends Service {
 			
 		}
     }
-    
-    public class SendObjectThread implements Runnable {
+	public class GameServerServiceBinder extends Binder {
+    	public GameServerService getService() {
+            return GameServerService.this;
+        }
+    }
+	public class ReceiveObjectThread implements Runnable {
+		
 		@Override
-		public void run() {
+		public void run(){
+			try
+			{
+				ObjectInputStream inFromClient = new ObjectInputStream(socket.getInputStream());
 			
-			Log.i("SEND_OBJECT", communication_object.getType().toString());
-			
+				communication_object =  (JBombComunicationObject) inFromClient.readObject();
+				
+				Log.i("RECEIVE_OBJECT_THREAD", "Recibí algo adentro del thread. - " + communication_object.getType().toString());
+			}
+			catch(Exception e)
+			{
+				Log.e(LOGCAT, "Fallé al recibir un objeto. - " + e.toString());
+			}
+		}
+
+	}
+
+	public class SendObjectThread implements Runnable {
+		@Override
+		public void run() {			
 			try
 			{
 				ObjectOutputStream outToClient = new ObjectOutputStream(socket.getOutputStream());
@@ -132,23 +85,63 @@ public class GameServerService extends Service {
 			}
 		}
     }
+	
+	private static final String LOGCAT = "GAME_SERVER_SERVICE";
+	
+	private Socket socket;
 
-	public class ReceiveObjectThread implements Runnable {
+	private JBombComunicationObject communication_object;
+	
+	private final IBinder myBinder = new GameServerServiceBinder();
+	
+	@Override
+	public IBinder onBind(Intent intent) {
+		Log.i(LOGCAT, "I'm being binded to a client");
 		
-		@Override
-		public void run(){
-			try
-			{
-				ObjectInputStream inFromClient = new ObjectInputStream(socket.getInputStream());
+		return myBinder;
+	}
+	
+	@Override
+	public void onCreate(){
+		Log.i(LOGCAT, "El servicio fue creado");
+		
+        this.stablishConnection();
+	}
+		
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i(LOGCAT, "Received start id " + startId + ": " + intent);
+        
+        return START_STICKY;
+    }
+    
+    
+    public JBombComunicationObject receiveObject(){
+		
+		Thread t = new Thread(new ReceiveObjectThread());
+		
+		try{
+			t.start();		
+			t.join();
+		}catch(Exception e){
+			Log.e("RECEIVE_OBJECT", "Fallé donde siempre... - " + e.toString());
 			
-				communication_object =  (JBombComunicationObject) inFromClient.readObject();
-			}
-			catch(Exception e)
-			{
-				Log.e(LOGCAT, "Fallé al recibir un objeto. - " + e.toString());
-			}
-		}
+			t.interrupt();
+		}		
+		
+		return this.communication_object;
+	}
+    
+    public void sendObject(JBombComunicationObject communicationObject){
+		
+		this.communication_object = communicationObject;
+		
+		(new Thread(new SendObjectThread())).start();
+	}
 
+	private void stablishConnection(){
+		
+		new Thread(new ConnectionThread()).start();
 	}
 		    	
 }

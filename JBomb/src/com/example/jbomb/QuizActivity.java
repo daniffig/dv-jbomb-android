@@ -15,7 +15,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.Intent;
 
 public class QuizActivity extends Activity {
 	
@@ -55,7 +54,22 @@ public class QuizActivity extends Activity {
 		return true;
 	}
 	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		
+		GameClient.printNotification("Voy a cerrar las preguntas.");
+	}
+	
 	public void sendAnswer(View view) {
+		
+		if (GameClient.getInstance().isBombExploded)
+		{
+			this.finish();
+			
+			return;
+		}
 
 		RadioGroup qqa = (RadioGroup) findViewById(R.id.quizQuestionAnswers);
 		
@@ -79,8 +93,12 @@ public class QuizActivity extends Activity {
 		
 		myService.sendObject(jbo);
 		
-		QuizActivity.this.finish();		
+		GameClient.printNotification("Acabo de mandar la respuesta.");
+		
+		this.finish();		
 	}
+	
+	/*
 	
 	public void openGameOver(View view)
 	{
@@ -94,4 +112,6 @@ public class QuizActivity extends Activity {
     	QuizActivity.this.setResult(RESULT_OK);    	
     	QuizActivity.this.finish();
 	}
+	
+	*/
 }
