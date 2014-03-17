@@ -2,8 +2,11 @@ package com.example.jbomb;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Observable;
+import java.util.Observer;
 
 import core.GameClient;
+
 import reference.JBombRequestResponse;
 import services.GameServerService;
 import network.JBombComunicationObject;
@@ -16,7 +19,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class QuizActivity extends Activity {
+public class QuizActivity extends Activity implements Observer {
 	
 	private GameServerService myService = MainActivity.getService();
 	
@@ -24,6 +27,8 @@ public class QuizActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_quiz);
+		
+		this.myService.suscribe(this);
 		
 		TextView tv = (TextView)findViewById(R.id.quizNotice);  
 		tv.setText("Debes responder la siguiente pregunta para pasar la bomba a " + this.getIntent().getExtras().getString("TARGET_PLAYER_NAME"));
@@ -59,17 +64,41 @@ public class QuizActivity extends Activity {
 	{
 		super.onDestroy();
 		
-		GameClient.printNotification("Voy a cerrar las preguntas.");
+		this.myService.unsuscribe(this);
+	}
+
+	@Override
+	public void update(Observable observable, final Object data) {
+		// TODO Auto-generated method stub
+
+		this.runOnUiThread(new Runnable()
+		{			 
+			JBombComunicationObject response = (JBombComunicationObject) data;
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+
+				GameClient.printNotification(String.format("Recibí desde el servidor: %s", response.getType().toString()));
+
+				switch (response.getType())
+				{
+				case BOMB_DETONATED_RESPONSE:
+					detonateBomb();
+					break;
+				case CLOSE_CONNECTION_RESPONSE:
+					finish();
+					break;
+				default:
+					// Si me mandan otra cosa, no me corresponde hacer nada.
+					break;
+				}								
+			}			
+		});
 	}
 	
+	
 	public void sendAnswer(View view) {
-		
-		if (GameClient.getInstance().isBombExploded)
-		{
-			this.finish();
-			
-			return;
-		}
 
 		RadioGroup qqa = (RadioGroup) findViewById(R.id.quizQuestionAnswers);
 		
@@ -89,13 +118,18 @@ public class QuizActivity extends Activity {
 		
 		GameClient.printNotification(String.format("Envié una respuesta: %s", jbo.getSelectedQuizAnswer()));
 		
-		Toast.makeText(this.getApplicationContext(), "Enviando respuesta al servidor...", Toast.LENGTH_SHORT).show();
+		MainActivity.showToast("Enviando respuesta al servidor...");
 		
 		myService.sendObject(jbo);
 		
 		GameClient.printNotification("Acabo de mandar la respuesta.");
 		
 		this.finish();		
+	}
+	
+	private void detonateBomb()
+	{		
+		this.finish();
 	}
 	
 	/*

@@ -1,5 +1,8 @@
 package com.example.jbomb;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import core.GameClient;
 import network.JBombComunicationObject;
 import reference.JBombRequestResponse;
@@ -14,23 +17,30 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class PlayersLoadingActivity extends Activity {
+public class PlayersLoadingActivity extends Activity implements Observer {
 
 	private GameServerService myService = MainActivity.getService();
-	private Thread listenerThread;
+	
+	private ProgressBar progressBar;
+	private Integer progressStatus;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_players_loading);
 		
-		ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);
-    	
-    	Integer progressStatus = (GameClient.getInstance().getCurrentPlayers() * 100) / GameClient.getInstance().getMaxPlayers();
-
-		pb.setProgress(progressStatus);
+		this.myService.suscribe(this);
 		
-		this.startListening();
+		this.progressBar = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);
+		this.progressStatus = (GameClient.getInstance().getCurrentPlayers() * 100) / GameClient.getInstance().getMaxPlayers();
+
+		this.progressBar.setProgress(this.progressStatus);
+		
+		// FIXME: El observer no llega a registrarse y no es notificado cuando llega un MAX_PLAYERS_REACHED si es el último, por eso hacemos este parche.
+		if (this.myService.getListener().getLastResponse().getType().equals(JBombRequestResponse.MAX_PLAYERS_REACHED))
+		{
+			this.showPlayButton();
+		}
 	}
 
 	@Override
@@ -40,83 +50,76 @@ public class PlayersLoadingActivity extends Activity {
 		return true;
 	}
 	
+	public void startGame(View view)
+	{
+    	this.startActivity(new Intent(this, IngameActivity.class));	
+    	
+    	this.finish();
+	}
+
+	@Override
+	public void update(Observable observable, final Object data) {
+		// TODO Auto-generated method stub
+
+		this.runOnUiThread(new Runnable()
+		{			 
+			JBombComunicationObject response = (JBombComunicationObject) data;
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+
+				switch (response.getType())
+				{
+				case PLAYER_ADDED:
+					addPlayer(response.getGamePlayInformation().getTotalPlayers());
+					break;			
+				case MAX_PLAYERS_REACHED:
+					showPlayButton(); 
+					break;
+				case CLOSE_CONNECTION_RESPONSE:
+					finish();
+					break;
+				default:
+					// Si me mandan otra cosa, no me corresponde hacer nada.
+					break;
+				}							
+			}			
+		});
+	}
+	
+	private void addPlayer(Integer totalPlayers)
+	{
+		GameClient.getInstance().setCurrentPlayers(totalPlayers);
+
+    	this.progressStatus = (GameClient.getInstance().getCurrentPlayers() * 100) / GameClient.getInstance().getMaxPlayers();
+		
+		this.progressBar.setProgress(progressStatus);
+	}
+	
+	private void showPlayButton()
+	{		
+		GameClient.printNotification("TENGO QUE MOSTRAR EL BOTON");
+		
+		TextView tv = (TextView) PlayersLoadingActivity.this.findViewById(R.id.loadingPlayersTitle);
+		ImageView iv = (ImageView) PlayersLoadingActivity.this.findViewById(R.id.loadingPlayersGetReady);
+			
+		tv.setVisibility(View.INVISIBLE);
+		iv.setVisibility(View.INVISIBLE);					
+		
+		this.progressBar.setVisibility(View.INVISIBLE);
+			
+		ImageButton b = (ImageButton) PlayersLoadingActivity.this.findViewById(R.id.playButton);
+			
+		b.setVisibility(View.VISIBLE);		
+	}
+	
 	@Override
 	protected void onDestroy()
 	{
 		super.onDestroy();
 		
-		if (!this.listenerThread.equals(null) && this.listenerThread.isAlive())
-		{
-			this.listenerThread.interrupt();
-		}
-	}
-	
-	public void startGame(View view)
-	{
-    	Intent myIntent = new Intent(this, IngameActivity.class);
-
-    	this.startActivity(myIntent);	
-    	
-    	this.finish();
-	}
-	
-	private void startListening()
-	{		
-		this.listenerThread = new Thread(new Runnable() 
-		{
-			@Override
-			public void run() {
-				
-				try
-				{
-					JBombComunicationObject response = myService.receiveObject();
-					
-					ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);
-					
-					while (!response.getType().equals(JBombRequestResponse.MAX_PLAYERS_REACHED))
-					{
-						if (response.getType().equals(JBombRequestResponse.PLAYER_ADDED))
-						{						
-							GameClient.getInstance().setCurrentPlayers(response.getGamePlayInformation().getTotalPlayers());
-			
-					    	Integer progressStatus = (GameClient.getInstance().getCurrentPlayers() * 100) / GameClient.getInstance().getMaxPlayers();
-							
-							pb.setProgress(progressStatus);
-						}
-						
-						response = myService.receiveObject();
-					}
-				}
-				catch (Exception e)
-				{
-					
-				}
-				
-				runOnUiThread(new Runnable(){
-
-					@Override
-					public void run() {
-						TextView tv = (TextView) PlayersLoadingActivity.this.findViewById(R.id.loadingPlayersTitle);
-						ProgressBar pb = (ProgressBar) findViewById(R.id.loadingPlayersProgressBar);		
-						ImageView iv = (ImageView) PlayersLoadingActivity.this.findViewById(R.id.loadingPlayersGetReady);
-							
-						tv.setVisibility(View.INVISIBLE);
-						pb.setVisibility(View.INVISIBLE);
-						iv.setVisibility(View.INVISIBLE);					
-							
-						ImageButton b = (ImageButton) PlayersLoadingActivity.this.findViewById(R.id.playButton);
-							
-						b.setVisibility(View.VISIBLE);	
-						
-					}
-					
-				});
-
-			}
-			
-		});
-		
-		this.listenerThread.start();		
+		this.myService.unsuscribe(this);
 	}
 
 }

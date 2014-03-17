@@ -1,19 +1,22 @@
 package com.example.jbomb;
 
 import java.util.Iterator;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Vector;
+
+import core.GameClient;
+import core.GameServer;
 
 import network.JBombComunicationObject;
 import network.Player;
 
 import reference.JBombRequestResponse;
 import services.GameServerService;
-import core.GameClient;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Activity;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -23,15 +26,17 @@ import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Intent;
-import android.content.SharedPreferences;
 
-public class IngameActivity extends Activity {
+public class IngameActivity extends Activity implements Observer {
 	
 	private Vector<Integer> playerNameIDs = new Vector<Integer>();
 	private Vector<Integer> playerImageIDs = new Vector<Integer>();
+	
+	private TextView flash;
 	
 	class DragListener implements OnDragListener
 	{
@@ -45,8 +50,8 @@ public class IngameActivity extends Activity {
 			{
 			case DragEvent.ACTION_DRAG_EXITED:
 				ingameBomb.setVisibility(View.VISIBLE);
+				
 				break;
-
 			case DragEvent.ACTION_DROP:
 				
 				JBombComunicationObject jbo = new JBombComunicationObject();
@@ -94,7 +99,6 @@ public class IngameActivity extends Activity {
 	}
 	
 	private GameServerService myService = MainActivity.getService();
-	private Thread listenerThread;
 	
 	private MediaPlayer alert;
 	
@@ -119,6 +123,8 @@ public class IngameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ingame);
 		
+		this.myService.suscribe(this);
+		
 		this.playerNameIDs.add(R.id.PlayerTop);
 		this.playerNameIDs.add(R.id.PlayerRight);
 		this.playerNameIDs.add(R.id.PlayerRight);
@@ -135,12 +141,11 @@ public class IngameActivity extends Activity {
 		
 		alert = MediaPlayer.create(getApplicationContext(), R.raw.alert);
 		explosion = MediaPlayer.create(getApplicationContext(), R.raw.explosion);
+		flash = ((TextView) this.findViewById(R.id.notificationText));
 		
 		TextView serverInfo = ((TextView) this.findViewById(R.id.ingameServerInfo));
-		
-	    SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
 	    
-	    serverInfo.setText(settings.getString("InetIPAddress", "IP"));		
+	    serverInfo.setText(GameServer.InetIPAddress);		
 
     	JBombComunicationObject jbo = new JBombComunicationObject();
     	jbo.setType(JBombRequestResponse.START_GAME_REQUEST);
@@ -148,34 +153,8 @@ public class IngameActivity extends Activity {
 		GameClient.printNotification(String.format("Voy a pedir los jugadores al servidor. Envío: %s", jbo.getType().toString()));
     	
     	myService.sendObject(jbo);
-		
-    	JBombComunicationObject response = myService.receiveObject();
     	
-    	if (response.getType().equals(JBombRequestResponse.ADJACENT_PLAYERS))
-    	{
-    		Iterator<Integer> playerNameIDsIterator = this.playerNameIDs.iterator();
-    		Iterator<Integer> playerImageIDsIterator = this.playerImageIDs.iterator();
-    		
-    		for (Player p : response.getPlayers())
-    		{
-    			Integer nameID = playerNameIDsIterator.next();
-    			Integer imageID = playerImageIDsIterator.next();
-    			
-    			TextView tv = (TextView) this.findViewById(nameID);
-    			ImageView iv = (ImageView) this.findViewById(imageID);
-    			
-    			GameClient.getInstance().adjacentPlayers.put(imageID, p);
-    			
-    			tv.setText(p.getName());
-    			iv.setOnDragListener(new DragListener());
-    			iv.setId(p.getUID());
-    			iv.setContentDescription(p.getName());
-    			tv.setVisibility(View.VISIBLE);
-    			iv.setVisibility(View.VISIBLE);
-    		}
-    	}
-    	
-    	this.startListening();
+    	MainActivity.showToast("Cargando jugadores...");
 	}
 
 	
@@ -186,190 +165,139 @@ public class IngameActivity extends Activity {
 		return true;
 	}
 	
+	
 	@Override
 	protected void onDestroy()
 	{
 		super.onDestroy();
 		
-		if (!(this.listenerThread == null) && this.listenerThread.isAlive())
-		{
-			this.listenerThread.interrupt();
-		}
-		
-		Log.e("INGAME_ACTIVITY", "Algo me cerró...");
+		this.myService.unsuscribe(this);
 	}
-	
-	public void openQuiz(View view)
-	{
-	}
-	
-	private void startListening()
-	{
-		this.listenerThread = new Thread(new Runnable()
-		{
-			JBombComunicationObject response;
-			
-			@Override			
+
+	@Override
+	public void update(Observable observable, final Object data) {
+		// TODO Auto-generated method stub
+
+		this.runOnUiThread(new Runnable()
+		{			 
+			JBombComunicationObject response = (JBombComunicationObject) data;
+
+			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				try
+
+				if (alert.isPlaying())
 				{
-					response = myService.receiveObject();
-					
-					while (!response.getType().equals(JBombRequestResponse.BOMB_DETONATED_RESPONSE))
-					{												
-						runOnUiThread(new Runnable()
-						{
-							@Override
-							public void run() {
-								// TODO Auto-generated method stub
-
-								TextView tv = (TextView) IngameActivity.this.findViewById(R.id.notificationText);
-								tv.setText(response.getFlash());
-							}
-							
-						});
-						
-						GameClient.printNotification(String.format("Recibì desde el servidor: %s", response.getType().toString()));
-						
-						switch(response.getType())
-						{
-						case BOMB_OWNER_RESPONSE:
-							
-							GameClient.printNotification(String.format("La bomba la tiene: %s", response.getBombOwner().getName()));
-							
-							runOnUiThread(new Runnable()
-							{
-								@Override
-								public void run() {
-									
-									if (response.getMyPlayer().getUID() == response.getBombOwner().getUID())
-									{										
-										GameClient.printNotification(String.format("¡Tengo la bomba!"));
-										
-										ImageView iv = (ImageView) findViewById(R.id.ingameBombImage);
-										
-										iv.setVisibility(View.VISIBLE);
-										
-										alert.start();
-									}
-									else
-									{									
-										GameClient.printNotification(String.format("No tengo la bomba. :)"));
-										
-										ImageView iv = (ImageView) findViewById(R.id.ingameBombImage);
-										
-										iv.setVisibility(View.INVISIBLE);
-									}									
-								}
-								
-							});
-							break;
-						case QUIZ_QUESTION_RESPONSE:
-							
-							if (alert.isPlaying())
-							{
-								alert.stop();
-							}
-							
-							GameClient.printNotification(String.format("Me enviaron una pregunta: %s", response.getQuizQuestion()));
-							
-							runOnUiThread(new Runnable()
-							{
-								@Override
-								public void run() {
-									// TODO Auto-generated method stub
-
-							    	Intent myIntent = new Intent(IngameActivity.this, QuizActivity.class);
-							    	
-							    	myIntent.putExtra("QUIZ_QUESTION", response.getQuizQuestion());
-							    	myIntent.putExtra("QUIZ_ANSWERS", response.getQuizAnswers());
-							    	
-							    	IngameActivity.this.startActivity(myIntent);
-								}
-								
-							});
-							break;
-						case QUIZ_ANSWER_RESPONSE:
-
-							GameClient.printNotification(String.format("¿La respuesta era correcta?: %s", response.getCorrectAnswer()));
-							
-							break;
-						case NOTICE_FLASH:
-							GameClient.printNotification("Recibi una actualización de estado.");
-							break;
-						default:							
-							GameClient.printNotification("Recibi cualquier cosa.");
-							break;
-						}
-						
-						response = myService.receiveObject();
-					}
-					
-					if (response.getType().equals(JBombRequestResponse.BOMB_DETONATED_RESPONSE))
-					{						
-						GameClient.printNotification(String.format("Recibì desde el servidor: %s", response.getType().toString()));
-						GameClient.printNotification("¡Explotó la bomba!");
-						
-						explosion.start();
-						
-						runOnUiThread(new Runnable()
-						{
-							@SuppressLint("NewApi")
-							@Override
-							public void run() {
-								
-								// FIXME: Ver cómo se arregla esto...
-								
-								/*
-								if (!(quizActivity == null))
-								{
-									quizActivity.finish();
-								}
-								*/
-								
-								/*
-								for (Integer playerImageID : GameClient.getInstance().adjacentPlayers.keySet())
-								{
-									((TextView) IngameActivity.this.findViewById(playerImageID)).setVisibility(View.INVISIBLE);
-								}
-								*/
-
-								TextView tv = (TextView) IngameActivity.this.findViewById(R.id.notificationText);
-								tv.setText(response.getFlash());							
-								
-								ImageView iv = (ImageView) findViewById(R.id.ingameBombImage);
-								
-								iv.setImageResource(R.drawable.explosion);
-								iv.setVisibility(View.VISIBLE);								
-								iv.setOnTouchListener(null);
-							}
-							
-						});
-					}
-					
+					alert.stop();
 				}
-				catch (Exception e)
+
+				GameClient.printNotification(String.format("Recibí desde el servidor: %s", response.getType().toString()));
+
+				switch (response.getType())
 				{
-					Log.e("INGAME_ACTIVITY_LISTENER", "Ocurrió un error. - " + e.toString());
-				}
-			}
-			
+				case ADJACENT_PLAYERS:
+					loadPlayers(response.getPlayers());
+					break;
+				case BOMB_OWNER_RESPONSE:
+					changeBombOwner(response.getBombOwner()); 
+					break;			
+				case QUIZ_QUESTION_RESPONSE:
+					openQuizQuestion(response.getQuizQuestion(), response.getQuizAnswers()); 
+					break;			
+				case BOMB_DETONATED_RESPONSE:
+					detonateBomb();
+					break;
+				case CLOSE_CONNECTION_RESPONSE:
+					finish();
+					break;
+				default:
+					// Si me mandan otra cosa, no me corresponde hacer nada.
+					break;
+				}		
+
+				if (!(response.getFlash() == null))
+				{			
+					flash.setText(response.getFlash());
+				}							
+			}			
 		});
-		
-		this.listenerThread.start();
 	}
 	
-	/*
-	@Override
-	protected void onDestroy()
+	private void loadPlayers(Vector<Player> players)
 	{
-		super.onDestroy();
+		Iterator<Integer> playerNameIDsIterator = this.playerNameIDs.iterator();
+		Iterator<Integer> playerImageIDsIterator = this.playerImageIDs.iterator();
 		
-		if (!this.listenerThread.equals(null) && this.listenerThread.isAlive())
+		for (Player p : players)
 		{
-			this.listenerThread.interrupt();
+			Integer nameID = playerNameIDsIterator.next();
+			Integer imageID = playerImageIDsIterator.next();
+			
+			TextView tv = (TextView) this.findViewById(nameID);
+			ImageView iv = (ImageView) this.findViewById(imageID);
+			
+			GameClient.getInstance().adjacentPlayers.put(imageID, p);
+			
+			tv.setText(p.getName());
+			iv.setOnDragListener(new DragListener());
+			iv.setId(p.getUID());
+			iv.setContentDescription(p.getName());
+			tv.setVisibility(View.VISIBLE);
+			iv.setVisibility(View.VISIBLE);
 		}
+		
 	}
-	*/
+	
+	private void changeBombOwner(Player bombOwner)
+	{				
+		if (GameClient.getInstance().getMyPlayer().getUID().equals(bombOwner.getUID()))
+		{	
+			Toast.makeText(this.getApplicationContext(), "TENGO LA BOMBA!!!!123" + GameClient.getInstance().getMyPlayer().getUID().toString() + "   " + bombOwner.getUID(), Toast.LENGTH_LONG).show();
+
+			GameClient.printNotification(String.format("¡Tengo la bomba!"));
+			
+			ImageView iv = (ImageView) findViewById(R.id.ingameBombImage);
+			
+			iv.setVisibility(View.VISIBLE);
+			
+			if (!this.alert.isPlaying())
+			{
+				alert.start();
+			}
+		}
+		else
+		{									
+			GameClient.printNotification(String.format("No tengo la bomba. :)"));
+			
+			ImageView iv = (ImageView) findViewById(R.id.ingameBombImage);
+			
+			iv.setVisibility(View.INVISIBLE);
+		}							
+	}
+	
+	private void openQuizQuestion(String quizQuestion, Vector<String> quizAnswers)
+	{
+		if (alert.isPlaying())
+		{
+			alert.stop();
+		}
+		
+    	Intent myIntent = new Intent(IngameActivity.this, QuizActivity.class);
+    	
+    	myIntent.putExtra("QUIZ_QUESTION", quizQuestion);
+    	myIntent.putExtra("QUIZ_ANSWERS", quizAnswers);
+    	
+    	IngameActivity.this.startActivity(myIntent);
+	}
+	
+	private void detonateBomb()
+	{		
+		explosion.start();
+		
+		ImageView iv = (ImageView) findViewById(R.id.ingameBombImage);
+		
+		iv.setImageResource(R.drawable.explosion);
+		iv.setVisibility(View.VISIBLE);								
+		iv.setOnTouchListener(null);
+	}
 }

@@ -1,10 +1,18 @@
 package com.example.jbomb;
 
+import java.util.Observable;
+import java.util.Observer;
+
+import network.JBombComunicationObject;
+import network.Player;
+import reference.JBombRequestResponse;
 import services.GameServerService;
 import core.GameClient;
+import core.GameServer;
 
 import android.os.Bundle;
 import android.os.IBinder;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,13 +24,16 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements Observer {
 	
 	private static GameServerService myService;
+	private static Toast toast;
+	
 	public static GameServerService getService()
 	{
 		return myService;
-	}	
+	}
+	
 	private Boolean isBound = false;
 	
 	private Intent myIntent;
@@ -42,8 +53,8 @@ public class MainActivity extends Activity {
             isBound = false;
         }
     };
-	
-    @Override
+    
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{		
 		if (resultCode == ClientSettingsActivity.REQUEST_CODE)
@@ -61,23 +72,30 @@ public class MainActivity extends Activity {
 	}
 
 
-    @Override
+    @SuppressLint("ShowToast")
+	@Override
     protected void onCreate(Bundle savedInstanceState) {    	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 		
 		this.myIntent = new Intent(this, GameServerService.class);
+		
+		toast = Toast.makeText(this.getApplicationContext(), "", Toast.LENGTH_SHORT);
 
         SharedPreferences settings_ro = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
 	    
 	    Editor settings_rw = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0).edit();
+	    
+	    GameServer.InetIPAddress = settings_ro.getString("InetIPAddress", "127.0.0.1");
+	    GameServer.InetPort = settings_ro.getInt("InetPort", 4321);
 
-	    settings_rw.putString("PlayerName", settings_ro.getString("PlayerName", "default"));    
-	    settings_rw.putString("InetIPAddress", settings_ro.getString("InetIPAddress", "127.0.0.1"));    
-	    settings_rw.putInt("InetPort", settings_ro.getInt("InetPort", 4321));
+	    settings_rw.putString("PlayerName", settings_ro.getString("PlayerName", "default"));	    
+	    settings_rw.putString("InetIPAddress", GameServer.InetIPAddress);    
+	    settings_rw.putInt("InetPort", GameServer.InetPort);
 	    
 	    settings_rw.commit();
 
+    	GameClient.getInstance().setMyPlayer(new Player(0, settings_ro.getString("PlayerName", "default")));
     	GameClient.getInstance().myPlayerName = settings_ro.getString("PlayerName", "default");
 	    
 	    this.bindService(myIntent, myConnection, Context.BIND_AUTO_CREATE);
@@ -96,12 +114,16 @@ public class MainActivity extends Activity {
     {
     	super.onDestroy();
     	
-    	GameClient.destroyInstance();
-    	
     	if (this.isBound)
-    	{
+    	{        	
+        	JBombComunicationObject request = new JBombComunicationObject(JBombRequestResponse.CLOSE_CONNECTION_REQUEST);
+        	
+        	myService.sendObject(request);
+        	
         	this.unbindService(myConnection);    		
     	}
+    	
+    	GameClient.destroyInstance();
     	
     	this.stopService(myIntent);
     }
@@ -117,27 +139,53 @@ public class MainActivity extends Activity {
     {
     	if (this.isBound)
     	{
-    		Intent myIntent = new Intent(MainActivity.this, GameSelectionActivity.class);
-
-    		MainActivity.this.startActivity(myIntent);
+    		this.startActivity(new Intent(this, GameSelectionActivity.class));
     	}
     	else
     	{
-    		Toast.makeText(getApplicationContext(), "Aún no se ha conectado con el servidor.", Toast.LENGTH_SHORT).show();
+    		showToast("Aún no se ha conectado con el servidor.");
     	}
     }
     
     public void openNewGame(View view)
     {
     	if (this.isBound)
-    	{
-    		Intent myIntent = new Intent(MainActivity.this, NewGameActivity.class);
-    	
-    		MainActivity.this.startActivity(myIntent);
+    	{    	
+    		this.startActivity(new Intent(this, NewGameActivity.class));
     	}
     	else
     	{
-			Toast.makeText(getApplicationContext(), "Aún no se ha conectado con el servidor.", Toast.LENGTH_SHORT).show();
+    		showToast("Aún no se ha conectado con el servidor.");
     	}
-    }    
+    }
+
+
+	@Override
+	public void update(Observable observable, Object data) {
+		
+		GameClient.printNotification("Me mandaron algo: " + ((JBombComunicationObject) data).getType());
+		
+	}    
+	
+	public static void showToast(String message)
+	{
+		if (toast == null)
+		{
+			return;
+		}
+		
+		toast.setText(message);
+		
+		toast.show();
+	}
+	
+	public static void hideToast()
+	{
+		if (toast == null)
+		{
+			return;
+		}
+		
+		toast.cancel();		
+	}
 }

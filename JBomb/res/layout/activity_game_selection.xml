@@ -28,8 +28,7 @@
     <RadioGroup
         android:id="@+id/availableGamesRadioGroup"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.80" >
+        android:layout_height="wrap_content" >
     </RadioGroup>
     
 </ScrollView>
@@ -39,7 +38,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:src="@drawable/connect"
-    android:onClick="connectToGame"
+    android:onClick="requestJoinGame"
     android:background="@null" />
 
 </LinearLayout>

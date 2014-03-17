@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import network.Player;
 
@@ -48,7 +47,7 @@ public class GameClient {
 	
 	public static void printNotification(String notification)
 	{
-		Log.i(String.format("[%s]", GameClient.getInstance().myPlayerName), notification);
+		Log.i(String.format("[%s]", GameClient.getInstance().myPlayer.getName()), notification);
 	}
 	public int currentPlayers = 0;
 	
@@ -56,8 +55,14 @@ public class GameClient {
 	
 	public String myPlayerName;
 
-	public int myPlayer;
+	public Player myPlayer;
 
+	public Player getMyPlayer() {
+		return myPlayer;
+	}
+	public void setMyPlayer(Player myPlayer) {
+		this.myPlayer = myPlayer;
+	}
 	public Boolean isBombExploded = false;
 
 	private List<Integer> players;
