@@ -268,7 +268,6 @@ public class IngameActivity extends Activity implements Observer {
 			
 			ImageView iv = (ImageView) findViewById(R.id.ingameBombImage);
 			
-			iv.setImageResource(R.drawable.explosion);
 			iv.setVisibility(View.VISIBLE);								
 			iv.setOnTouchListener(null);
 		}

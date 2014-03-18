@@ -98,8 +98,8 @@ public class MainActivity extends Activity implements Observer {
     	GameClient.getInstance().setMyPlayer(new Player(0, settings_ro.getString("PlayerName", "default")));
     	GameClient.getInstance().myPlayerName = settings_ro.getString("PlayerName", "default");
 	    
-	    this.bindService(myIntent, myConnection, Context.BIND_AUTO_CREATE);
-	    this.startService(myIntent);
+	    //this.bindService(myIntent, myConnection, Context.BIND_AUTO_CREATE);
+	    //this.startService(myIntent);
     }
  
     @Override
@@ -157,6 +157,11 @@ public class MainActivity extends Activity implements Observer {
     	{
     		showToast("Aún no se ha conectado con el servidor.");
     	}
+    }
+    
+    public void openExplosion(View view)
+    {
+		this.startActivity(new Intent(this, ExplosionActivity.class));
     }
 
 

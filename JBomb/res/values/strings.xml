@@ -53,5 +53,6 @@
     <string name="create_game">Crear juego</string>
     <string name="title_activity_game_positions">GamePositionsActivity</string>
     <string name="game_positions">Tabla de posiciones</string>
+    <string name="title_activity_explosion">ExplosionActivity</string>
 
 </resources>

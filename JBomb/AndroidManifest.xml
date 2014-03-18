@@ -12,6 +12,7 @@
     </uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
     </uses-permission>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:allowBackup="true"
@@ -21,8 +22,8 @@
         <activity
             android:name="com.example.jbomb.MainActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" 
-            android:screenOrientation="sensorLandscape" >
+            android:screenOrientation="sensorLandscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -93,6 +94,12 @@
         <activity
             android:name="com.example.jbomb.GamePositionsActivity"
             android:label="@string/title_activity_game_positions" >
+        </activity>
+        <activity
+            android:name="com.example.jbomb.ExplosionActivity"
+            android:screenOrientation="sensorLandscape"
+            android:label="@string/title_activity_explosion" 
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         </activity>
     </application>
 

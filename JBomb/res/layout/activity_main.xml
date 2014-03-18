@@ -27,7 +27,7 @@
         android:adjustViewBounds="true"
         android:background="@null"
         android:contentDescription="@string/todo"
-        android:onClick="openNewGame"
+        android:onClick="openExplosion"
         android:src="@drawable/new_game" />
 
     <ImageButton
