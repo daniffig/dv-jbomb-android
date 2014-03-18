@@ -1,7 +1,6 @@
 package network;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Vector;
 
 import reference.JBombRequestResponse;
@@ -10,7 +9,7 @@ public class JBombComunicationObject implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
-	//Define el proposito de la comunicaci�n, a partir de este se infiere que atributos se tienen que tomar en cuenta y cuales no
+	//Define el proposito de la comunicacion, a partir de este se infiere que atributos se tienen que tomar en cuenta y cuales no
 	private JBombRequestResponse Type;
 	
 	private String Flash;
@@ -21,6 +20,7 @@ public class JBombComunicationObject implements Serializable{
 	private GameSettings gameSettings;
 	private Player BombOwner;
 	private Player Loser;
+	
 	private String QuizQuestion;
 	private Vector<String> QuizAnswers;
 	private String SelectedQuizAnswer;
@@ -30,9 +30,6 @@ public class JBombComunicationObject implements Serializable{
 	private Player  BombTargetPlayer;
 	private Integer RequestedGameId;
 	private GamePlayInformation GamePlayInformation = null;
-	
-	private HashMap<String, Integer> LastRoundScores;
-	private HashMap<String, Integer> GeneralScores;
 	
 	public JBombComunicationObject(){
 		super();
@@ -77,12 +74,6 @@ public class JBombComunicationObject implements Serializable{
 	}
 	public GameSettingsInformation getGameSettingsInformation() {
 		return gameSettingsInformation;
-	}
-	public HashMap<String, Integer> getGeneralScores() {
-		return GeneralScores;
-	}
-	public HashMap<String, Integer> getLastRoundScores() {
-		return LastRoundScores;
 	}
 	public Player getLoser() {
 		return Loser;
@@ -146,14 +137,6 @@ public class JBombComunicationObject implements Serializable{
 	
 	public void setGameSettingsInformation(GameSettingsInformation gameSettingsInformation) {
 		this.gameSettingsInformation = gameSettingsInformation;
-	}
-
-	public void setGeneralScores(HashMap<String, Integer> generalScores) {
-		GeneralScores = generalScores;
-	}
-
-	public void setLastRoundScores(HashMap<String, Integer> lastRoundScores) {
-		LastRoundScores = lastRoundScores;
 	}
 
 	public void setLoser(Player loser) {
