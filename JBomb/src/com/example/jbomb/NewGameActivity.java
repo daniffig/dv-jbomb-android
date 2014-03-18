@@ -2,12 +2,16 @@ package com.example.jbomb;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Vector;
 
 import core.GameClient;
 
 
+import network.GamePlayInformation;
 import network.GameSettings;
+import network.GameSettingsInformation;
 import network.JBombComunicationObject;
 import network.Player;
 
@@ -24,14 +28,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 @SuppressLint("UseSparseArrays")
-public class NewGameActivity extends Activity {
+public class NewGameActivity extends Activity implements Observer {
 	
 	private GameServerService myService = MainActivity.getService();
-	
-    private Toast loading;
     
     private Map<Integer, String> topologyIDs = new HashMap<Integer, String>();
     private Map<Integer, String> quizIDs = new HashMap<Integer, String>();
@@ -43,9 +44,6 @@ public class NewGameActivity extends Activity {
     	/*
     	 * TODO: Validaciones!
     	 */
-    	
-    	JBombComunicationObject jbo = new JBombComunicationObject();
-    	jbo.setType(JBombRequestResponse.CREATE_GAME_REQUEST);
     	
     	GameSettings gs = new GameSettings();
     	
@@ -65,47 +63,12 @@ public class NewGameActivity extends Activity {
     	gs.setMaxRounds((Integer)newGameMaxRoundsSpinner.getSelectedItem());
     	gs.setRoundDurationId(this.getKeyForValue(this.getRoundDurationIDs(), newGameRoundDurationSpinner.getSelectedItem()));
     	
-    	jbo.setGameSettings(gs);
+    	JBombComunicationObject jbo = new JBombComunicationObject();
+    	jbo.setType(JBombRequestResponse.CREATE_GAME_REQUEST);
     	
-    	GameClient.printNotification(String.format("Voy a crear un juego llamado: %s", jbo.getGameSettings().getName()));
+    	jbo.setGameSettings(gs);
 
     	myService.sendObject(jbo);
-		
-		Toast.makeText(NewGameActivity.this.getApplicationContext(), "Conectando con el servidor...", Toast.LENGTH_SHORT).show();
-    	
-    	JBombComunicationObject response = myService.receiveObject();
-    	
-    	if (response.getType().equals(JBombRequestResponse.CREATE_GAME_RESPONSE) && (response.getAvailableGames().size() > 0))
-    	{
-            SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
-    		
-    		Player myPlayer = new Player();
-    		
-    		myPlayer.setName(settings.getString("PlayerName", "default"));
-    		
-    		jbo = new JBombComunicationObject();
-    		
-    		jbo.setType(JBombRequestResponse.JOIN_GAME_REQUEST);
-    		jbo.setRequestedGameId(response.getAvailableGames().get(0).getUID());		
-    		jbo.setMyPlayer(myPlayer);
-    		
-    		myService.sendObject(jbo);		    		
-        	
-        	response = myService.receiveObject();
-        	
-        	GameClient.getInstance().setCurrentPlayers(response.getGamePlayInformation().getTotalPlayers());
-        	GameClient.getInstance().setMaxPlayers(response.getGamePlayInformation().getMaxPlayers());
-
-        	Intent myIntent = new Intent(NewGameActivity.this, PlayersLoadingActivity.class);
-
-        	NewGameActivity.this.startActivity(myIntent);
-        	
-        	NewGameActivity.this.finish();
-    	}
-    	else
-    	{    		
-    		Toast.makeText(NewGameActivity.this.getApplicationContext(), "Ocurrió un error al crear el juego.", Toast.LENGTH_SHORT).show();
-    	}
     }
 	
 	private Integer getKeyForValue(Map<Integer, String> map, Object value)
@@ -191,32 +154,13 @@ public class NewGameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_game);
 		
-		loading = Toast.makeText(this.getApplicationContext(), "Cargando juegos...", Toast.LENGTH_SHORT);
-		loading.show();		
+		this.myService.suscribe(this);
 
     	JBombComunicationObject jbo = new JBombComunicationObject();
+    	
     	jbo.setType(JBombRequestResponse.GAME_SETTINGS_INFORMATION_REQUEST);
 
 		myService.sendObject(jbo);
-	    
-		loading.cancel();
-		
-    	JBombComunicationObject response = myService.receiveObject();
-    	
-    	this.setTopologyIDs(response.getGameSettingsInformation().getTopologies());
-    	this.loadSpinner((Spinner) this.findViewById(R.id.newGameTopologySpinner), this.getTopologyIDs());
-    	
-    	this.setQuizIDs(response.getGameSettingsInformation().getQuizzes());
-    	this.loadSpinner((Spinner) this.findViewById(R.id.newGameQuizSpinner), this.getQuizIDs());
-    	
-    	this.setModeIDs(response.getGameSettingsInformation().getModes());
-    	this.loadSpinner((Spinner) this.findViewById(R.id.newGameModeSpinner), this.getModeIDs());
-    	
-    	this.loadMaxPlayers((Spinner) this.findViewById(R.id.newGameMaxPlayersSpinner), response.getGameSettingsInformation().getMaxPlayersAllowed());
-    	this.loadMaxRounds((Spinner) this.findViewById(R.id.newGameMaxRoundsSpinner), response.getGameSettingsInformation().getMaxRoundsAllowed());
-    	
-    	this.setRoundDurationIDs(response.getGameSettingsInformation().getRoundDurations());
-    	this.loadSpinner((Spinner) this.findViewById(R.id.newGameRoundDurationSpinner), this.getRoundDurationIDs());
 	}
 
 	@Override
@@ -238,11 +182,98 @@ public class NewGameActivity extends Activity {
 		this.roundDurationIDs = roundDurationIDs;
 	}
     
-    /*
-     * FIXME: Método del mal
-     */
-    
     public void setTopologyIDs(Map<Integer, String> topologyIDs) {
 		this.topologyIDs = topologyIDs;
+	}
+    
+	@Override
+	public void update(Observable observable, final Object data) {
+		// TODO Auto-generated method stub
+
+		this.runOnUiThread(new Runnable()
+		{			 
+			JBombComunicationObject response = (JBombComunicationObject) data;
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+
+				myService.stopAlert();
+
+				switch (response.getType())
+				{
+				case GAME_SETTINGS_INFORMATION_RESPONSE:
+					loadGameSettingsInformation(response.getGameSettingsInformation());
+					break;
+				case CREATE_GAME_RESPONSE:
+					requestJoinMyGame(response.getAvailableGames().get(0).getUID());
+					break;
+				case GAMEPLAY_INFORMATION_RESPONSE:
+			    	joinGame(response.getGamePlayInformation()); 
+					break;
+				case CLOSE_CONNECTION_RESPONSE:
+					finish();
+					break;
+				default:
+					// Si me mandan otra cosa, no me corresponde hacer nada.
+					break;
+				}						
+			}			
+		});
+	}
+	
+	private void loadGameSettingsInformation(GameSettingsInformation gameSettingsInformation)
+	{    	
+    	this.setTopologyIDs(gameSettingsInformation.getTopologies());
+    	this.loadSpinner((Spinner) this.findViewById(R.id.newGameTopologySpinner), this.getTopologyIDs());
+    	
+    	this.setQuizIDs(gameSettingsInformation.getQuizzes());
+    	this.loadSpinner((Spinner) this.findViewById(R.id.newGameQuizSpinner), this.getQuizIDs());
+    	
+    	this.setModeIDs(gameSettingsInformation.getModes());
+    	this.loadSpinner((Spinner) this.findViewById(R.id.newGameModeSpinner), this.getModeIDs());
+    	
+    	this.loadMaxPlayers((Spinner) this.findViewById(R.id.newGameMaxPlayersSpinner), gameSettingsInformation.getMaxPlayersAllowed());
+    	this.loadMaxRounds((Spinner) this.findViewById(R.id.newGameMaxRoundsSpinner), gameSettingsInformation.getMaxRoundsAllowed());
+    	
+    	this.setRoundDurationIDs(gameSettingsInformation.getRoundDurations());
+    	this.loadSpinner((Spinner) this.findViewById(R.id.newGameRoundDurationSpinner), this.getRoundDurationIDs());
+	}
+	
+	private void requestJoinMyGame(Integer myGameUID)
+	{
+        SharedPreferences settings = getSharedPreferences(ClientSettingsActivity.PREFS_NAME, 0);
+		
+		Player myPlayer = new Player();
+		
+		myPlayer.setName(settings.getString("PlayerName", "default"));
+		
+		JBombComunicationObject jbo = new JBombComunicationObject();
+		
+		jbo.setType(JBombRequestResponse.JOIN_GAME_REQUEST);
+		jbo.setRequestedGameId(myGameUID);		
+		jbo.setMyPlayer(myPlayer);
+		
+		myService.sendObject(jbo);
+	}
+	
+	private void joinGame(GamePlayInformation gpi)
+	{
+    	GameClient.getInstance().setCurrentPlayers(gpi.getTotalPlayers());
+    	GameClient.getInstance().setMaxPlayers(gpi.getMaxPlayers());
+
+    	Intent myIntent = new Intent(NewGameActivity.this, PlayersLoadingActivity.class);
+
+    	NewGameActivity.this.startActivity(myIntent);
+    	
+    	NewGameActivity.this.finish();		
+	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		
+		this.myService.unsuscribe(this);
 	}
 }

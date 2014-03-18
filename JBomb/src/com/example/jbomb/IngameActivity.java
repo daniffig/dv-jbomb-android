@@ -14,7 +14,6 @@ import network.Player;
 import reference.JBombRequestResponse;
 import services.GameServerService;
 
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.DragEvent;
@@ -32,9 +31,6 @@ import android.content.ClipData;
 import android.content.Intent;
 
 public class IngameActivity extends Activity implements Observer {
-	
-	private Vector<Integer> playerNameIDs = new Vector<Integer>();
-	private Vector<Integer> playerImageIDs = new Vector<Integer>();
 	
 	private TextView flash;
 	
@@ -100,10 +96,6 @@ public class IngameActivity extends Activity implements Observer {
 	
 	private GameServerService myService = MainActivity.getService();
 	
-	private MediaPlayer alert;
-	
-	private MediaPlayer explosion;
-	
 	public QuizActivity quizActivity;
 	
 	private void hidePlayers() {
@@ -115,7 +107,7 @@ public class IngameActivity extends Activity implements Observer {
 		this.findViewById(R.id.PlayerRightImage).setVisibility(View.INVISIBLE);
 		this.findViewById(R.id.PlayerBottomImage).setVisibility(View.INVISIBLE);
 		this.findViewById(R.id.PlayerLeftImage).setVisibility(View.INVISIBLE);		
-		this.findViewById(R.id.ingameBombImage).setVisibility(View.INVISIBLE);
+		//this.findViewById(R.id.ingameBombImage).setVisibility(View.INVISIBLE);
 	}
 
 	@Override
@@ -125,36 +117,29 @@ public class IngameActivity extends Activity implements Observer {
 		
 		this.myService.suscribe(this);
 		
-		this.playerNameIDs.add(R.id.PlayerTop);
-		this.playerNameIDs.add(R.id.PlayerRight);
-		this.playerNameIDs.add(R.id.PlayerRight);
-		this.playerNameIDs.add(R.id.PlayerLeft);
-
-		this.playerImageIDs.add(R.id.PlayerTopImage);
-		this.playerImageIDs.add(R.id.PlayerRightImage);
-		this.playerImageIDs.add(R.id.PlayerRightImage);
-		this.playerImageIDs.add(R.id.PlayerLeftImage);
-		
 		this.findViewById(R.id.ingameBombImage).setOnTouchListener(new TouchListener());
 		
 		this.hidePlayers();
+		this.loadPlayers();
 		
-		alert = MediaPlayer.create(getApplicationContext(), R.raw.alert);
-		explosion = MediaPlayer.create(getApplicationContext(), R.raw.explosion);
 		flash = ((TextView) this.findViewById(R.id.notificationText));
 		
 		TextView serverInfo = ((TextView) this.findViewById(R.id.ingameServerInfo));
 	    
-	    serverInfo.setText(GameServer.InetIPAddress);		
-
-    	JBombComunicationObject jbo = new JBombComunicationObject();
-    	jbo.setType(JBombRequestResponse.START_GAME_REQUEST);
+	    serverInfo.setText(GameServer.InetIPAddress);
 		
-		GameClient.printNotification(String.format("Voy a pedir los jugadores al servidor. Envío: %s", jbo.getType().toString()));
-    	
-    	myService.sendObject(jbo);
-    	
-    	MainActivity.showToast("Cargando jugadores...");
+		// FIXME: El observer no llega a registrarse y no es notificado cuando llega un MAX_PLAYERS_REACHED si es el último, por eso hacemos este parche.
+	    JBombComunicationObject lastResponse = this.myService.getListener().getLastResponse();
+	    
+		if (lastResponse.getType().equals(JBombRequestResponse.BOMB_OWNER_RESPONSE))
+		{
+			changeBombOwner(lastResponse.getBombOwner());
+
+			if (!(lastResponse.getFlash() == null))
+			{			
+				flash.setText(lastResponse.getFlash());
+			}		
+		}
 	}
 
 	
@@ -186,18 +171,10 @@ public class IngameActivity extends Activity implements Observer {
 			public void run() {
 				// TODO Auto-generated method stub
 
-				if (alert.isPlaying())
-				{
-					alert.stop();
-				}
-
-				GameClient.printNotification(String.format("Recibí desde el servidor: %s", response.getType().toString()));
+				myService.stopAlert();
 
 				switch (response.getType())
 				{
-				case ADJACENT_PLAYERS:
-					loadPlayers(response.getPlayers());
-					break;
 				case BOMB_OWNER_RESPONSE:
 					changeBombOwner(response.getBombOwner()); 
 					break;			
@@ -205,7 +182,7 @@ public class IngameActivity extends Activity implements Observer {
 					openQuizQuestion(response.getQuizQuestion(), response.getQuizAnswers()); 
 					break;			
 				case BOMB_DETONATED_RESPONSE:
-					detonateBomb();
+					detonateBomb(response.getBombOwner());
 					break;
 				case CLOSE_CONNECTION_RESPONSE:
 					finish();
@@ -223,13 +200,13 @@ public class IngameActivity extends Activity implements Observer {
 		});
 	}
 	
-	private void loadPlayers(Vector<Player> players)
+	private void loadPlayers()
 	{
-		Iterator<Integer> playerNameIDsIterator = this.playerNameIDs.iterator();
-		Iterator<Integer> playerImageIDsIterator = this.playerImageIDs.iterator();
+		Iterator<Integer> playerNameIDsIterator = GameClient.getInstance().getPlayerNameIDs().iterator();
+		Iterator<Integer> playerImageIDsIterator = GameClient.getInstance().getPlayerImageIDs().iterator();
 		
-		for (Player p : players)
-		{
+		for (Player p : GameClient.getInstance().adjacentPlayers.values())
+		{			
 			Integer nameID = playerNameIDsIterator.next();
 			Integer imageID = playerImageIDsIterator.next();
 			
@@ -244,8 +221,7 @@ public class IngameActivity extends Activity implements Observer {
 			iv.setContentDescription(p.getName());
 			tv.setVisibility(View.VISIBLE);
 			iv.setVisibility(View.VISIBLE);
-		}
-		
+		}		
 	}
 	
 	private void changeBombOwner(Player bombOwner)
@@ -260,10 +236,7 @@ public class IngameActivity extends Activity implements Observer {
 			
 			iv.setVisibility(View.VISIBLE);
 			
-			if (!this.alert.isPlaying())
-			{
-				alert.start();
-			}
+			myService.playAlert();
 		}
 		else
 		{									
@@ -276,11 +249,8 @@ public class IngameActivity extends Activity implements Observer {
 	}
 	
 	private void openQuizQuestion(String quizQuestion, Vector<String> quizAnswers)
-	{
-		if (alert.isPlaying())
-		{
-			alert.stop();
-		}
+	{		
+		myService.stopAlert();
 		
     	Intent myIntent = new Intent(IngameActivity.this, QuizActivity.class);
     	
@@ -290,14 +260,17 @@ public class IngameActivity extends Activity implements Observer {
     	IngameActivity.this.startActivity(myIntent);
 	}
 	
-	private void detonateBomb()
-	{		
-		explosion.start();
-		
-		ImageView iv = (ImageView) findViewById(R.id.ingameBombImage);
-		
-		iv.setImageResource(R.drawable.explosion);
-		iv.setVisibility(View.VISIBLE);								
-		iv.setOnTouchListener(null);
+	private void detonateBomb(Player bombOwner)
+	{			
+		if (GameClient.getInstance().getMyPlayer().getUID().equals(bombOwner.getUID()))
+		{	
+			myService.playExplosion();
+			
+			ImageView iv = (ImageView) findViewById(R.id.ingameBombImage);
+			
+			iv.setImageResource(R.drawable.explosion);
+			iv.setVisibility(View.VISIBLE);								
+			iv.setOnTouchListener(null);
+		}
 	}
 }

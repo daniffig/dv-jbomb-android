@@ -49,8 +49,6 @@ public class GameSelectionActivity extends Activity implements Observer {
 		jbo.setRequestedGameId(availableGamesRadioGroup.getCheckedRadioButtonId());		
 		jbo.setMyPlayer(GameClient.getInstance().getMyPlayer());
 		
-		MainActivity.showToast("Envie: " + jbo.getType().toString());
-		
 		myService.sendObject(jbo);
 	}
 	

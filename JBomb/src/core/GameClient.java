@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import network.Player;
 
@@ -22,6 +23,9 @@ public class GameClient {
 	
 //	public Vector<Integer> adjacentPlayersUIDs = new Vector<Integer>();	
 	public Map<Integer, Player> adjacentPlayers = new HashMap<Integer, Player>();
+	
+	private Vector<Integer> playerNameIDs = new Vector<Integer>();
+	private Vector<Integer> playerImageIDs = new Vector<Integer>();
 
 	public static void destroyInstance()
 	{
@@ -32,19 +36,33 @@ public class GameClient {
 		if (GameClient.instance == null)
 		{
 			GameClient.instance = new GameClient();
-			GameClient.instance.players = new ArrayList<Integer>();
 			
-			
-			for (int i = (int)System.currentTimeMillis() % 4; i >= 0; i--) {
-				
-				System.out.println(i);
-				GameClient.instance.players.add(i);
-			}
+			instance.playerNameIDs.add(R.id.PlayerTop);
+			instance.playerNameIDs.add(R.id.PlayerRight);
+			instance.playerNameIDs.add(R.id.PlayerRight);
+			instance.playerNameIDs.add(R.id.PlayerLeft);
+
+			instance.playerImageIDs.add(R.id.PlayerTopImage);
+			instance.playerImageIDs.add(R.id.PlayerRightImage);
+			instance.playerImageIDs.add(R.id.PlayerRightImage);
+			instance.playerImageIDs.add(R.id.PlayerLeftImage);
 		}
 		
 		return GameClient.instance;
 	}
 	
+	public Vector<Integer> getPlayerNameIDs() {
+		return playerNameIDs;
+	}
+	public void setPlayerNameIDs(Vector<Integer> playerNameIDs) {
+		this.playerNameIDs = playerNameIDs;
+	}
+	public Vector<Integer> getPlayerImageIDs() {
+		return playerImageIDs;
+	}
+	public void setPlayerImageIDs(Vector<Integer> playerImageIDs) {
+		this.playerImageIDs = playerImageIDs;
+	}
 	public static void printNotification(String notification)
 	{
 		Log.i(String.format("[%s]", GameClient.getInstance().myPlayer.getName()), notification);

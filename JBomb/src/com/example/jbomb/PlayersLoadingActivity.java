@@ -1,10 +1,13 @@
 package com.example.jbomb;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
 import core.GameClient;
 import network.JBombComunicationObject;
+import network.Player;
 import reference.JBombRequestResponse;
 import services.GameServerService;
 import android.os.Bundle;
@@ -37,9 +40,12 @@ public class PlayersLoadingActivity extends Activity implements Observer {
 		this.progressBar.setProgress(this.progressStatus);
 		
 		// FIXME: El observer no llega a registrarse y no es notificado cuando llega un MAX_PLAYERS_REACHED si es el último, por eso hacemos este parche.
-		if (this.myService.getListener().getLastResponse().getType().equals(JBombRequestResponse.MAX_PLAYERS_REACHED))
+		
+		JBombComunicationObject lastResponse = this.myService.getListener().getLastResponse();
+		
+		if (lastResponse.getType().equals(JBombRequestResponse.GAME_RUNNABLE))
 		{
-			this.showPlayButton();
+			loadPlayers(lastResponse.getPlayers());
 		}
 	}
 
@@ -52,6 +58,11 @@ public class PlayersLoadingActivity extends Activity implements Observer {
 	
 	public void startGame(View view)
 	{
+    	JBombComunicationObject jbo = new JBombComunicationObject();
+    	jbo.setType(JBombRequestResponse.START_GAME_REQUEST);
+    	
+    	myService.sendObject(jbo);
+    	
     	this.startActivity(new Intent(this, IngameActivity.class));	
     	
     	this.finish();
@@ -74,8 +85,8 @@ public class PlayersLoadingActivity extends Activity implements Observer {
 				case PLAYER_ADDED:
 					addPlayer(response.getGamePlayInformation().getTotalPlayers());
 					break;			
-				case MAX_PLAYERS_REACHED:
-					showPlayButton(); 
+				case GAME_RUNNABLE:
+					loadPlayers(response.getPlayers());
 					break;
 				case CLOSE_CONNECTION_RESPONSE:
 					finish();
@@ -97,9 +108,17 @@ public class PlayersLoadingActivity extends Activity implements Observer {
 		this.progressBar.setProgress(progressStatus);
 	}
 	
-	private void showPlayButton()
-	{		
-		GameClient.printNotification("TENGO QUE MOSTRAR EL BOTON");
+	private void loadPlayers(Collection<Player> adjacentPlayers)
+	{
+		Iterator<Integer> playerImageIDsIterator = GameClient.getInstance().getPlayerImageIDs().iterator();
+		
+		MainActivity.showToast("Voy a cargar: " + adjacentPlayers.size() + " jugadores.");		
+		GameClient.printNotification("Voy a cargar: " + adjacentPlayers.size() + " jugadores.");
+		
+		for (Player p : adjacentPlayers)
+		{			
+			GameClient.getInstance().adjacentPlayers.put(playerImageIDsIterator.next(), p);
+		}
 		
 		TextView tv = (TextView) PlayersLoadingActivity.this.findViewById(R.id.loadingPlayersTitle);
 		ImageView iv = (ImageView) PlayersLoadingActivity.this.findViewById(R.id.loadingPlayersGetReady);

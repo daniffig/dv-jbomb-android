@@ -38,6 +38,8 @@ public class GameServerListener extends Observable {
 					
 					setLastResponse(response);		
 					
+			    	GameClient.printNotification("Recibí: " + response.getType().toString());
+					
 					while (!response.getType().equals(JBombRequestResponse.CLOSED_CONNECTION) && !stopSignal)
 					{								    					
 						setChanged();  	
@@ -47,6 +49,8 @@ public class GameServerListener extends Observable {
 						setLastResponse(response);
 						
 						response = (JBombComunicationObject) (new ObjectInputStream(socket.getInputStream())).readObject();
+						
+				    	GameClient.printNotification("Recibí: " + response.getType().toString());
 					}					
 				} catch (StreamCorruptedException e) {
 					// TODO Auto-generated catch block
