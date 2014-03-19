@@ -18,6 +18,7 @@ import services.GameServerService;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.app.Activity;
 import android.view.DragEvent;
 import android.view.Menu;
@@ -30,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 
 public class IngameActivity extends Activity implements Observer {
@@ -240,6 +242,12 @@ public class IngameActivity extends Activity implements Observer {
 			
 			this.alert = MediaPlayer.create(this, R.raw.alert);			
 			this.alert.start();
+			
+
+			
+			Vibrator v = (Vibrator) this.getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+
+			v.vibrate(1000);	
 			
 			GameClient.printNotification(String.format("¡Tengo la bomba!"));
 			

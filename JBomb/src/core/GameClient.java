@@ -47,9 +47,9 @@ public class GameClient {
 			@Override
 			public int compare(Player arg0, Player arg1) {
 				if (arg0.getGeneralPoints() > arg1.getGeneralPoints())
-					return 1;
-				if (arg0.getGeneralPoints() < arg1.getGeneralPoints())
 					return -1;
+				if (arg0.getGeneralPoints() < arg1.getGeneralPoints())
+					return 1;
 				
 				return 0;
 			}			
