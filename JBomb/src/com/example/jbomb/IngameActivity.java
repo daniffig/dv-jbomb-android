@@ -61,7 +61,8 @@ public class IngameActivity extends Activity implements Observer {
 				
 				Player targetPlayer = new Player();
 				
-				targetPlayer.setUID(ingameImage.getId());
+				//targetPlayer.setUID(ingameImage.getId());
+				targetPlayer.setUID(GameClient.getInstance().adjacentPlayers.get(ingameImage.getId()).getUID());
 				targetPlayer.setName(String.valueOf(ingameImage.getContentDescription()));
 				
 				jbo.setBombTargetPlayer(targetPlayer);
@@ -223,7 +224,7 @@ public class IngameActivity extends Activity implements Observer {
 			
 			tv.setText(p.getName());
 			iv.setOnDragListener(new DragListener());
-			iv.setId(p.getUID());
+			//iv.setId(p.getUID());
 			iv.setContentDescription(p.getName());
 			tv.setVisibility(View.VISIBLE);
 			iv.setVisibility(View.VISIBLE);
@@ -242,8 +243,6 @@ public class IngameActivity extends Activity implements Observer {
 			
 			this.alert = MediaPlayer.create(this, R.raw.alert);			
 			this.alert.start();
-			
-
 			
 			Vibrator v = (Vibrator) this.getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -266,13 +265,8 @@ public class IngameActivity extends Activity implements Observer {
 	}
 	
 	private void openQuizQuestion(String quizQuestion, Vector<String> quizAnswers)
-	{		
-    	Intent myIntent = new Intent(IngameActivity.this, QuizActivity.class);
-    	
-    	myIntent.putExtra("QUIZ_QUESTION", quizQuestion);
-    	myIntent.putExtra("QUIZ_ANSWERS", quizAnswers);
-    	
-    	this.startActivity(myIntent);
+	{		    	
+    	this.startActivity(new Intent(this, QuizActivity.class));
 	}
 	
 	private void detonateBomb(Player loser, Collection<Player> players, GamePlayInformation gamePlayInformation)

@@ -84,6 +84,7 @@ public class MainActivity extends Activity implements Observer {
         {
         	this.startActivity(new Intent(this, IntroActivity.class));
         	
+        	GameClient.destroyInstance();        	
         	GameClient.getInstance().appStarted = true;
         	
             introSong = MediaPlayer.create(MainActivity.this, R.raw.intro_song);	
@@ -139,7 +140,7 @@ public class MainActivity extends Activity implements Observer {
     	this.stopIntroSong();
     	this.introSong.release();
     	
-    	if (this.isBound)
+    	if (this.isBound && myService.getIsLinked())
     	{        	
         	JBombCommunicationObject request = new JBombCommunicationObject(JBombRequestResponse.CLOSE_CONNECTION_REQUEST);
         	
@@ -166,7 +167,7 @@ public class MainActivity extends Activity implements Observer {
     {
     	this.stopIntroSong();
     	
-    	if (this.isBound)
+    	if (this.isBound && myService.getIsLinked())
     	{
     		this.startActivity(new Intent(this, GameSelectionActivity.class));
     	}
@@ -180,7 +181,7 @@ public class MainActivity extends Activity implements Observer {
     {
     	this.stopIntroSong();
     	
-    	if (this.isBound)
+    	if (this.isBound && myService.getIsLinked())
     	{    	
     		this.startActivity(new Intent(this, NewGameActivity.class));
     	}

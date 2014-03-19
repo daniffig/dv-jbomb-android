@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Vector;
 
 import core.GameClient;
 
@@ -31,11 +32,11 @@ public class QuizActivity extends Activity implements Observer {
 		this.myService.suscribe(this);
 		
 		TextView qq = (TextView) this.findViewById(R.id.quizQuestion);
-		qq.setText(this.getIntent().getExtras().getString("QUIZ_QUESTION"));
+		qq.setText(this.myService.getListener().getLastResponse().getQuizQuestion());
 		
 		RadioGroup qqa = (RadioGroup) this.findViewById(R.id.quizQuestionAnswers);
 		
-		ArrayList<String> answers = this.getIntent().getExtras().getStringArrayList("QUIZ_ANSWERS");
+		Vector<String> answers = this.myService.getListener().getLastResponse().getQuizAnswers();
 		
 		Collections.shuffle(answers);		
 		

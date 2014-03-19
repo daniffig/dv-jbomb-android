@@ -2,10 +2,13 @@ package services;
 
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Observer;
+
+import reference.JBombRequestResponse;
 
 import com.example.jbomb.ClientSettingsActivity;
 
@@ -23,6 +26,14 @@ import android.util.Log;
 
 public class GameServerService extends Service {
 	
+	public Boolean getIsLinked() {
+		return isLinked;
+	}
+
+	public void setIsLinked(Boolean isLinked) {
+		this.isLinked = isLinked;
+	}
+
 	private Boolean isLinked = false;
 	private GameServerListener listener;
 	
@@ -86,9 +97,17 @@ public class GameServerService extends Service {
 				try{
 					socket = new Socket(settings.getString("InetIPAddress", "127.0.0.1"), settings.getInt("InetPort", 4321));
 					
-					GameClient.printNotification(String.format("Me conecté con: %s:%s", settings.getString("InetIPAddress", null), settings.getInt("InetPort", 0)));
+					GameClient.printNotification(String.format("Me conecté con: %s:%s", settings.getString("InetIPAddress", "127.0.0.1"), settings.getInt("InetPort", 4321)));
 					
-					isLinked = true;
+					JBombCommunicationObject request = new JBombCommunicationObject(JBombRequestResponse.TRY_CONNECTION_REQUEST);
+					
+					ObjectOutputStream outToClient = new ObjectOutputStream(socket.getOutputStream());
+					
+					outToClient.writeObject(request);
+					
+					JBombCommunicationObject response = (JBombCommunicationObject) (new ObjectInputStream(socket.getInputStream())).readObject();
+
+					isLinked = (response.getType().equals(JBombRequestResponse.CONNECTION_ACCEPTED_RESPONSE));
 				} 
 				catch(UnknownHostException e1){
 					e1.printStackTrace();
@@ -101,6 +120,10 @@ public class GameServerService extends Service {
 				catch(NetworkOnMainThreadException e1){
 					e1.printStackTrace();
 					Log.e(LOGCAT, "SE ESTA CREANDO LA RED EN EL MAIN THREAD!");
+				}
+				catch(Exception e)
+				{
+					
 				}
 				
 			}

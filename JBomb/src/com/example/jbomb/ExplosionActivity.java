@@ -16,6 +16,7 @@ import android.os.Vibrator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.widget.VideoView;
 
@@ -34,7 +35,18 @@ public class ExplosionActivity extends Activity implements Observer {
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
 		
 		videoHolder = new VideoView(this);
-		videoHolder.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.bomb_explosion));
+		
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+		if (metrics.heightPixels < 720)
+		{
+			videoHolder.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.bomb_explosion_480));
+		}
+		else
+		{
+			videoHolder.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.bomb_explosion_720));
+		}
 		
 		v = (Vibrator) this.getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
 		

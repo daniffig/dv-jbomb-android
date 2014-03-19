@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.PixelFormat;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,7 +23,18 @@ public class IntroActivity extends Activity {
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
 		
 		videoHolder = (VideoView) this.findViewById(R.id.introVideoView);
-		videoHolder.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dvorak_dev_intro));
+		
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+		if (metrics.heightPixels < 720)
+		{
+			videoHolder.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dvorak_dev_intro_480));
+		}
+		else
+		{
+			videoHolder.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dvorak_dev_intro_720));
+		}
 		
 		videoHolder.setOnPreparedListener(new MediaPlayer.OnPreparedListener()
 		{

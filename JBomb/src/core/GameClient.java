@@ -45,13 +45,8 @@ public class GameClient {
 		Collections.sort(this.orderedPlayersByGeneralPoints, new Comparator<Player>()
 		{
 			@Override
-			public int compare(Player arg0, Player arg1) {
-				if (arg0.getGeneralPoints() > arg1.getGeneralPoints())
-					return -1;
-				if (arg0.getGeneralPoints() < arg1.getGeneralPoints())
-					return 1;
-				
-				return 0;
+			public int compare(Player arg0, Player arg1) {				
+				return arg1.getGeneralPoints() - arg0.getGeneralPoints();
 			}			
 		});
 	}
@@ -62,9 +57,8 @@ public class GameClient {
 	}
 	
 	public Boolean isWinner()
-	{		
-		
-		return this.orderedPlayersByGeneralPoints.get(0).equals(this.getMyPlayer());
+	{				
+		return this.orderedPlayersByGeneralPoints.get(0).getUID() == this.getMyPlayer().getUID();
 	}
 	
 	public Boolean appStarted = false;
@@ -140,41 +134,6 @@ public class GameClient {
 	
 	public int getCurrentPlayers() {
 		return currentPlayers;
-	}
-	
-	// MUY MUY MAL HACER ESTO, pero hay que sacarlo funcionando ya.
-	public int getIdForPlayer(int i)
-	{
-		switch (i)
-		{
-		case 0:
-			return R.id.PlayerTop;
-		case 1:
-			return R.id.PlayerRight;
-		case 2:
-			return R.id.PlayerBottom;
-		case 3:
-			return R.id.PlayerLeft;
-		}
-		
-		return -1;
-	}
-	
-	public int getImageForPlayer(int i) {
-
-		switch (i)
-		{
-		case 0:
-			return R.id.PlayerTopImage;
-		case 1:
-			return R.id.PlayerRightImage;
-		case 2:
-			return R.id.PlayerBottomImage;
-		case 3:
-			return R.id.PlayerLeftImage;
-		}
-		
-		return -1;
 	}
 	
 	public int getMaxPlayers() {

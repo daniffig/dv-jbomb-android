@@ -55,6 +55,18 @@ public class NewGameActivity extends Activity implements Observer {
     	Spinner newGameMaxRoundsSpinner = (Spinner) this.findViewById(R.id.newGameMaxRoundsSpinner);
     	Spinner newGameRoundDurationSpinner = (Spinner) this.findViewById(R.id.newGameRoundDurationSpinner);
     	
+    	if ((newGameNameEditText.getText().equals(""))
+    			|| (newGameTopologySpinner.getSelectedItemId() == -1)
+    			|| (newGameQuizSpinner.getSelectedItemId() == -1)
+    			|| (newGameModeSpinner.getSelectedItemId() == -1)
+    			|| (newGameRoundDurationSpinner.getSelectedItemId() == -1)   			
+    	)
+    	{
+    		MainActivity.showToast("Datos del juego incorrectos.");
+    		
+    		return;
+    	}
+    	    	
     	gs.setName(newGameNameEditText.getText().toString());
     	gs.setTopologyId(this.getKeyForValue(this.getTopologyIDs(), newGameTopologySpinner.getSelectedItem()));
     	gs.setQuizId(this.getKeyForValue(this.getQuizIDs(), newGameQuizSpinner.getSelectedItem()));

@@ -1,8 +1,5 @@
 package com.example.jbomb;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -70,31 +67,13 @@ public class GamePositionsActivity extends Activity implements Observer {
 		
 		roundCountTextView.setText(String.format("Ronda %s de %s", instance.getGamePlayInformation().getCurrentRound().toString(), instance.getGamePlayInformation().getMaxRounds().toString()));
 
-		List<Player> players = new ArrayList<Player>();
-		
-		for (Player p : instance.getPlayers())
-		{
-			players.add(p);
-		}
-		
-		Collections.sort(players, new Comparator<Player>()
-		{
-			@Override
-			public int compare(Player arg0, Player arg1) {
-				if (arg0.getGeneralPoints() > arg1.getGeneralPoints())
-					return 1;
-				if (arg0.getGeneralPoints() < arg1.getGeneralPoints())
-					return -1;
-				
-				return 0;
-			}			
-		});
-
 	    TableLayout gamePositionsTable = (TableLayout)findViewById(R.id.GamePositionsTableLayout);
 	    
-		for (int i = 0; i < players.size(); i++)
+	    List<Player> orderedPlayersByGeneralPoints = instance.getOrderedPlayersByGeneralPoints();
+	    
+		for (int i = 0; i < orderedPlayersByGeneralPoints.size(); i++)
 		{
-			Player p = players.get(i);
+			Player p = orderedPlayersByGeneralPoints.get(i);
 			
 		    TableRow playerRow = new TableRow(this);
 		    
