@@ -30,9 +30,6 @@ public class QuizActivity extends Activity implements Observer {
 		
 		this.myService.suscribe(this);
 		
-		TextView tv = (TextView)findViewById(R.id.quizNotice);  
-		tv.setText("Debes responder la siguiente pregunta para pasar la bomba a " + this.getIntent().getExtras().getString("TARGET_PLAYER_NAME"));
-		
 		TextView qq = (TextView) this.findViewById(R.id.quizQuestion);
 		qq.setText(this.getIntent().getExtras().getString("QUIZ_QUESTION"));
 		
@@ -131,21 +128,4 @@ public class QuizActivity extends Activity implements Observer {
 	{		
 		this.finish();
 	}
-	
-	/*
-	
-	public void openGameOver(View view)
-	{
-		RadioGroup answersRadioGroup = (RadioGroup) findViewById(R.id.quizQuestionAnswers);
-		
-    	Intent myIntent = new Intent(QuizActivity.this, GameOverActivity.class);
-    	myIntent.putExtra("answerID", answersRadioGroup.getCheckedRadioButtonId());
-    	
-    	QuizActivity.this.startActivity(myIntent);
-    	
-    	QuizActivity.this.setResult(RESULT_OK);    	
-    	QuizActivity.this.finish();
-	}
-	
-	*/
 }

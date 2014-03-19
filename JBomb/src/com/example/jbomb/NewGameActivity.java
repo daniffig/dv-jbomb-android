@@ -198,8 +198,6 @@ public class NewGameActivity extends Activity implements Observer {
 			public void run() {
 				// TODO Auto-generated method stub
 
-				myService.stopAlert();
-
 				switch (response.getType())
 				{
 				case GAME_SETTINGS_INFORMATION_RESPONSE:

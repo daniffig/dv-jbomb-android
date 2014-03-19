@@ -1,11 +1,13 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import network.GamePlayInformation;
 import network.Player;
 
 import android.annotation.SuppressLint;
@@ -18,6 +20,8 @@ public class GameClient {
 
 	private static GameClient instance;
 	
+	public Boolean appStarted = false;
+	
 	public static int CORRECT_ANSWER = 31;
 	public static int INCORRECT_ANSWER = 37;
 	
@@ -26,6 +30,9 @@ public class GameClient {
 	
 	private Vector<Integer> playerNameIDs = new Vector<Integer>();
 	private Vector<Integer> playerImageIDs = new Vector<Integer>();
+	
+	private GamePlayInformation gamePlayInformation;
+	private Collection<Player> players;
 
 	public static void destroyInstance()
 	{
@@ -82,8 +89,7 @@ public class GameClient {
 		this.myPlayer = myPlayer;
 	}
 	public Boolean isBombExploded = false;
-
-	private List<Integer> players;
+	public Boolean isLoser = false;
 	
 	public int getCurrentPlayers() {
 		return currentPlayers;
@@ -128,14 +134,6 @@ public class GameClient {
 		return maxPlayers;
 	}
 	
-	public List<Integer> getPlayers() {
-		return GameClient.instance.players;
-	}
-	
-	public Integer getPlayersCount() {
-		return GameClient.instance.players.size();
-	}
-	
 	public String getQuizQuestion()
 	{
 		return "¿Quién es la mejor persona del planeta?";
@@ -163,5 +161,17 @@ public class GameClient {
 	
 	public void setMaxPlayers(int maxPlayers) {
 		this.maxPlayers = maxPlayers;
+	}
+	public GamePlayInformation getGamePlayInformation() {
+		return gamePlayInformation;
+	}
+	public void setGamePlayInformation(GamePlayInformation gamePlayInformation) {
+		this.gamePlayInformation = gamePlayInformation;
+	}
+	public Collection<Player> getPlayers() {
+		return players;
+	}
+	public void setPlayers(Collection<Player> players) {
+		this.players = players;
 	}
 }

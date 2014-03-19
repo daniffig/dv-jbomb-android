@@ -10,6 +10,7 @@ import services.GameServerService;
 import core.GameClient;
 import core.GameServer;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.annotation.SuppressLint;
@@ -70,13 +71,26 @@ public class MainActivity extends Activity implements Observer {
 		    this.startService(myIntent);
 		}
 	}
-
+	
+	private MediaPlayer introSong;
 
     @SuppressLint("ShowToast")
 	@Override
     protected void onCreate(Bundle savedInstanceState) {    	
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);        
+        
+        if (!GameClient.getInstance().appStarted)
+        {
+        	this.startActivity(new Intent(this, IntroActivity.class));
+        	
+        	GameClient.getInstance().appStarted = true;
+        	
+            introSong = MediaPlayer.create(MainActivity.this, R.raw.intro_song);	
+            introSong.setVolume(0.3f, 0.3f);
+            
+            introSong.start();
+        }        
 		
 		this.myIntent = new Intent(this, GameServerService.class);
 		
@@ -98,8 +112,8 @@ public class MainActivity extends Activity implements Observer {
     	GameClient.getInstance().setMyPlayer(new Player(0, settings_ro.getString("PlayerName", "default")));
     	GameClient.getInstance().myPlayerName = settings_ro.getString("PlayerName", "default");
 	    
-	    //this.bindService(myIntent, myConnection, Context.BIND_AUTO_CREATE);
-	    //this.startService(myIntent);
+	    this.bindService(myIntent, myConnection, Context.BIND_AUTO_CREATE);
+	    this.startService(myIntent);
     }
  
     @Override
@@ -108,11 +122,22 @@ public class MainActivity extends Activity implements Observer {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+    
+    private void stopIntroSong()
+    {    	
+    	if (this.introSong.isPlaying())
+    	{
+    		this.introSong.stop();
+    	}
+    }
  
     @Override
 	protected void onDestroy()
     {
     	super.onDestroy();
+    	
+    	this.stopIntroSong();
+    	this.introSong.release();
     	
     	if (this.isBound)
     	{        	
@@ -130,6 +155,8 @@ public class MainActivity extends Activity implements Observer {
  
     public void openClientSettings(View view)
     {
+    	this.stopIntroSong();
+    	
     	Intent myIntent = new Intent(MainActivity.this, ClientSettingsActivity.class);
 
     	MainActivity.this.startActivityForResult(myIntent, ClientSettingsActivity.REQUEST_CODE);
@@ -137,6 +164,8 @@ public class MainActivity extends Activity implements Observer {
     
 	public void openGameSelection(View view)
     {
+    	this.stopIntroSong();
+    	
     	if (this.isBound)
     	{
     		this.startActivity(new Intent(this, GameSelectionActivity.class));
@@ -149,6 +178,8 @@ public class MainActivity extends Activity implements Observer {
     
     public void openNewGame(View view)
     {
+    	this.stopIntroSong();
+    	
     	if (this.isBound)
     	{    	
     		this.startActivity(new Intent(this, NewGameActivity.class));

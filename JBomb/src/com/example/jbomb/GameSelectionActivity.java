@@ -53,7 +53,9 @@ public class GameSelectionActivity extends Activity implements Observer {
 	}
 	
 	public void joinGame(Player myPlayer, GamePlayInformation gamePlayInformation)
-	{		
+	{		    	
+    	GameClient.getInstance().setGamePlayInformation(gamePlayInformation);
+    	
 		GameClient.getInstance().setMyPlayer(myPlayer);
     	GameClient.getInstance().setCurrentPlayers(gamePlayInformation.getTotalPlayers());
     	GameClient.getInstance().setMaxPlayers(gamePlayInformation.getMaxPlayers());

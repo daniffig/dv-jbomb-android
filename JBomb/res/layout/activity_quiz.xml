@@ -11,27 +11,21 @@
     tools:context=".QuizActivity" >
 
     <TextView
-        android:id="@+id/quizNotice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="@dimen/text_size_small" />
-
-    <TextView
         android:id="@+id/quizQuestion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/quiz_question_default"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="@dimen/text_size_small" />
+        android:textSize="@dimen/text_size_small"
+        android:layout_weight="0.10" />
 
     <ScrollView
         android:id="@+id/QuizQuestionAnswersScroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp" >
+        android:layout_marginTop="18dp"
+        android:layout_weight="0.70" >
 
         <LinearLayout
             android:id="@+id/AnswersLayout"
@@ -46,18 +40,19 @@
                 android:orientation="vertical" >
             </RadioGroup>
 
-            <ImageButton
-                android:id="@+id/enviarRespuestaButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:adjustViewBounds="true"
-                android:background="@null"
-                android:contentDescription="@string/todo"
-                android:onClick="sendAnswer"
-                android:src="@drawable/send_answer" />
-
         </LinearLayout>
     </ScrollView>
+
+    <ImageButton
+        android:id="@+id/enviarRespuestaButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:adjustViewBounds="true"
+        android:background="@null"
+        android:contentDescription="@string/todo"
+        android:onClick="sendAnswer"
+        android:src="@drawable/send_answer"
+        android:layout_weight="0.20" />
 
 </LinearLayout>

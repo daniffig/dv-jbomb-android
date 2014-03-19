@@ -10,102 +10,44 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".GamePositionsActivity" >
 
+    <ImageView
+        android:id="@+id/roundResultImageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20sp"
+        android:src="@drawable/scoreboard"
+        android:layout_weight="0.20" />
+
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/roundCountTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/game_positions"
+        android:layout_weight="0.20"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <TableLayout
+    <ScrollView
+        android:id="@+id/GamePositionsScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TableRow
-            android:id="@+id/tableRow1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-            
-	        <TextView
-	            android:id="@+id/textView2"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="1."
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
-	
-	        <TextView
-	            android:id="@+id/textView1"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="Andrés" />
-
-	        <TextView
-	            android:id="@+id/textView7"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:gravity="right"
-	            android:text="(+1000)" />
-
-	        <TextView
-	            android:id="@+id/textView8"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="1000"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRow2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right" >
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2."
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Matías" />
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(+900)" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="900"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRow3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRow4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </TableRow>
-    </TableLayout>
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Jugar" />
+        android:paddingBottom="20sp"
+        android:layout_weight="0.70" >
+
+        <TableLayout
+            android:id="@+id/GamePositionsTableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </TableLayout>
+    </ScrollView>
+
+    <ImageButton
+        android:id="@+id/imageButton1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:adjustViewBounds="true"
+        android:background="@null"
+        android:src="@drawable/next_round"
+        android:layout_weight="0.10"
+        android:onClick="joinNewRound" />
 
 </LinearLayout>

@@ -8,17 +8,14 @@ import java.net.UnknownHostException;
 import java.util.Observer;
 
 import com.example.jbomb.ClientSettingsActivity;
-import com.example.jbomb.R;
 
 import core.GameClient;
-
 
 import network.JBombComunicationObject;
 
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.NetworkOnMainThreadException;
@@ -26,6 +23,7 @@ import android.util.Log;
 
 public class GameServerService extends Service {
 	
+	private Boolean isLinked = false;
 	private GameServerListener listener;
 	
 	public void suscribe(Observer observer)
@@ -36,33 +34,6 @@ public class GameServerService extends Service {
 	public void unsuscribe(Observer observer)
 	{
 		this.getListener().deleteObserver(observer);
-	}
-	
-	/*
-	 * FIXME: Ver bien cómo se maneja el tema del audio más adelante, ahora nos está haciendo crashear la aplicación.
-	 */
-	
-	private MediaPlayer alert;	
-	private MediaPlayer explosion;
-	
-	public void playAlert()
-	{		
-		this.alert.start();		
-	}
-	
-	public void stopAlert()
-	{
-		this.alert.stop();
-	}
-	
-	public void playExplosion()
-	{		
-		this.alert.start();				
-	}
-	
-	public void stopExplosion()
-	{
-		this.explosion.stop();	
 	}
 	
 	public class GameServerServiceBinder extends Binder {
@@ -105,9 +76,6 @@ public class GameServerService extends Service {
 	@Override
 	public void onCreate(){
 		Log.i(LOGCAT, "El servicio fue creado");
-
-		this.alert = MediaPlayer.create(getApplicationContext(), R.raw.alert);
-		this.explosion = MediaPlayer.create(getApplicationContext(), R.raw.explosion);
 		
 		Thread t = new Thread(new Runnable(){
 	    	
@@ -116,9 +84,11 @@ public class GameServerService extends Service {
 			@Override
 			public void run() {
 				try{
-					socket = new Socket(settings.getString("InetIPAddress", null), settings.getInt("InetPort", 0));
+					socket = new Socket(settings.getString("InetIPAddress", "127.0.0.1"), settings.getInt("InetPort", 4321));
 					
 					GameClient.printNotification(String.format("Me conecté con: %s:%s", settings.getString("InetIPAddress", null), settings.getInt("InetPort", 0)));
+					
+					isLinked = true;
 				} 
 				catch(UnknownHostException e1){
 					e1.printStackTrace();
@@ -152,18 +122,36 @@ public class GameServerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(LOGCAT, "Received start id " + startId + ": " + intent);
         
-        this.listener.start();
-        
-        return START_STICKY;
+        if (this.isLinked)
+        {
+        	this.listener.start();
+                
+        	return START_STICKY;
+        }
+        else
+        {            
+            return START_REDELIVER_INTENT;
+        }
     }
     
-    public void sendObject(JBombComunicationObject communicationObject){
+    public Boolean sendObject(JBombComunicationObject communicationObject){
     	
     	GameClient.printNotification("Voy a enviar: " + communicationObject.getType().toString());
-		
+    	
 		this.communication_object = communicationObject;
-		
-		(new Thread(new SendObjectThread())).start();
+    	
+    	if (this.isLinked)
+    	{
+    		(new Thread(new SendObjectThread())).start();
+    		
+    		return true;
+    	}
+    	else
+    	{
+    		GameClient.printNotification("El servicio no está conectado.");
+    		
+    		return false;
+    	}
 	}
 
 	public GameServerListener getListener() {
@@ -179,8 +167,7 @@ public class GameServerService extends Service {
 	{
 		super.onDestroy();
 		
-		this.alert.release();
-		this.explosion.release();
+		this.isLinked = false;
 		
 		this.listener.stop();
 	}

@@ -1,5 +1,6 @@
 package com.example.jbomb;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
@@ -8,12 +9,14 @@ import java.util.Vector;
 import core.GameClient;
 import core.GameServer;
 
+import network.GamePlayInformation;
 import network.JBombComunicationObject;
 import network.Player;
 
 import reference.JBombRequestResponse;
 import services.GameServerService;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.DragEvent;
@@ -25,7 +28,6 @@ import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Intent;
@@ -33,6 +35,7 @@ import android.content.Intent;
 public class IngameActivity extends Activity implements Observer {
 	
 	private TextView flash;
+	private MediaPlayer alert;
 	
 	class DragListener implements OnDragListener
 	{
@@ -107,7 +110,7 @@ public class IngameActivity extends Activity implements Observer {
 		this.findViewById(R.id.PlayerRightImage).setVisibility(View.INVISIBLE);
 		this.findViewById(R.id.PlayerBottomImage).setVisibility(View.INVISIBLE);
 		this.findViewById(R.id.PlayerLeftImage).setVisibility(View.INVISIBLE);		
-		//this.findViewById(R.id.ingameBombImage).setVisibility(View.INVISIBLE);
+		this.findViewById(R.id.ingameBombImage).setVisibility(View.INVISIBLE);
 	}
 
 	@Override
@@ -121,6 +124,7 @@ public class IngameActivity extends Activity implements Observer {
 		
 		this.hidePlayers();
 		this.loadPlayers();
+		this.alert = MediaPlayer.create(this, R.raw.alert);
 		
 		flash = ((TextView) this.findViewById(R.id.notificationText));
 		
@@ -134,11 +138,11 @@ public class IngameActivity extends Activity implements Observer {
 		if (lastResponse.getType().equals(JBombRequestResponse.BOMB_OWNER_RESPONSE))
 		{
 			changeBombOwner(lastResponse.getBombOwner());
+		}
 
-			if (!(lastResponse.getFlash() == null))
-			{			
-				flash.setText(lastResponse.getFlash());
-			}		
+		if (!(lastResponse.getFlash() == null))
+		{			
+			flash.setText(lastResponse.getFlash());
 		}
 	}
 
@@ -156,6 +160,8 @@ public class IngameActivity extends Activity implements Observer {
 	{
 		super.onDestroy();
 		
+		this.alert.release();
+		
 		this.myService.unsuscribe(this);
 	}
 
@@ -171,8 +177,6 @@ public class IngameActivity extends Activity implements Observer {
 			public void run() {
 				// TODO Auto-generated method stub
 
-				myService.stopAlert();
-
 				switch (response.getType())
 				{
 				case BOMB_OWNER_RESPONSE:
@@ -182,7 +186,7 @@ public class IngameActivity extends Activity implements Observer {
 					openQuizQuestion(response.getQuizQuestion(), response.getQuizAnswers()); 
 					break;			
 				case BOMB_DETONATED_RESPONSE:
-					detonateBomb(response.getBombOwner());
+					detonateBomb(response.getLoser(), response.getPlayers(), response.getGamePlayInformation());
 					break;
 				case CLOSE_CONNECTION_RESPONSE:
 					finish();
@@ -227,16 +231,21 @@ public class IngameActivity extends Activity implements Observer {
 	private void changeBombOwner(Player bombOwner)
 	{				
 		if (GameClient.getInstance().getMyPlayer().getUID().equals(bombOwner.getUID()))
-		{	
-			Toast.makeText(this.getApplicationContext(), "TENGO LA BOMBA!!!!123" + GameClient.getInstance().getMyPlayer().getUID().toString() + "   " + bombOwner.getUID(), Toast.LENGTH_LONG).show();
-
+		{				
+			if (this.alert.isPlaying())
+			{
+				this.alert.stop();
+				this.alert.release();
+			}
+			
+			this.alert = MediaPlayer.create(this, R.raw.alert);			
+			this.alert.start();
+			
 			GameClient.printNotification(String.format("¡Tengo la bomba!"));
 			
 			ImageView iv = (ImageView) findViewById(R.id.ingameBombImage);
 			
 			iv.setVisibility(View.VISIBLE);
-			
-			myService.playAlert();
 		}
 		else
 		{									
@@ -250,26 +259,29 @@ public class IngameActivity extends Activity implements Observer {
 	
 	private void openQuizQuestion(String quizQuestion, Vector<String> quizAnswers)
 	{		
-		myService.stopAlert();
-		
     	Intent myIntent = new Intent(IngameActivity.this, QuizActivity.class);
     	
     	myIntent.putExtra("QUIZ_QUESTION", quizQuestion);
     	myIntent.putExtra("QUIZ_ANSWERS", quizAnswers);
     	
-    	IngameActivity.this.startActivity(myIntent);
+    	this.startActivity(myIntent);
 	}
 	
-	private void detonateBomb(Player bombOwner)
-	{			
-		if (GameClient.getInstance().getMyPlayer().getUID().equals(bombOwner.getUID()))
-		{	
-			myService.playExplosion();
-			
-			ImageView iv = (ImageView) findViewById(R.id.ingameBombImage);
-			
-			iv.setVisibility(View.VISIBLE);								
-			iv.setOnTouchListener(null);
+	private void detonateBomb(Player loser, Collection<Player> players, GamePlayInformation gamePlayInformation)
+	{					
+		GameClient.getInstance().setPlayers(players);
+		GameClient.getInstance().setGamePlayInformation(gamePlayInformation);
+		GameClient.getInstance().isLoser = GameClient.getInstance().getMyPlayer().getUID().equals(loser.getUID());
+		
+		if (GameClient.getInstance().isLoser)
+		{	    	
+	    	this.startActivity(new Intent(this, ExplosionActivity.class));
 		}
+		else
+		{
+	    	this.startActivity(new Intent(this, GamePositionsActivity.class));
+		}
+		
+		this.finish();
 	}
 }

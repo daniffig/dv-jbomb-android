@@ -54,5 +54,6 @@
     <string name="title_activity_game_positions">GamePositionsActivity</string>
     <string name="game_positions">Tabla de posiciones</string>
     <string name="title_activity_explosion">ExplosionActivity</string>
+    <string name="title_activity_intro">IntroActivity</string>
 
 </resources>
