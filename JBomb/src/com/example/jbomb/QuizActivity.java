@@ -9,7 +9,7 @@ import core.GameClient;
 
 import reference.JBombRequestResponse;
 import services.GameServerService;
-import network.JBombComunicationObject;
+import network.JBombCommunicationObject;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
@@ -70,7 +70,7 @@ public class QuizActivity extends Activity implements Observer {
 
 		this.runOnUiThread(new Runnable()
 		{			 
-			JBombComunicationObject response = (JBombComunicationObject) data;
+			JBombCommunicationObject response = (JBombCommunicationObject) data;
 
 			@Override
 			public void run() {
@@ -108,7 +108,7 @@ public class QuizActivity extends Activity implements Observer {
 		
 		RadioButton rb = (RadioButton) this.findViewById(qqa.getCheckedRadioButtonId());
 		
-		JBombComunicationObject jbo = new JBombComunicationObject();
+		JBombCommunicationObject jbo = new JBombCommunicationObject();
 		
 		jbo.setType(JBombRequestResponse.QUIZ_ANSWER_REQUEST);
 		jbo.setSelectedQuizAnswer(String.valueOf(rb.getText()));

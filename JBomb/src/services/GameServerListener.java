@@ -8,7 +8,7 @@ import java.util.Observable;
 
 import core.GameClient;
 
-import network.JBombComunicationObject;
+import network.JBombCommunicationObject;
 
 import reference.JBombRequestResponse;
 
@@ -16,8 +16,8 @@ public class GameServerListener extends Observable {
 	
 	private Socket socket;
 	private Thread listenerThread;
-	private JBombComunicationObject response;
-	private JBombComunicationObject lastResponse;
+	private JBombCommunicationObject response;
+	private JBombCommunicationObject lastResponse;
 	private Boolean stopSignal;
 	
 	public void start()
@@ -34,7 +34,7 @@ public class GameServerListener extends Observable {
 				
 				try {
 					
-					response = (JBombComunicationObject) (new ObjectInputStream(socket.getInputStream())).readObject();	
+					response = (JBombCommunicationObject) (new ObjectInputStream(socket.getInputStream())).readObject();	
 					
 					setLastResponse(response);		
 					
@@ -48,7 +48,7 @@ public class GameServerListener extends Observable {
 						
 						setLastResponse(response);
 						
-						response = (JBombComunicationObject) (new ObjectInputStream(socket.getInputStream())).readObject();
+						response = (JBombCommunicationObject) (new ObjectInputStream(socket.getInputStream())).readObject();
 						
 				    	GameClient.printNotification("Recibí: " + response.getType().toString());
 					}					
@@ -81,11 +81,11 @@ public class GameServerListener extends Observable {
 		this.socket = socket;
 	}
 
-	public JBombComunicationObject getLastResponse() {
+	public JBombCommunicationObject getLastResponse() {
 		return lastResponse;
 	}
 
-	public void setLastResponse(JBombComunicationObject lastResponse) {
+	public void setLastResponse(JBombCommunicationObject lastResponse) {
 		this.lastResponse = lastResponse;
 	}
 }

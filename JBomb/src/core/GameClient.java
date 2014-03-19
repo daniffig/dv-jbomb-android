@@ -2,6 +2,8 @@ package core;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,38 @@ import com.example.jbomb.R;
 public class GameClient {
 
 	private static GameClient instance;
+	
+	private List<Player> orderedPlayersByGeneralPoints;
+	
+	public Boolean isGameOver()
+	{
+		return !this.getGamePlayInformation().getCurrentRound().equals(this.getGamePlayInformation().getMaxRounds());
+	}
+	
+	public Boolean isWinner()
+	{		
+		this.orderedPlayersByGeneralPoints = new ArrayList<Player>();
+		
+		for (Player p : instance.getPlayers())
+		{
+			players.add(p);
+		}
+		
+		Collections.sort(this.orderedPlayersByGeneralPoints, new Comparator<Player>()
+		{
+			@Override
+			public int compare(Player arg0, Player arg1) {
+				if (arg0.getGeneralPoints() > arg1.getGeneralPoints())
+					return 1;
+				if (arg0.getGeneralPoints() < arg1.getGeneralPoints())
+					return -1;
+				
+				return 0;
+			}			
+		});
+		
+		return this.orderedPlayersByGeneralPoints.get(0).equals(this.getMyPlayer());
+	}
 	
 	public Boolean appStarted = false;
 	

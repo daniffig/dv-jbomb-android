@@ -3,7 +3,7 @@ package com.example.jbomb;
 import java.util.Observable;
 import java.util.Observer;
 
-import network.JBombComunicationObject;
+import network.JBombCommunicationObject;
 import network.Player;
 import reference.JBombRequestResponse;
 import services.GameServerService;
@@ -141,7 +141,7 @@ public class MainActivity extends Activity implements Observer {
     	
     	if (this.isBound)
     	{        	
-        	JBombComunicationObject request = new JBombComunicationObject(JBombRequestResponse.CLOSE_CONNECTION_REQUEST);
+        	JBombCommunicationObject request = new JBombCommunicationObject(JBombRequestResponse.CLOSE_CONNECTION_REQUEST);
         	
         	myService.sendObject(request);
         	
@@ -199,7 +199,7 @@ public class MainActivity extends Activity implements Observer {
 	@Override
 	public void update(Observable observable, Object data) {
 		
-		GameClient.printNotification("Me mandaron algo: " + ((JBombComunicationObject) data).getType());
+		GameClient.printNotification("Me mandaron algo: " + ((JBombCommunicationObject) data).getType());
 		
 	}    
 	

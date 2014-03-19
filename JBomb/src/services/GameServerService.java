@@ -11,7 +11,7 @@ import com.example.jbomb.ClientSettingsActivity;
 
 import core.GameClient;
 
-import network.JBombComunicationObject;
+import network.JBombCommunicationObject;
 
 import android.app.Service;
 import android.content.Intent;
@@ -62,7 +62,7 @@ public class GameServerService extends Service {
 	
 	private Socket socket;
 
-	private JBombComunicationObject communication_object;
+	private JBombCommunicationObject communication_object;
 	
 	private final IBinder myBinder = new GameServerServiceBinder();
 	
@@ -134,7 +134,7 @@ public class GameServerService extends Service {
         }
     }
     
-    public Boolean sendObject(JBombComunicationObject communicationObject){
+    public Boolean sendObject(JBombCommunicationObject communicationObject){
     	
     	GameClient.printNotification("Voy a enviar: " + communicationObject.getType().toString());
     	

@@ -6,7 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import core.GameClient;
-import network.JBombComunicationObject;
+import network.JBombCommunicationObject;
 import network.Player;
 import reference.JBombRequestResponse;
 import services.GameServerService;
@@ -41,7 +41,7 @@ public class PlayersLoadingActivity extends Activity implements Observer {
 		
 		// FIXME: El observer no llega a registrarse y no es notificado cuando llega un MAX_PLAYERS_REACHED si es el último, por eso hacemos este parche.
 		
-		JBombComunicationObject lastResponse = this.myService.getListener().getLastResponse();
+		JBombCommunicationObject lastResponse = this.myService.getListener().getLastResponse();
 		
 		if (lastResponse.getType().equals(JBombRequestResponse.GAME_RUNNABLE))
 		{
@@ -58,7 +58,7 @@ public class PlayersLoadingActivity extends Activity implements Observer {
 	
 	public void startGame(View view)
 	{
-    	JBombComunicationObject jbo = new JBombComunicationObject();
+    	JBombCommunicationObject jbo = new JBombCommunicationObject();
     	jbo.setType(JBombRequestResponse.START_GAME_REQUEST);
     	
     	myService.sendObject(jbo);
@@ -74,7 +74,7 @@ public class PlayersLoadingActivity extends Activity implements Observer {
 
 		this.runOnUiThread(new Runnable()
 		{			 
-			JBombComunicationObject response = (JBombComunicationObject) data;
+			JBombCommunicationObject response = (JBombCommunicationObject) data;
 
 			@Override
 			public void run() {

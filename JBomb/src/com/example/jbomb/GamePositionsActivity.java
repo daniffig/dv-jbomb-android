@@ -11,7 +11,7 @@ import network.Player;
 
 import reference.JBombRequestResponse;
 import services.GameServerService;
-import network.JBombComunicationObject;
+import network.JBombCommunicationObject;
 import core.GameClient;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -35,24 +36,41 @@ public class GamePositionsActivity extends Activity implements Observer {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_positions);
 		
-		ImageView roundResultImageView = (ImageView) findViewById(R.id.roundResultImageView);
+		GameClient instance = GameClient.getInstance();
 		
-		if (GameClient.getInstance().isLoser)
+		ImageView roundResultImageView = (ImageView) findViewById(R.id.roundResultImageView);
+		ImageButton nextActionImageButton = (ImageButton) findViewById(R.id.nextActionImageButton);
+		
+		if (instance.isLoser)
 		{			
 			roundResultImageView.setBackgroundResource(R.drawable.you_lose);
 		}
 		else
 		{
 			roundResultImageView.setBackgroundResource(R.drawable.ursafe);
-		}		
+		}	
+		
+		if (instance.isGameOver())
+		{
+			nextActionImageButton.setBackgroundResource(R.drawable.back);
+		}
+		else
+		{
+			nextActionImageButton.setBackgroundResource(R.drawable.next_round);
+		}
+		
+		if (GameClient.getInstance().isWinner())
+		{
+			roundResultImageView.setBackgroundResource(R.drawable.you_win);
+		}
 		
 		TextView roundCountTextView = (TextView) findViewById(R.id.roundCountTextView);
 		
-		roundCountTextView.setText(String.format("Ronda %s de %s", GameClient.getInstance().getGamePlayInformation().getCurrentRound().toString(), GameClient.getInstance().getGamePlayInformation().getMaxRounds().toString()));
+		roundCountTextView.setText(String.format("Ronda %s de %s", instance.getGamePlayInformation().getCurrentRound().toString(), instance.getGamePlayInformation().getMaxRounds().toString()));
 
 		List<Player> players = new ArrayList<Player>();
 		
-		for (Player p : GameClient.getInstance().getPlayers())
+		for (Player p : instance.getPlayers())
 		{
 			players.add(p);
 		}
@@ -72,9 +90,9 @@ public class GamePositionsActivity extends Activity implements Observer {
 
 	    TableLayout gamePositionsTable = (TableLayout)findViewById(R.id.GamePositionsTableLayout);
 	    
-		for (int i = 0; i <= players.size(); i++)
+		for (int i = 0; i < players.size(); i++)
 		{
-			Player p = players.get(i + 1);
+			Player p = players.get(i);
 			
 		    TableRow playerRow = new TableRow(this);
 		    
@@ -110,6 +128,20 @@ public class GamePositionsActivity extends Activity implements Observer {
 		return true;
 	}
 	
+	public void nextAction(View view)
+	{
+		if (GameClient.getInstance().isGameOver())
+		{						
+			myService.sendObject(new JBombCommunicationObject(JBombRequestResponse.CONNECTION_RESET_REQUEST));
+			
+	    	this.finish();		
+		}
+		else
+		{
+			this.joinNewRound(view);
+		}
+	}
+	
 	public void joinNewRound(View view)
 	{				
     	GameClient.getInstance().setCurrentPlayers(0);
@@ -118,7 +150,7 @@ public class GamePositionsActivity extends Activity implements Observer {
     	
     	this.finish();
     	
-		JBombComunicationObject jbo = new JBombComunicationObject();
+		JBombCommunicationObject jbo = new JBombCommunicationObject();
 		
 		jbo.setType(JBombRequestResponse.START_NEW_ROUND_REQUEST);
 		
@@ -134,7 +166,7 @@ public class GamePositionsActivity extends Activity implements Observer {
 		
 		this.runOnUiThread(new Runnable()
 		{			 
-			JBombComunicationObject response = (JBombComunicationObject) data;
+			JBombCommunicationObject response = (JBombCommunicationObject) data;
 			
 			@Override
 			public void run() {

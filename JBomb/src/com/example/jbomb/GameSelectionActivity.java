@@ -40,7 +40,7 @@ public class GameSelectionActivity extends Activity implements Observer {
 			return;
 		}
 		
-		JBombComunicationObject jbo = new JBombComunicationObject();
+		JBombCommunicationObject jbo = new JBombCommunicationObject();
 		
 		jbo.setType(JBombRequestResponse.JOIN_GAME_REQUEST);
 		
@@ -60,7 +60,7 @@ public class GameSelectionActivity extends Activity implements Observer {
     	GameClient.getInstance().setCurrentPlayers(gamePlayInformation.getTotalPlayers());
     	GameClient.getInstance().setMaxPlayers(gamePlayInformation.getMaxPlayers());
 
-    	this.startActivity(new Intent(GameSelectionActivity.this, PlayersLoadingActivity.class));
+    	this.startActivity(new Intent(this, PlayersLoadingActivity.class));
     	
     	this.finish();		
 	}
@@ -79,7 +79,7 @@ public class GameSelectionActivity extends Activity implements Observer {
 	{
 		MainActivity.showToast("Cargando juegos...");
 		
-    	JBombComunicationObject jbo = new JBombComunicationObject();
+    	JBombCommunicationObject jbo = new JBombCommunicationObject();
     	jbo.setType(JBombRequestResponse.GAME_LIST_REQUEST);
 
     	myService.sendObject(jbo);		
@@ -98,7 +98,7 @@ public class GameSelectionActivity extends Activity implements Observer {
 		
 		this.runOnUiThread(new Runnable()
 		{			 
-			JBombComunicationObject response = (JBombComunicationObject) data;
+			JBombCommunicationObject response = (JBombCommunicationObject) data;
 			
 			@Override
 			public void run() {

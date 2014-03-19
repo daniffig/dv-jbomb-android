@@ -5,7 +5,7 @@ import java.util.Observer;
 
 import core.GameClient;
 
-import network.JBombComunicationObject;
+import network.JBombCommunicationObject;
 
 import services.GameServerService;
 import android.graphics.PixelFormat;
@@ -79,7 +79,7 @@ public class ExplosionActivity extends Activity implements Observer {
 		
 		this.runOnUiThread(new Runnable()
 		{			 
-			JBombComunicationObject response = (JBombComunicationObject) data;
+			JBombCommunicationObject response = (JBombCommunicationObject) data;
 			
 			@Override
 			public void run() {

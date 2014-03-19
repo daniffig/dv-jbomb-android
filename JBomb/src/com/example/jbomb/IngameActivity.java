@@ -10,7 +10,7 @@ import core.GameClient;
 import core.GameServer;
 
 import network.GamePlayInformation;
-import network.JBombComunicationObject;
+import network.JBombCommunicationObject;
 import network.Player;
 
 import reference.JBombRequestResponse;
@@ -53,7 +53,7 @@ public class IngameActivity extends Activity implements Observer {
 				break;
 			case DragEvent.ACTION_DROP:
 				
-				JBombComunicationObject jbo = new JBombComunicationObject();
+				JBombCommunicationObject jbo = new JBombCommunicationObject();
 				
 				jbo.setType(JBombRequestResponse.SEND_BOMB_REQUEST);
 				
@@ -133,7 +133,7 @@ public class IngameActivity extends Activity implements Observer {
 	    serverInfo.setText(GameServer.InetIPAddress);
 		
 		// FIXME: El observer no llega a registrarse y no es notificado cuando llega un MAX_PLAYERS_REACHED si es el último, por eso hacemos este parche.
-	    JBombComunicationObject lastResponse = this.myService.getListener().getLastResponse();
+	    JBombCommunicationObject lastResponse = this.myService.getListener().getLastResponse();
 	    
 		if (lastResponse.getType().equals(JBombRequestResponse.BOMB_OWNER_RESPONSE))
 		{
@@ -171,7 +171,7 @@ public class IngameActivity extends Activity implements Observer {
 
 		this.runOnUiThread(new Runnable()
 		{			 
-			JBombComunicationObject response = (JBombComunicationObject) data;
+			JBombCommunicationObject response = (JBombCommunicationObject) data;
 
 			@Override
 			public void run() {

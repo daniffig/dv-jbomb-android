@@ -12,7 +12,7 @@ import core.GameClient;
 import network.GamePlayInformation;
 import network.GameSettings;
 import network.GameSettingsInformation;
-import network.JBombComunicationObject;
+import network.JBombCommunicationObject;
 import network.Player;
 
 import reference.JBombRequestResponse;
@@ -63,7 +63,7 @@ public class NewGameActivity extends Activity implements Observer {
     	gs.setMaxRounds((Integer)newGameMaxRoundsSpinner.getSelectedItem());
     	gs.setRoundDurationId(this.getKeyForValue(this.getRoundDurationIDs(), newGameRoundDurationSpinner.getSelectedItem()));
     	
-    	JBombComunicationObject jbo = new JBombComunicationObject();
+    	JBombCommunicationObject jbo = new JBombCommunicationObject();
     	jbo.setType(JBombRequestResponse.CREATE_GAME_REQUEST);
     	
     	jbo.setGameSettings(gs);
@@ -156,7 +156,7 @@ public class NewGameActivity extends Activity implements Observer {
 		
 		this.myService.suscribe(this);
 
-    	JBombComunicationObject jbo = new JBombComunicationObject();
+    	JBombCommunicationObject jbo = new JBombCommunicationObject();
     	
     	jbo.setType(JBombRequestResponse.GAME_SETTINGS_INFORMATION_REQUEST);
 
@@ -192,7 +192,7 @@ public class NewGameActivity extends Activity implements Observer {
 
 		this.runOnUiThread(new Runnable()
 		{			 
-			JBombComunicationObject response = (JBombComunicationObject) data;
+			JBombCommunicationObject response = (JBombCommunicationObject) data;
 
 			@Override
 			public void run() {
@@ -207,7 +207,7 @@ public class NewGameActivity extends Activity implements Observer {
 					requestJoinMyGame(response.getAvailableGames().get(0).getUID());
 					break;
 				case GAMEPLAY_INFORMATION_RESPONSE:
-			    	joinGame(response.getGamePlayInformation()); 
+			    	joinGame(response.getMyPlayer(), response.getGamePlayInformation()); 
 					break;
 				case CLOSE_CONNECTION_RESPONSE:
 					finish();
@@ -246,7 +246,7 @@ public class NewGameActivity extends Activity implements Observer {
 		
 		myPlayer.setName(settings.getString("PlayerName", "default"));
 		
-		JBombComunicationObject jbo = new JBombComunicationObject();
+		JBombCommunicationObject jbo = new JBombCommunicationObject();
 		
 		jbo.setType(JBombRequestResponse.JOIN_GAME_REQUEST);
 		jbo.setRequestedGameId(myGameUID);		
@@ -255,16 +255,17 @@ public class NewGameActivity extends Activity implements Observer {
 		myService.sendObject(jbo);
 	}
 	
-	private void joinGame(GamePlayInformation gpi)
-	{
-    	GameClient.getInstance().setCurrentPlayers(gpi.getTotalPlayers());
-    	GameClient.getInstance().setMaxPlayers(gpi.getMaxPlayers());
-
-    	Intent myIntent = new Intent(NewGameActivity.this, PlayersLoadingActivity.class);
-
-    	NewGameActivity.this.startActivity(myIntent);
+	public void joinGame(Player myPlayer, GamePlayInformation gamePlayInformation)
+	{		    	
+    	GameClient.getInstance().setGamePlayInformation(gamePlayInformation);
     	
-    	NewGameActivity.this.finish();		
+		GameClient.getInstance().setMyPlayer(myPlayer);
+    	GameClient.getInstance().setCurrentPlayers(gamePlayInformation.getTotalPlayers());
+    	GameClient.getInstance().setMaxPlayers(gamePlayInformation.getMaxPlayers());
+
+    	this.startActivity(new Intent(this, PlayersLoadingActivity.class));
+    	
+    	this.finish();		
 	}
 	
 	@Override

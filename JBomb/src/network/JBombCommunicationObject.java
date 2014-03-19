@@ -5,7 +5,7 @@ import java.util.Vector;
 
 import reference.JBombRequestResponse;
 
-public class JBombComunicationObject implements Serializable{
+public class JBombCommunicationObject implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -31,11 +31,11 @@ public class JBombComunicationObject implements Serializable{
 	private Integer RequestedGameId;
 	private GamePlayInformation GamePlayInformation = null;
 	
-	public JBombComunicationObject(){
+	public JBombCommunicationObject(){
 		super();
 	}
 	
-	public JBombComunicationObject(JBombRequestResponse jbrr){
+	public JBombCommunicationObject(JBombRequestResponse jbrr){
 		super();
 		this.Type = jbrr;
 	}

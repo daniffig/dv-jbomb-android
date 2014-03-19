@@ -15,8 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="20sp"
-        android:src="@drawable/scoreboard"
-        android:layout_weight="0.20" />
+        android:layout_weight="0.20" android:contentDescription="TODO"/>
 
     <TextView
         android:id="@+id/roundCountTextView"
@@ -40,14 +39,13 @@
     </ScrollView>
 
     <ImageButton
-        android:id="@+id/imageButton1"
+        android:id="@+id/nextActionImageButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:adjustViewBounds="true"
         android:background="@null"
-        android:src="@drawable/next_round"
         android:layout_weight="0.10"
-        android:onClick="joinNewRound" />
+        android:onClick="nextAction" />
 
 </LinearLayout>
