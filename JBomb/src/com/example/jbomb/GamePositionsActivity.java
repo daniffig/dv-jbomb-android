@@ -50,6 +50,8 @@ public class GamePositionsActivity extends Activity implements Observer {
 			roundResultImageView.setBackgroundResource(R.drawable.ursafe);
 		}	
 		
+		instance.orderPlayersByGeneralPoints();
+		
 		if (instance.isGameOver())
 		{
 			nextActionImageButton.setBackgroundResource(R.drawable.back);
@@ -59,7 +61,7 @@ public class GamePositionsActivity extends Activity implements Observer {
 			nextActionImageButton.setBackgroundResource(R.drawable.next_round);
 		}
 		
-		if (GameClient.getInstance().isWinner())
+		if (instance.isWinner())
 		{
 			roundResultImageView.setBackgroundResource(R.drawable.you_win);
 		}

@@ -22,20 +22,24 @@ public class GameClient {
 
 	private static GameClient instance;
 	
+	public List<Player> getOrderedPlayersByGeneralPoints() {
+		return orderedPlayersByGeneralPoints;
+	}
+
+	public void setOrderedPlayersByGeneralPoints(
+			List<Player> orderedPlayersByGeneralPoints) {
+		this.orderedPlayersByGeneralPoints = orderedPlayersByGeneralPoints;
+	}
+
 	private List<Player> orderedPlayersByGeneralPoints;
 	
-	public Boolean isGameOver()
+	public void orderPlayersByGeneralPoints()
 	{
-		return !this.getGamePlayInformation().getCurrentRound().equals(this.getGamePlayInformation().getMaxRounds());
-	}
-	
-	public Boolean isWinner()
-	{		
 		this.orderedPlayersByGeneralPoints = new ArrayList<Player>();
 		
 		for (Player p : instance.getPlayers())
 		{
-			players.add(p);
+			orderedPlayersByGeneralPoints.add(p);
 		}
 		
 		Collections.sort(this.orderedPlayersByGeneralPoints, new Comparator<Player>()
@@ -50,6 +54,15 @@ public class GameClient {
 				return 0;
 			}			
 		});
+	}
+	
+	public Boolean isGameOver()
+	{
+		return this.getGamePlayInformation().getCurrentRound().equals(this.getGamePlayInformation().getMaxRounds());
+	}
+	
+	public Boolean isWinner()
+	{		
 		
 		return this.orderedPlayersByGeneralPoints.get(0).equals(this.getMyPlayer());
 	}
