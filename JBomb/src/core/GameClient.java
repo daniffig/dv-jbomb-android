@@ -66,7 +66,6 @@ public class GameClient {
 	public static int CORRECT_ANSWER = 31;
 	public static int INCORRECT_ANSWER = 37;
 	
-//	public Vector<Integer> adjacentPlayersUIDs = new Vector<Integer>();	
 	public Map<Integer, Player> adjacentPlayers = new HashMap<Integer, Player>();
 	
 	private Vector<Integer> playerNameIDs = new Vector<Integer>();

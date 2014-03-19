@@ -39,6 +39,8 @@ public class IngameActivity extends Activity implements Observer {
 	private TextView flash;
 	private MediaPlayer alert;
 	
+	private static Boolean isBugged;
+	
 	class DragListener implements OnDragListener
 	{
 		@Override
@@ -121,6 +123,8 @@ public class IngameActivity extends Activity implements Observer {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ingame);
 		
+		isBugged = false;
+		
 		this.myService.suscribe(this);
 		
 		this.findViewById(R.id.ingameBombImage).setOnTouchListener(new TouchListener());
@@ -131,9 +135,16 @@ public class IngameActivity extends Activity implements Observer {
 		
 		flash = ((TextView) this.findViewById(R.id.notificationText));
 		
-		TextView serverInfo = ((TextView) this.findViewById(R.id.ingameServerInfo));
+		TextView gameInfo = ((TextView) this.findViewById(R.id.gameInfo));	
+		
+		gameInfo.setText(String.format("Juego: %s (%s de %s)",
+				GameClient.getInstance().getGamePlayInformation().getName(),
+				Integer.valueOf(GameClient.getInstance().getGamePlayInformation().getCurrentRound() + 1),
+				GameClient.getInstance().getGamePlayInformation().getMaxRounds()));
+		
+		TextView ingameServerInfo = ((TextView) this.findViewById(R.id.ingameServerInfo));
 	    
-	    serverInfo.setText(GameServer.InetIPAddress);
+		ingameServerInfo.setText(String.format("Servidor: %s:%s", GameServer.InetIPAddress, GameServer.InetPort.toString()));
 		
 		// FIXME: El observer no llega a registrarse y no es notificado cuando llega un MAX_PLAYERS_REACHED si es el último, por eso hacemos este parche.
 	    JBombCommunicationObject lastResponse = this.myService.getListener().getLastResponse();
@@ -162,6 +173,21 @@ public class IngameActivity extends Activity implements Observer {
 	protected void onDestroy()
 	{
 		super.onDestroy();
+		
+		if (GameClient.getInstance().isBombExploded)
+		{
+			if (GameClient.getInstance().isGameOver())
+			{
+				this.myService.sendObject(new JBombCommunicationObject(JBombRequestResponse.PLAYER_DISCONNECTED));
+			}
+		}
+		else
+		{
+			if (!isBugged)
+			{		
+				this.myService.sendObject(new JBombCommunicationObject(JBombRequestResponse.PLAYER_DISCONNECTED_ERROR));				
+			}
+		}
 		
 		this.alert.release();
 		
@@ -220,12 +246,12 @@ public class IngameActivity extends Activity implements Observer {
 			TextView tv = (TextView) this.findViewById(nameID);
 			ImageView iv = (ImageView) this.findViewById(imageID);
 			
-			GameClient.getInstance().adjacentPlayers.put(imageID, p);
-			
 			tv.setText(p.getName());
 			iv.setOnDragListener(new DragListener());
 			//iv.setId(p.getUID());
 			iv.setContentDescription(p.getName());
+			
+			GameClient.printNotification(String.format("Agregue a %s. Tiene UID %s", p.getName(), p.getUID().toString()));
 			tv.setVisibility(View.VISIBLE);
 			iv.setVisibility(View.VISIBLE);
 		}		
@@ -266,6 +292,8 @@ public class IngameActivity extends Activity implements Observer {
 	
 	private void openQuizQuestion(String quizQuestion, Vector<String> quizAnswers)
 	{		    	
+		isBugged = true;
+		
     	this.startActivity(new Intent(this, QuizActivity.class));
 	}
 	

@@ -1,6 +1,5 @@
 package com.example.jbomb;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;

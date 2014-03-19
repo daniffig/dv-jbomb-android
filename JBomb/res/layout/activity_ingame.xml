@@ -12,7 +12,7 @@
     tools:context=".IngameActivity" >
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/gameInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView7"
+        android:layout_below="@+id/gameInfo"
         android:text="@string/the_bomb"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="@dimen/text_size_small" />
