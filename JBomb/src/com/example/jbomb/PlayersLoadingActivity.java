@@ -1,6 +1,7 @@
 package com.example.jbomb;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
@@ -11,6 +12,7 @@ import network.Player;
 import reference.JBombRequestResponse;
 import services.GameServerService;
 import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
@@ -20,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+@SuppressLint("UseSparseArrays")
 public class PlayersLoadingActivity extends Activity implements Observer {
 
 	private GameServerService myService = MainActivity.getService();
@@ -114,6 +117,8 @@ public class PlayersLoadingActivity extends Activity implements Observer {
 		
 		MainActivity.showToast("Voy a cargar: " + adjacentPlayers.size() + " jugadores.");		
 		GameClient.printNotification("Voy a cargar: " + adjacentPlayers.size() + " jugadores.");
+		
+		GameClient.getInstance().adjacentPlayers = new HashMap<Integer, Player>();
 		
 		for (Player p : adjacentPlayers)
 		{			

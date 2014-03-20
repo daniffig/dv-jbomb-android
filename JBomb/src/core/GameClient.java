@@ -86,12 +86,12 @@ public class GameClient {
 			
 			instance.playerNameIDs.add(R.id.PlayerTop);
 			instance.playerNameIDs.add(R.id.PlayerRight);
-			instance.playerNameIDs.add(R.id.PlayerRight);
+			instance.playerNameIDs.add(R.id.PlayerBottom);
 			instance.playerNameIDs.add(R.id.PlayerLeft);
 
 			instance.playerImageIDs.add(R.id.PlayerTopImage);
 			instance.playerImageIDs.add(R.id.PlayerRightImage);
-			instance.playerImageIDs.add(R.id.PlayerRightImage);
+			instance.playerImageIDs.add(R.id.PlayerBottomImage);
 			instance.playerImageIDs.add(R.id.PlayerLeftImage);
 		}
 		

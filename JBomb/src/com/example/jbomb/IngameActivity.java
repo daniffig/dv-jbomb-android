@@ -234,7 +234,27 @@ public class IngameActivity extends Activity implements Observer {
 	}
 	
 	private void loadPlayers()
-	{
+	{		
+		for (int i = 0; i < GameClient.getInstance().adjacentPlayers.size(); i++)
+		{			
+			TextView tv = (TextView) this.findViewById(GameClient.getInstance().getPlayerNameIDs().get(i));
+			ImageView iv = (ImageView) this.findViewById(GameClient.getInstance().getPlayerImageIDs().get(i));
+
+			Player p = GameClient.getInstance().adjacentPlayers.get(GameClient.getInstance().getPlayerImageIDs().get(i));
+			
+			tv.setText(p.getName());
+			iv.setOnDragListener(new DragListener());
+			//iv.setId(p.getUID());
+			iv.setContentDescription(p.getName());
+			
+			GameClient.printNotification(String.format("Agregue a %s. Tiene UID %s", p.getName(), p.getUID().toString()));
+			tv.setVisibility(View.VISIBLE);
+			iv.setVisibility(View.VISIBLE);
+		}
+		
+		/*
+		 * 
+		 * 
 		Iterator<Integer> playerNameIDsIterator = GameClient.getInstance().getPlayerNameIDs().iterator();
 		Iterator<Integer> playerImageIDsIterator = GameClient.getInstance().getPlayerImageIDs().iterator();
 		
@@ -254,7 +274,7 @@ public class IngameActivity extends Activity implements Observer {
 			GameClient.printNotification(String.format("Agregue a %s. Tiene UID %s", p.getName(), p.getUID().toString()));
 			tv.setVisibility(View.VISIBLE);
 			iv.setVisibility(View.VISIBLE);
-		}		
+		}	*/	
 	}
 	
 	private void changeBombOwner(Player bombOwner)
